@@ -1,13 +1,18 @@
 package com.st.mall.goodsservice;
 
+import com.st.mall.goodsservice.mapper.CategoryMapper;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GoodsServiceApplicationTests {
+public class GoodsServiceApplicationTests {
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     @Test
-    void contextLoads() {
+    public void test1() {
+        System.out.println(categoryMapper.selectById(1));
     }
 
 }
