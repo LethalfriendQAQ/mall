@@ -13,7 +13,7 @@
         <collection column="id" property="childList" ofType="category" select="selectByParentId" />
     </resultMap>
     <insert id="insert" parameterType="category" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
-        INSERT INTO `category`(`id`, `name`, `dscp`, `pic`, `parent_id`, `recom`, `status`)
+        INSERT INTO `category`(`name`, `dscp`, `pic`, `parent_id`, `recom`, `status`)
         VALUES (#{name}, #{dscp}, #{pic}, #{parentId}, #{recom}, #{status})
     </insert>
     <update id="update" parameterType="category">
