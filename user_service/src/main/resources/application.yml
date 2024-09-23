@@ -1,6 +1,6 @@
 # \u5E94\u7528\u7684\u7AEF\u53E3
 server:
-  port: 8090
+  port: 8091
 # \u8FDE\u63A5\u6C60
 spring:
   datasource:
@@ -15,6 +15,3 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
   type-aliases-package: com.st.mall.common.bean
-
-st:
-  picDir: D:/situ/code/Project02/pic/
