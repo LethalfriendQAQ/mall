@@ -47,7 +47,7 @@ public class CategoryController {
     //根据id查询
     @GetMapping("/{id}")
     public RespBean selectById(@PathVariable("id") Integer id) {
-        return RespBean.ok("", categoryService.selectByParentId(id));
+        return RespBean.ok("", categoryService.selectById(id));
     }
     //获取所有的父分类
     @GetMapping("/allParent")

@@ -108,4 +108,9 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> selectByParentId(Integer parentId) {
         return categoryMapper.selectByParentId(parentId);
     }
+
+    @Override
+    public Category selectById(Integer id) {
+        return categoryMapper.selectById(id);
+    }
 }

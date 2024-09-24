@@ -10,7 +10,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${st.picDir}")
     private String picDir;
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/category/pic/**")
+        registry.addResourceHandler("/category/pic/**", "/goods/pic/**")
                 .addResourceLocations("file:" + picDir);
     }
 }

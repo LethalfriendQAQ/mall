@@ -16,4 +16,5 @@ public interface CategoryService {
     Object selectByCondition(Category condition, Integer pageNum, Integer pageSize);
     //根据id查询
     List<Category> selectByParentId(Integer parentId);
+    Category selectById(Integer id);
 }
