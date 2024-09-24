@@ -11,7 +11,7 @@
           :ellipsis="false"
           active-text-color="#ffd04b"
       >
-        <el-menu-item index="1" style="width: 300px">在线商城</el-menu-item>
+        <el-menu-item index="1" style="width: 200px">在线商城</el-menu-item>
         <el-sub-menu index="2">
           <template #title>Admin</template>
           <el-menu-item index="center">个人中心</el-menu-item>
@@ -22,7 +22,7 @@
     </el-header>
     <el-container>
       <!--<el-aside width="300px" style="border-radius: 20px;margin: 10px;">-->
-      <el-aside width="300px">
+      <el-aside width="200px">
         <el-menu
             active-text-color="#ffd04b"
             background-color="#545c64"
