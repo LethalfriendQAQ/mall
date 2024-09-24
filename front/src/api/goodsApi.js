@@ -9,6 +9,8 @@ const goodsApi = {
     delete(id) {
         return service.delete(`/goods/${id}`);
     },
+    //修改
+
     //根据id查询
     selectById(id) {
         return service.get(`/goods/${id}`);

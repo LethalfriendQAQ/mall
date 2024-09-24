@@ -8,6 +8,7 @@ import com.st.mall.common.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/goods")
 public class GoodsController {
@@ -45,7 +46,7 @@ public class GoodsController {
     }
 
     //根据id查询
-    @GetMapping
+    @GetMapping("/goods/{id}")
     public RespBean selectById(@PathVariable("id") Integer id) {
         Goods goods = goodsService.selectById(id);
         return RespBean.ok("", goods);

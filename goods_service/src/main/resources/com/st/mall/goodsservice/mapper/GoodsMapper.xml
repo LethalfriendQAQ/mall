@@ -86,7 +86,7 @@
                 `status`=#{status},
             </if>
         </set>
-
+        WHERE `id`=#{id}
     </update>
     <delete id="delete">
         DELETE FROM `goods` WHERE `id`=#{id}

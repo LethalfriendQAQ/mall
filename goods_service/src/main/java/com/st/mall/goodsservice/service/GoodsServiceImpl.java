@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class GoodsService implements com.st.mall.common.service.GoodsService {
+public class GoodsServiceImpl implements com.st.mall.common.service.GoodsService {
     @Autowired
     private CategoryMapper categoryMapper;
     @Autowired
@@ -76,29 +76,27 @@ public class GoodsService implements com.st.mall.common.service.GoodsService {
         Goods newInfo = goods;
         Goods oldInfo = goodsMapper.selectById(goods.getId());
         //判断商品是否存在
-        if (oldInfo ==null) {
-            throw new StException("该商品不存在无法修改");
+        if (oldInfo == null) {
+            throw new StException("该商品不存在,无法修改");
         }
         //判断是否修改了分类
         if (newInfo.getCategoryId() != null && newInfo.getCategoryId().equals(oldInfo.getCategoryId())) {
-            //判断修改之后的分类是否是子分类
+            //判断修改之后的分类是否存在并且必须是子分类
             Category category = categoryMapper.selectById(newInfo.getCategoryId());
             if (category == null || (category != null && category.getParentId() == 0)) {
-                throw new StException("修改之后的分类不存在或者修改之后的分类是一个父分类，无法修改");
+                throw new StException("该分类不存在或分类是父分类，无法修改");
             }
         }
-        //不能重名 - 分类，名字，颜色，版本
-        Integer newCategoryId = newInfo.getCategoryId() == null ? oldInfo.getCategoryId() : newInfo.getCategoryId();
+        //判断是否同名 -分类 -名字 -颜色 -版本
+        Integer newcategoryId = newInfo.getCategoryId() == null ? oldInfo.getCategoryId() : newInfo.getCategoryId();
         String newName = newInfo.getName() == null ? oldInfo.getName() : newInfo.getName();
         String newColor = newInfo.getColor() == null ? oldInfo.getColor() : newInfo.getColor();
-        String newVersion = newInfo.getVersion() == null ? oldInfo.getVersion() : newInfo.getVersion();
-
+        String newVersion = newInfo.getName() == null ? oldInfo.getVersion() : newInfo.getVersion();
         Goods condition = new Goods();
-        condition.setCategoryId(newCategoryId);
+        condition.setCategoryId(newcategoryId);
         condition.setName(newName);
         condition.setColor(newColor);
         condition.setVersion(newVersion);
-
         if (goodsMapper.selectByCondition(condition)
                 .stream()
                 .anyMatch(item -> item.getName().equals(newName) && !item.getId().equals(newInfo.getId()))) {
@@ -106,16 +104,13 @@ public class GoodsService implements com.st.mall.common.service.GoodsService {
         }
         //修改商品信息
         goodsMapper.update(goods);
-        //修改图片 1. 删除之前的图片  2. 添加
+        //修改图片 1.删除之前的图片 2.添加
         goodsPicMapper.delete(newInfo.getId());
         if (newInfo.getPicList() != null && newInfo.getPicList().size() > 0) {
-            //设置每个图片的商品id
-            newInfo.getPicList()
-                    .stream()
-                    .forEach(pic -> pic.setGoodsId(newInfo.getId()));
-            //添加图片
+            newInfo.getPicList().forEach(pic -> pic.setGoodsId(newInfo.getId()));
             goodsPicMapper.insert(newInfo.getPicList());
         }
+
     }
 
     @Override
