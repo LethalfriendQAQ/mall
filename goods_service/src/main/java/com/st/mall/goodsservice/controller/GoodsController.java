@@ -46,7 +46,7 @@ public class GoodsController {
     }
 
     //根据id查询
-    @GetMapping("/goods/{id}")
+    @GetMapping("/{id}")
     public RespBean selectById(@PathVariable("id") Integer id) {
         Goods goods = goodsService.selectById(id);
         return RespBean.ok("", goods);

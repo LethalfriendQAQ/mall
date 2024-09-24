@@ -3,7 +3,7 @@
     <el-card>
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item>
-          <el-button type="primary" @click="addDialogShow = true">添加</el-button>
+          <el-button type="primary" @click="">添加</el-button>
         </el-form-item>
         <el-form-item style="float: right;">
           <el-input v-model="condition.name" placeholder="请输入要搜索的名称" @input="selectByPage(1);" />
@@ -21,52 +21,62 @@
             <el-option label="已下架" value="0"/>
           </el-select>
         </el-form-item>
+
         <el-form-item style="float: right;">
-          <el-select
-              v-model="condition.parentId"
+          <el-cascader
+              v-model="condition.categoryId"
+              :options="allParent"
+              :props="props"
+              placeholder="请选择分类"
               clearable
-              placeholder="请选择父分类"
-              style="width: 150px"
               :value-on-clear="null"
               @change="selectByPage(1)"
-          >
-            <el-option label="没有父分类" value="0"/>
-            <el-option v-for="(parent, index) in allParent" :key="index" :label="parent.name" :value="parent.id"/>
-          </el-select>
+          />
         </el-form-item>
+
       </el-form>
       <el-table :data="pageInfo.list" border style="width: 100%">
-        <el-table-column prop="id" label="ID"/>
+        <el-table-column prop="id" label="ID" width="50px"/>
         <el-table-column prop="name" label="名称"/>
-        <el-table-column label="图片">
-          <template #default="scope">
-            <el-avatar shape="square" :size="size" :src="SERVER_ADDR + '/category/pic/' + scope.row.pic" :title="SERVER_ADDR + '/category/pic/' + scope.row.pic"/>
-          </template>
-        </el-table-column>
         <el-table-column prop="dscp" label="描述"/>
-        <el-table-column label="父分类">
-          <template #default="scope">
-            <el-text v-if="scope.row.parent">{{scope.row.parent.name}}</el-text>
-          </template>
-        </el-table-column>
+        <el-table-column prop="price" label="售价"/>
+        <el-table-column prop="markPrice" label="标价"/>
+        <el-table-column prop="color" label="颜色"/>
+        <el-table-column prop="version" label="版本"/>
+        <el-table-column prop="count" label="数量"/>
         <el-table-column label="是否推荐">
           <template #default="scope">
             <el-tag type="success" v-if="scope.row.recom == 1">推荐</el-tag>
             <el-tag type="warning" v-else>不推荐</el-tag>
           </template>
         </el-table-column>
+        <el-table-column label="分类">
+          <template #default="scope">
+            <el-text >{{scope.row.category.name}}</el-text>
+          </template>
+        </el-table-column>
+        <el-table-column prop="score" label="评分"/>
         <el-table-column label="是否上架">
           <template #default="scope">
             <el-tag type="success" v-if="scope.row.status == 1">上架中</el-tag>
             <el-tag type="warning" v-else>已下架</el-tag>
           </template>
         </el-table-column>
-
-        <el-table-column label="操作">
+        <el-table-column label="图片">
           <template #default="scope">
-            <el-button type="primary" size="small" @click="selectById(scope.row.id)" round>修改</el-button>
-            <el-popconfirm title="你确定要删除该分类吗？" confirm-button-text="确认" cancel-button-text="取消"
-                           width="200px" @confirm="deleteCategory(scope.row.id)">
+            <el-popover placement="right"  trigger="hover" v-if="scope.row.picList.length > 0">
+              <template #reference>
+                <el-image :key="index" style="width: 30px; height: 30px" :src="SERVER_ADDR + '/goods/pic/' + scope.row.picList[0].url" :fit="fit"  :title="SERVER_ADDR + '/goods/pic/' + scope.row.picList[0].url"/>
+              </template>
+                <el-image v-for="(pic, index) in scope.row.picList" :key="index" style="width: 40px; height: 40px;margin-right: 5px" :src="SERVER_ADDR + '/goods/pic/' + pic.url" :fit="fit" />
+            </el-popover>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="150px">
+          <template #default="scope">
+            <el-button type="primary" size="small" @click="" round>修改</el-button>
+            <el-popconfirm title="你确定要删除该商品吗？" confirm-button-text="确认" cancel-button-text="取消"
+                           width="200px" @confirm="">
               <template #reference>
                 <el-button size="small" type="danger" round>删除</el-button>
               </template>
@@ -81,117 +91,15 @@
     </el-card>
   </el-col>
 
-  <!-- 添加对话框开始 -->
-  <el-dialog v-model="addDialogShow" title="添加分类" width="500">
-    <el-form>
-      <el-form-item label="名称" label-width="20%">
-        <el-input v-model="categoryAdd.name" placeholder="请输入名称" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="描述" label-width="20%">
-        <el-input v-model="categoryAdd.dscp" placeholder="请输入描述" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="父分类" label-width="20%">
-        <el-select v-model="categoryAdd.parentId" placeholder="请选择父分类" clearable :empty-values="[0]" :value-on-clear="0" style="width: 300px;">
-          <el-option v-for="(category, index) in allParent" :key="index"
-                     :label="category.name" :value="category.id" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="是否推荐" label-width="20%">
-        <el-radio-group v-model="categoryAdd.recom">
-          <el-radio label="不推荐" :value="0" size="large" />
-          <el-radio label="推荐" :value="1" size="large" />
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="是否上架" label-width="20%">
-        <el-radio-group v-model="categoryAdd.status">
-          <el-radio label="已下架" :value="0" size="large" />
-          <el-radio label="上架中" :value="1" size="large" />
-        </el-radio-group>
-      </el-form-item>
-      <!--</el-form-item>-->
-      <el-form-item label="图片" label-width="20%">
-        <el-upload class="avatar-uploader" :action="SERVER_ADDR + '/category/upload'" name="pic"
-                   :show-file-list="false" :before-upload="beforePicUpload" :on-success="PicAddUploadSuccess">
-          <img v-if="categoryAdd.pic" :src="SERVER_ADDR + '/category/pic/' + categoryAdd.pic" class="avatar" />
-          <el-icon v-else class="avatar-uploader-icon">
-            <Plus />
-          </el-icon>
-        </el-upload>
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="addDialogShow = false">取消</el-button>
-        <el-button type="primary" @click="insert">确认</el-button>
-      </div>
-    </template>
-  </el-dialog>
-  <!-- 添加对话框结束 -->
-
-
-  <!-- 修改对话框开始 -->
-  <el-dialog v-model="updateDialogShow" title="修改分类" width="500">
-    <el-form>
-      <el-form-item label="名称" label-width="20%">
-        <el-input v-model="categoryUpdate.name" placeholder="请输入名称" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="描述" label-width="20%">
-        <el-input v-model="categoryUpdate.dscp" placeholder="请输入描述" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="父分类" label-width="20%">
-        <el-select v-model="categoryUpdate.parentId" placeholder="请选择父分类" clearable :empty-values="[0]" :value-on-clear="0" style="width: 300px;">
-          <el-option v-for="(category, index) in allParent" :key="index"
-                     :label="category.name" :value="category.id" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="是否推荐" label-width="20%">
-        <el-radio-group v-model="categoryUpdate.recom">
-          <el-radio label="不推荐" :value="0" size="large" />
-          <el-radio label="推荐" :value="1" size="large" />
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="是否上架" label-width="20%">
-        <el-radio-group v-model="categoryUpdate.status">
-          <el-radio label="已下架" :value="0" size="large" />
-          <el-radio label="上架中" :value="1" size="large" />
-        </el-radio-group>
-      </el-form-item>
-      <!--</el-form-item>-->
-      <el-form-item label="图片" label-width="20%">
-        <el-upload class="avatar-uploader" :action="SERVER_ADDR + '/category/upload'" name="pic"
-                   :show-file-list="false" :before-upload="beforePicUpload" :on-success="PicUpdateUploadSuccess">
-          <img v-if="categoryUpdate.pic" :src="SERVER_ADDR + '/category/pic/' + categoryUpdate.pic" class="avatar" />
-          <el-icon v-else class="avatar-uploader-icon">
-            <Plus />
-          </el-icon>
-        </el-upload>
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="updateDialogShow = false">取消</el-button>
-        <el-button type="primary" @click="update">确认</el-button>
-      </div>
-    </template>
-  </el-dialog>
-  <!-- 修改对话框结束 -->
-
 </template>
 
 <script setup>
-import categoryApi from "@/api/categoryApi.js";
+import goodsApi from "@/api/goodsApi.js";
 import {ref} from "vue";
 import {ElMessage} from "element-plus";
-
+import categoryApi from "@/api/categoryApi.js";
 //服务器路径
 const SERVER_ADDR = ref(import.meta.env.VITE_SERVER_ADDR);
-
-//搜索条件
-const condition = ref({
-  name: null,
-  parentId: null,
-  status: null
-});
 
 //分页信息
 const pageInfo = ref({
@@ -199,39 +107,23 @@ const pageInfo = ref({
   pageSize: 0,
   pageNum: 0
 });
-const allParent = ref([]);
-//添加分类的信息
-const categoryAdd = ref({
+
+//搜索条件
+const condition = ref({
   name: null,
-  dscp: null,
-  pic: null,
-  parentId: 0,
-  recom: 1,
-  status: 1
+  categoryId: null,
+  status: null
 })
-//是否显示添加对话框
-const addDialogShow = ref(false);
+//父分类
+const allParent = ref([]);
 
-//修改分类的信息
-const categoryUpdate = ref({
-  id: null,
-  name: null,
-  dscp: null,
-  pic: null,
-  parentId: 0,
-  recom: 1,
-  status: 1
-});
-//是否显示修改对话框
-const updateDialogShow = ref(false);
-//分页查询
-function selectByPage(pageNum) {
-  categoryApi.selectByPage(condition.value, pageNum, 5)
-      .then(resp => {
-        pageInfo.value = resp.data;
-      })
+//级联选择器的配置选项
+const props = {
+  label: "name",
+  value: "id",
+  children: "childList",
+  emitPath: false
 }
-
 //获取所有的父分类
 function selectAllParent() {
   categoryApi.selectAllParent()
@@ -239,115 +131,16 @@ function selectAllParent() {
         allParent.value = resp.data;
       })
 }
-//添加成功上传之前的回调
-function beforePicUpload(rawFile) {
-  if (rawFile.type !== 'image/jpeg') {
-    ElMessage.error('图片仅支持jpg格式');
-    return false
-  } else if (rawFile.size / 1024 / 1024 > 2) {
-    ElMessage.error('图片不能超过2M');
-    return false
-  }
-  return true
-}
-
-
-//添加成功上传之后的回调
-function PicAddUploadSuccess(resp) {
-  if (resp.code == 10000) {
-    ElMessage.success(resp.msg);
-    categoryAdd.value.pic = resp.data;
-  } else {
-    ElMessage.error(resp.msg);
-  }
-}
-
-//修改成功上传之后的回调
-function PicUpdateUploadSuccess(resp) {
-  if (resp.code == 10000) {
-    ElMessage.success(resp.msg);
-    categoryUpdate.value.pic = resp.data;
-  } else {
-    ElMessage.error(resp.msg);
-  }
-}
-
-//定义方法完成分类添加
-function insert() {
-  categoryApi.insert(categoryAdd.value)
+//分页查询
+function selectByPage(pageNum) {
+  goodsApi.selectByPage(condition.value, pageNum, 10)
       .then(resp => {
-        if (resp.code == 10000) {
-          //弹出消息
-          ElMessage.success(resp.msg);
-          //隐藏对话框
-          addDialogShow.value = false;
-          //清空对话框中的数据
-          categoryAdd.value = {
-            name: null,
-            dscp: null,
-            pic: null,
-            parentId: 0,
-            recom: 1,
-            status: 1
-          };
-          //imgUrl清空
-          //imageUrl.value = '';
-          //刷新表格数据
-          selectByPage(pageInfo.value.pageNum);
-        } else {
-          //弹出消息
-          ElMessage.error(resp.msg);
-        }
-      });
-}
-
-//删除分类
-function deleteCategory(id) {
-  categoryApi.delete(id)
-      .then(resp => {
-        //判断-弹出消息-刷新表格
-        if (resp.code == 10000) {
-          //弹出消息
-          ElMessage.success(resp.msg);
-          selectByPage(pageInfo.value.pageNum);
-        } else {
-          //弹出消息
-          ElMessage.error(resp.msg);
-        }
+        pageInfo.value = resp.data;
       })
 }
 
-//根据id查询被修改分类的信息
-function selectById(id) {
-  categoryApi.selectById(id)
-      .then(resp => {
-        categoryUpdate.value = resp.data;
-        updateDialogShow.value = true;
-      });
-}
-
-//定义方法完成分类修改
-function update() {
-  categoryApi.update(categoryUpdate.value)
-      .then(resp => {
-        if (resp.code == 10000) {
-          //弹出消息
-          ElMessage.success(resp.msg);
-          //隐藏对话框
-          updateDialogShow.value = false;
-          //imgUrl清空
-          //imageUrl.value = '';
-          //刷新表格数据
-          selectByPage(pageInfo.value.pageNum);
-        } else {
-          //弹出消息
-          ElMessage.error(resp.msg);
-        }
-      });
-}
-
 selectAllParent();
-selectByPage();
+selectByPage(1);
 </script>
 
 <style scoped>

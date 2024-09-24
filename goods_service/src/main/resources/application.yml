@@ -1,14 +1,14 @@
-# \u5E94\u7528\u7684\u7AEF\u53E3
+
 server:
   port: 8090
-# \u8FDE\u63A5\u6C60
+
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/mall?useSSL=false
     username: root
     password: 123456
-# \u914D\u7F6EMyBatis
+
 mybatis:
 
   configuration:
