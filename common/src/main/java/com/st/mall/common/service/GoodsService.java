@@ -18,5 +18,5 @@ public interface GoodsService {
     Goods selectById(Integer id);
 
     //搜索 - 分页查询
-    PageInfo<Goods> selectByConfition(Goods condition, Integer pageNum, Integer pageSize);
+    PageInfo<Goods> selectByCondition(Goods condition, Integer pageNum, Integer pageSize);
 }

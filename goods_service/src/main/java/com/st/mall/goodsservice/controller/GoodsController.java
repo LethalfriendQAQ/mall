@@ -42,8 +42,8 @@ public class GoodsController {
         pageNum = pageNum == null ? 1 : pageNum;
         pageSize = pageSize == null ? 5 : pageSize;
 
-        PageInfo<Goods> PageInfo = goodsService.selectByConfition(condition, pageNum, pageSize);
-        return RespBean.ok("查询成功", PageInfo);
+        PageInfo<Goods> pageInfo = goodsService.selectByCondition(condition, pageNum, pageSize);
+        return RespBean.ok("查询成功", pageInfo);
     }
 
     //根据id查询

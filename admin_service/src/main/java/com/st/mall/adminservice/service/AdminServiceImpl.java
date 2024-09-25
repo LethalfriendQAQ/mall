@@ -48,13 +48,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Object selectByCondition(Admin condition, Integer pageNum, Integer pageSize) {
+    public PageInfo<Admin> selectByCondition(Admin condition, Integer pageNum, Integer pageSize) {
         //设置分页参数
         PageHelper.startPage(pageNum, pageSize);
         //查询
         List<Admin> admins = adminMapper.selectByCondition(condition);
         //创建分页信息
-        PageInfo<Admin> pageInfo = new PageInfo<>();
+        PageInfo<Admin> pageInfo = new PageInfo<>(admins);
         return pageInfo;
     }
 

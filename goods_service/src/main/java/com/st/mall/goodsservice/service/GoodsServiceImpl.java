@@ -119,7 +119,7 @@ public class GoodsServiceImpl implements com.st.mall.common.service.GoodsService
     }
 
     @Override
-    public PageInfo<Goods> selectByConfition(Goods condition, Integer pageNum, Integer pageSize) {
+    public PageInfo<Goods> selectByCondition(Goods condition, Integer pageNum, Integer pageSize) {
         //设置分页参数
         PageHelper.startPage(pageNum, pageSize);
         //查询

@@ -1,5 +1,6 @@
 package com.st.mall.common.service;
 
+import com.github.pagehelper.PageInfo;
 import com.st.mall.common.bean.Admin;
 import com.st.mall.common.exception.StException;
 
@@ -13,7 +14,7 @@ public interface AdminService {
     boolean update(Admin admin) throws StException;
     Admin selectById(Integer id);
     //条件搜索
-    Object selectByCondition(Admin condition, Integer pageNum, Integer pageSize);
+    PageInfo<Admin> selectByCondition(Admin condition, Integer pageNum, Integer pageSize);
     //查询所有
     List<Admin> selectAll();
 }
