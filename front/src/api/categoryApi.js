@@ -22,9 +22,6 @@ const categoryApi = {
     },
     selectAllParent() {
         return service.get("/category/allParent");
-    },
-    hello() {
-        return service.get("/user/hello");
     }
 };
 
