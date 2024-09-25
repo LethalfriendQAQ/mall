@@ -12,6 +12,8 @@ public interface AdminService {
     boolean insert(Admin admin) throws StException;
     //修改
     boolean update(Admin admin) throws StException;
+
+    boolean delete(Integer id);
     Admin selectById(Integer id);
     //条件搜索
     PageInfo<Admin> selectByCondition(Admin condition, Integer pageNum, Integer pageSize);

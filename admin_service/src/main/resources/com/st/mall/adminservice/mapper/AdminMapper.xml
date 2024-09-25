@@ -56,6 +56,9 @@
         </set>
         WHERE `id`=#{id}
     </update>
+    <delete id="delete">
+        DELETE FROM `admin` WHERE `id`=#{id}
+    </delete>
     <select id="selectByCondition" resultType="com.st.mall.common.bean.Admin">
         SELECT * FROM `admin`
         <where>

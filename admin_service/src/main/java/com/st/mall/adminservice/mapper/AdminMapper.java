@@ -9,6 +9,8 @@ public interface AdminMapper {
 
     int update(Admin admin);
 
+    int delete(Integer id);
+
     Admin selectById(Integer id);
     List<Admin> selectByCondition(Admin condition);
 

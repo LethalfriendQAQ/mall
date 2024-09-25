@@ -28,6 +28,11 @@ public class AdminController {
         return RespBean.ok("修改成功");
     }
 
+    @DeleteMapping("/{id}")
+    public RespBean delete(@PathVariable("id") Integer id) {
+        adminService.delete(id);
+        return RespBean.ok("删除成功");
+    }
     //搜索
     @GetMapping
     public RespBean selectByPage(Admin condition, Integer pageNum, Integer pageSize) {

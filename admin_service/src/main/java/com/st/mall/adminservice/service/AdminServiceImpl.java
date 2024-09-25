@@ -8,6 +8,7 @@ import com.st.mall.common.exception.StException;
 import com.st.mall.common.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -40,6 +41,12 @@ public class AdminServiceImpl implements AdminService {
             throw new StException("该用户名已存在");
         }
         return adminMapper.update(admin) == 1;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean delete(Integer id) {
+        return adminMapper.delete(id) == 1;
     }
 
     @Override
