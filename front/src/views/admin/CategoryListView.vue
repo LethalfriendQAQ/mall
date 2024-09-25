@@ -335,8 +335,6 @@ function update() {
           ElMessage.success(resp.msg);
           //隐藏对话框
           updateDialogShow.value = false;
-          //imgUrl清空
-          //imageUrl.value = '';
           //刷新表格数据
           selectByPage(pageInfo.value.pageNum);
         } else {

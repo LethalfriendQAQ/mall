@@ -74,7 +74,7 @@
         </el-table-column>
         <el-table-column label="操作" width="150px">
           <template #default="scope">
-            <el-button type="primary" size="small" @click="" round>修改</el-button>
+            <el-button type="primary" size="small" @click="selectById(scope.row.id)" round>修改</el-button>
             <el-popconfirm title="你确定要删除该商品吗？" confirm-button-text="确认" cancel-button-text="取消"
                            width="200px" @confirm="deleteGoods(scope.row.id)">
               <template #reference>
@@ -146,7 +146,7 @@
             name="pic"
             list-type="picture-card"
             :before-upload="beforePicUpload"
-            :on-success="PicAddUploadSuccess"
+            :on-success="PicUploadSuccess"
         >
           <el-icon class="avatar-uploader-icon">
             <Plus />
@@ -168,7 +168,7 @@
     <el-form>
       <el-form-item label="分类" label-width="20%">
         <el-cascader
-            v-model="goodsAdd.categoryId"
+            v-model="goodsUpdate.categoryId"
             :options="allParent"
             :props="props"
             placeholder="请选择分类"
@@ -177,48 +177,48 @@
         />
       </el-form-item>
       <el-form-item label="名称" label-width="20%">
-        <el-input v-model="goodsAdd.name" placeholder="请输入名称" autocomplete="off" />
+        <el-input v-model="goodsUpdate.name" placeholder="请输入名称" autocomplete="off" />
       </el-form-item>
       <el-form-item label="描述" label-width="20%">
-        <el-input v-model="goodsAdd.dscp" placeholder="请输入描述" autocomplete="off" />
+        <el-input v-model="goodsUpdate.dscp" placeholder="请输入描述" autocomplete="off" />
       </el-form-item>
       <el-form-item label="售价" label-width="20%">
-        <el-input v-model="goodsAdd.price" placeholder="请输入售价" autocomplete="off" />
+        <el-input v-model="goodsUpdate.price" placeholder="请输入售价" autocomplete="off" />
       </el-form-item>
       <el-form-item label="标价" label-width="20%">
-        <el-input v-model="goodsAdd.markPrice" placeholder="请输入标价" autocomplete="off" />
+        <el-input v-model="goodsUpdate.markPrice" placeholder="请输入标价" autocomplete="off" />
       </el-form-item>
       <el-form-item label="进价" label-width="20%">
-        <el-input v-model="goodsAdd.purchasePrice" placeholder="请输入进价" autocomplete="off" />
+        <el-input v-model="goodsUpdate.purchasePrice" placeholder="请输入进价" autocomplete="off" />
       </el-form-item>
       <el-form-item label="颜色" label-width="20%">
-        <el-input v-model="goodsAdd.color" placeholder="请输入颜色" autocomplete="off" />
+        <el-input v-model="goodsUpdate.color" placeholder="请输入颜色" autocomplete="off" />
       </el-form-item>
       <el-form-item label="版本" label-width="20%">
-        <el-input v-model="goodsAdd.version" placeholder="请输入版本" autocomplete="off" />
+        <el-input v-model="goodsUpdate.version" placeholder="请输入版本" autocomplete="off" />
       </el-form-item>
       <el-form-item label="数量" label-width="20%">
-        <el-input v-model="goodsAdd.count" placeholder="请输入数量" autocomplete="off" />
+        <el-input v-model="goodsUpdate.count" placeholder="请输入数量" autocomplete="off" />
       </el-form-item>
       <el-form-item label="是否推荐" label-width="20%">
-        <el-radio-group v-model="goodsAdd.recom">
+        <el-radio-group v-model="goodsUpdate.recom">
           <el-radio label="不推荐" :value="0" size="large" />
           <el-radio label="推荐" :value="1" size="large" />
         </el-radio-group>
       </el-form-item>
       <el-form-item label="是否上架" label-width="20%">
-        <el-radio-group v-model="goodsAdd.status">
+        <el-radio-group v-model="goodsUpdate.status">
           <el-radio label="已下架" :value="0" size="large" />
           <el-radio label="上架中" :value="1" size="large" />
         </el-radio-group>
       </el-form-item>
       <el-form-item label="图片" label-width="20%">
         <el-upload
-            v-model:file-list="goodsAdd.picList"
+            v-model:file-list="goodsUpdate.picList"
             list-type="picture-card"
             :action="SERVER_ADDR + '/category/upload'"
             name="pic"
-            :before-upload="beforePicUpload" :on-success="PicAddUploadSuccess"
+            :before-upload="beforePicUpload" :on-success="PicUploadSuccess"
         >
           <el-icon class="avatar-uploader-icon">
             <Plus />
@@ -229,7 +229,7 @@
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="updateDialogShow = false">取消</el-button>
-        <el-button type="primary" @click="insert">确认</el-button>
+        <el-button type="primary" @click="update">确认</el-button>
       </div>
     </template>
   </el-dialog>
@@ -289,6 +289,7 @@ const goodsAdd = ref({
   picList: []
 });
 
+//被修改的商品的信息
 const goodsUpdate = ref({
   name: '',
   dscp: '',
@@ -304,12 +305,51 @@ const goodsUpdate = ref({
   picList: []
 });
 
+function update() {
+  //处理图片 realName -> url
+  for (let i = 0; i < goodsUpdate.value.picList.length; i++) {
+    goodsUpdate.value.picList[i].url = goodsUpdate.value.picList[i].realName;
+  }
+  goodsApi.update(goodsUpdate.value)
+      .then(resp => {
+        if (resp.code == 10000) {
+          //弹出消息
+          ElMessage.success(resp.msg);
+          //隐藏对话框
+          updateDialogShow.value = false;
+          goodsUpdate.value = {
+            name: '',
+            dscp: '',
+            price: null,
+            markPrice: null,
+            purchasePrice: null,
+            color: null,
+            version: null,
+            count: null,
+            recom: null,
+            categoryId: null,
+            status: null,
+            picList: []
+          }
+          //刷新表格数据
+          selectByPage(pageInfo.value.pageNum);
+        } else {
+          //弹出消息
+          ElMessage.error(resp.msg);
+        }
+      })
+}
+
+
 function selectById(id) {
   goodsApi.selectById(id)
       .then(resp => {
         goodsUpdate.value = resp.data;
         //处理图片 realName -> url
         for (let i = 0; i < goodsUpdate.value.picList.length; i++) {
+          //保存图片真实的名字
+          goodsUpdate.value.picList[i].realName = goodsUpdate.value.picList[i].url;
+          //回显图片
           goodsUpdate.value.picList[i].url = `${SERVER_ADDR.value}/goods/pic/${goodsUpdate.value.picList[i].url}`;
         }
         updateDialogShow.value = true;
@@ -329,7 +369,7 @@ function beforePicUpload(rawFile) {
 
 
 //添加成功上传之后的回调
-function PicAddUploadSuccess(resp, uploadFile) {
+function PicUploadSuccess(resp, uploadFile) {
   if (resp.code == 10000) {
     ElMessage.success(resp.msg);
     uploadFile.url = `${SERVER_ADDR.value}/goods/pic/${resp.data}`;
