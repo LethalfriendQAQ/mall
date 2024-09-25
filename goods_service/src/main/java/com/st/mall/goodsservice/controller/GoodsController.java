@@ -18,6 +18,7 @@ public class GoodsController {
     //添加
     @PostMapping
     public RespBean insert(@RequestBody Goods goods) throws StException {
+        goods.setScore(5F);
         goodsService.insert(goods);
         return RespBean.ok("添加成功");
     }
