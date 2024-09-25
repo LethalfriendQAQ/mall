@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.st.mall.orderservice.mapper.OrderMapper">
+    <insert id="insert" parameterType="order">
+        INSERT INTO `order`(
+            `id`,
+            `user_id`,
+            `create_time`,
+            `express`,
+            `pay_type`,
+            `addr_id`,
+            `addr_detail`,
+            `status`
+        )
+        VALUES (
+            #{id},
+            #{userId},
+            #{createTime},
+            #{express},
+            #{payType},
+            #{addrId},
+            #{addrDetail},
+            #{status}
+               )
+    </insert>
+    <update id="update" parameterType="order">
+        UPDATE `order`
+        <set>
+            <if test="id!=null and id.length>0">
+                `id`=#{id},
+            </if>
+            <if test="userId!=null">
+                `user_id`=#{userId},
+            </if>
+            <if test="createTime!=null">
+                `create_time`=#{createTime},
+            </if>
+            <if test="express!=null and express.length>0">
+                `express`=#{express},
+            </if>
+            <if test="payType!=null">
+                `pay_type`=#{payType},
+            </if>
+            <if test="addrId!=null">
+                `addr_id`=#{addrId},
+            </if>
+            <if test="addrDetail!=null and addrDetail.length>0">
+                `addr_detail`=#{addrDetail},
+            </if>
+            <if test="status!=null">
+                `status`=#{status},
+            </if>
+        </set>
+        WHERE `id`=#{id}
+    </update>
+    <delete id="delete">
+        DELETE FROM `order` WHERE `id`=#{id}
+    </delete>
+    <select id="selectByCondition" resultType="order">
+        SELECT * FROM `order`
+        <where>
+            <if test="id!=null and id.length>0">
+                AND `id` LIKE CONCAT('%', #{id}, '%')
+            </if>
+            <if test="userId!=null">
+                AND `user_id` LIKE CONCAT('%', #{userId}, '%')
+            </if>
+            <if test="status!=null">
+                AND `status`=#{status}
+            </if>
+        </where>
+    </select>
+    <select id="selectById" resultType="order">
+        SELECT * FROM `order` WHERE `id`=#{id}
+    </select>
+</mapper>
