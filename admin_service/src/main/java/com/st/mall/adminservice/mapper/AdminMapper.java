@@ -8,6 +8,8 @@ public interface AdminMapper {
     int insert(Admin admin);
 
     int update(Admin admin);
+
+    Admin selectById(Integer id);
     List<Admin> selectByCondition(Admin condition);
 
     List<Admin> selectAll();

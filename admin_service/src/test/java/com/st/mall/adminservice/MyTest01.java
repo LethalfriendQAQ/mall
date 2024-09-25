@@ -2,6 +2,8 @@ package com.st.mall.adminservice;
 
 import com.st.mall.adminservice.mapper.AdminMapper;
 import com.st.mall.common.bean.Admin;
+import com.st.mall.common.exception.StException;
+import com.st.mall.common.service.AdminService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +16,22 @@ public class MyTest01 {
     @Autowired
     private AdminMapper adminMapper;
 
+    @Autowired
+    private AdminService adminService;
+
+    @Test
+    public void test11() throws ParseException, StException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Admin admin = new Admin(null, "1212", "1212", "1212", "1111", "1111", "1", sdf.parse("2024-05-08 10:01:01"), 0);
+        adminService.insert(admin);
+    }
+
+    @Test
+    public void test12() throws ParseException, StException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Admin admin = new Admin(8, "122", "1212", "1212", "1111", "1111", "1", sdf.parse("2024-05-08 10:01:01"), 0);
+        adminService.update(admin);
+    }
 
     @Test
     public void test1() {
@@ -42,5 +60,9 @@ public class MyTest01 {
         adminMapper.selectByCondition(condition)
                 .stream()
                 .forEach(System.out::println);
+    }
+    @Test
+    public void test5() {
+        System.out.println(adminMapper.selectById(2));
     }
 }
