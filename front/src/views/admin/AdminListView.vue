@@ -39,9 +39,9 @@
         </el-table-column>
         <el-table-column label="操作">
           <template #default="scope">
-            <el-button type="primary" size="small" @click="selectById(scope.row.id)" round>修改</el-button>
+            <el-button type="primary" size="small" @click="" round>修改</el-button>
             <el-popconfirm title="你确定要删除该分类吗？" confirm-button-text="确认" cancel-button-text="取消"
-                           width="200px" @confirm="deleteCategory(scope.row.id)">
+                           width="200px" @confirm="">
               <template #reference>
                 <el-button size="small" type="danger" round>删除</el-button>
               </template>
@@ -83,7 +83,7 @@ function selectByPage(pageNum) {
       })
 }
 
-selectByPage();
+selectByPage(1);
 </script>
 
 <style scoped>
