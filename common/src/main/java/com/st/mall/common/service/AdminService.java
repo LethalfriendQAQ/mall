@@ -19,4 +19,6 @@ public interface AdminService {
     PageInfo<Admin> selectByCondition(Admin condition, Integer pageNum, Integer pageSize);
     //查询所有
     List<Admin> selectAll();
+
+    Admin login(String username, String password) throws StException;
 }

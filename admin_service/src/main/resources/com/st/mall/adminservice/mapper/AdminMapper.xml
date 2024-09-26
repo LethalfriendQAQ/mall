@@ -79,4 +79,7 @@
     <select id="selectById" resultType="com.st.mall.common.bean.Admin">
         SELECT * FROM `admin` WHERE `id`=#{id}
     </select>
+    <select id="selectByUsername" resultType="com.st.mall.common.bean.Admin">
+        SELECT * FROM `admin` WHERE `username`=#{username}
+    </select>
 </mapper>

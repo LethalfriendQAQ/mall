@@ -15,4 +15,6 @@ public interface AdminMapper {
     List<Admin> selectByCondition(Admin condition);
 
     List<Admin> selectAll();
+
+    Admin selectByUsername(String username);
 }

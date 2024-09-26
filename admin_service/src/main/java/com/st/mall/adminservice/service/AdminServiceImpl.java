@@ -1,5 +1,6 @@
 package com.st.mall.adminservice.service;
 
+import cn.hutool.crypto.SecureUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.st.mall.adminservice.mapper.AdminMapper;
@@ -68,5 +69,21 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<Admin> selectAll() {
         return adminMapper.selectAll();
+    }
+
+    @Override
+    public Admin login(String username, String password) throws StException {
+        //根据用户名查询
+        Admin admin = adminMapper.selectByUsername(username);
+        if (admin == null) {
+            throw new StException("用户名错误");
+        }
+        //对用户输入的密码进行加密 - 使用MD5算法和盐进行加密
+        String md5Pwd = SecureUtil.md5(SecureUtil.md5(password + admin.getSalt()));
+        //对加密之后的密码和数据库中的密码进行比较
+        if (!md5Pwd.equals(admin.getPassword())) {
+            throw new StException("密码错误");
+        }
+        return admin;
     }
 }

@@ -1,5 +1,6 @@
 package com.st.mall.adminservice;
 
+import cn.hutool.crypto.SecureUtil;
 import com.st.mall.adminservice.mapper.AdminMapper;
 import com.st.mall.common.bean.Admin;
 import com.st.mall.common.exception.StException;
@@ -64,5 +65,14 @@ public class MyTest01 {
     @Test
     public void test5() {
         System.out.println(adminMapper.selectById(2));
+    }
+    @Test
+    public void test6() {
+        String md5Pwd = SecureUtil.md5(SecureUtil.md5("123" + "981a735b"));
+        System.out.println(md5Pwd);
+    }
+    @Test
+    public void test7() throws StException {
+        System.out.println(adminService.login("admin", "123"));
     }
 }
