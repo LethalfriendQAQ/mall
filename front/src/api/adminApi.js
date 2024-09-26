@@ -1,5 +1,5 @@
 import service from "@/api/index.js";
-
+import qs from 'qs'
 const adminApi = {
     // 添加
     insert(admin) {
@@ -22,6 +22,12 @@ const adminApi = {
         condition.pageNum = pageNum;
         condition.pageSize = pageSize;
         return service.get("/admin", { params: condition });
+    },
+    captcha() {
+        return service.get("/admin/captcha");
+    },
+    login(admin) {
+        return service.post("/admin/login", qs.stringify(admin))
     }
 }
 

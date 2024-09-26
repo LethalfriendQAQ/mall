@@ -71,7 +71,7 @@ const condition = ref({
 const pageInfo = ref({
   pages: 0,
   pageSize: 0,
-  pageNum: 0
+  pageNum: 0,
 });
 //分页查询
 function selectByPage(pageNum) {
