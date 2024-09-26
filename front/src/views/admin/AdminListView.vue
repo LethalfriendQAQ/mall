@@ -23,7 +23,7 @@
         </el-form-item>
       </el-form>
       <el-table :data="pageInfo.list" border style="width: 100%">
-        <el-table-column prop="id" label="ID"/>
+        <el-table-column prop="id" label="ID" width="50px"/>
         <el-table-column prop="username" label="用户名"/>
         <el-table-column prop="password" label="密码"/>
         <el-table-column prop="salt" label="盐"/>
