@@ -5,7 +5,9 @@ import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.st.mall.common.bean.RespBean;
+import com.st.mall.common.config.WhiteListConfig;
 import com.st.mall.common.utils.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -16,8 +18,22 @@ import java.util.Map;
 
 @Component
 public class JwtInterceptor implements HandlerInterceptor {
+    @Autowired
+    private WhiteListConfig whiteListConfig;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object hander) throws IOException {
+        //获取请求路径
+        String path = request.getRequestURI();
+        //获取请求方式
+        String method = request.getMethod();
+        //判断请求是否在白名单中 - 放行
+        if (whiteListConfig.getRules()
+                .stream()
+                .anyMatch(rule -> rule.getMethod().equalsIgnoreCase(method) && path.matches(rule.getRegPath()))) {
+            return true;
+        }
+
+
         //对OPTIONS请求放行，不然会出现跨域问题
         if("OPTIONS".equals(request.getMethod().toUpperCase())) {
             return true;
