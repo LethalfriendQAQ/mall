@@ -94,4 +94,8 @@ public class AdminController {
         Admin admin = adminService.selectById(id);
         return RespBean.ok("", admin);
     }
+    @GetMapping("/test")
+    public RespBean test() {
+        return RespBean.ok("hhhhh");
+    }
 }
