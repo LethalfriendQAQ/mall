@@ -266,11 +266,23 @@
 
 <script setup>
 import goodsApi from "@/api/goodsApi.js";
-import {ref, shallowRef, onBeforeUnmount, onMounted} from "vue";
+import {ref, shallowRef, onBeforeUnmount, onMounted, computed} from "vue";
 import {ElMessage} from "element-plus";
 import categoryApi from "@/api/categoryApi.js";
 import '@wangeditor/editor/dist/css/style.css' // 引入 css
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+import {useTokenStore} from "@/stores/token.js";
+
+
+const tokenStore = useTokenStore();
+
+const headers = computed(() => {
+  let token = tokenStore.tokenStr;
+  return {
+    token
+  }
+})
+
 //服务器路径
 const SERVER_ADDR = ref(import.meta.env.VITE_SERVER_ADDR);
 // 编辑器实例，必须用 shallowRef
@@ -516,8 +528,6 @@ function insert() {
             status: null,
             picList: []
           };
-          //imgUrl清空
-          //imageUrl.value = '';
           //刷新表格数据
           selectByPage(pageInfo.value.pageNum);
         } else {

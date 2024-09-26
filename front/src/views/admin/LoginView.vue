@@ -61,7 +61,7 @@ function login() {
     if (valid) {
       // 如果表单验证通过，调用登录 API
       adminApi.login(admin.value).then(resp => {
-        if (resp.code === 10000) {
+        if (resp.code == 10000) {
           ElMessage({
             message: resp.msg,
             type: 'success',

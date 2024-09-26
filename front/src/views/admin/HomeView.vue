@@ -16,7 +16,7 @@
           <template #title>Admin</template>
           <el-menu-item index="center">个人中心</el-menu-item>
           <el-menu-item index="chgPwd">修改密码</el-menu-item>
-          <el-menu-item index="logout">退出登录</el-menu-item>
+          <el-menu-item index="logout" @click="logout">退出登录</el-menu-item>
         </el-sub-menu>
       </el-menu>
     </el-header>
@@ -81,6 +81,17 @@
 <script setup>
 import {RouterView} from "vue-router";
 import router from "@/router/index.js";
+import { useTokenStore} from "@/stores/token.js";
+const tokenStore = useTokenStore();
+
+function logout() {
+  //重置store中的token
+  tokenStore.$reset();
+  //跳转到登录页
+  router.push('/login');
+}
+
+
 </script>
 
 <style scoped>

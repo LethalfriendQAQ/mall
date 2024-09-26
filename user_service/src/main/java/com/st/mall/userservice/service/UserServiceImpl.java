@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Service
@@ -27,6 +29,7 @@ public class UserServiceImpl implements UserService {
                 .anyMatch(item -> item.getUsername().equals(user.getUsername()))) {
             throw new StException("该用户名已存在");
         }
+        user.setMoney(new BigDecimal(String.valueOf(user.getMoney())).setScale(2, RoundingMode.HALF_UP));
         userMapper.insert(user);
     }
 

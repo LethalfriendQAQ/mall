@@ -7,6 +7,7 @@ import GoodsListView from "@/views/admin/GoodsListView.vue";
 import OrderListView from "@/views/admin/OrderListView.vue";
 import UserListView from "@/views/admin/UserListView.vue";
 import LoginView from "@/views/admin/LoginView.vue";
+import {useTokenStore} from "@/stores/token.js";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -51,5 +52,22 @@ const router = createRouter({
         },
     ]
 })
+//导航守卫
+router.beforeEach((to, from) => {
+    //to - 要访问的位置
+    //from - 其实位置
+    if(to.path == '/admin/login') {
+        return true;
+    } else {
+        const tokenStore = useTokenStore();
+
+        //判断store中是否有token
+        if(!tokenStore.token) {
+            return "/admin/login";
+        } else {
+            return true;
+        }
+    }
+});
 
 export default router
