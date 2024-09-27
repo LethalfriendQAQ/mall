@@ -10,8 +10,8 @@ const adminApi = {
         return service.delete(`/admin/${id}`);
     },
     // 修改
-    update(admin) {
-        return service.put("/admin", admin);
+    changeInfo(admin) {
+        return service.put("/admin/changeInfo", admin);
     },
     // 根据ID查询
     selectById(id) {
@@ -32,6 +32,9 @@ const adminApi = {
     //获取已登录用户的信息
     getInfo() {
         return service.get("/admin/info")
+    },
+    changePassword(chgPwdObj) {
+        return service.put("/admin/changePassword", qs.stringify(chgPwdObj))
     }
 }
 

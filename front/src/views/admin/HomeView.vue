@@ -14,8 +14,8 @@
         <el-menu-item index="1" style="width: 200px">在线商城</el-menu-item>
         <el-sub-menu index="2">
           <template #title>{{ admin.username }}</template>
-          <el-menu-item index="center">个人中心</el-menu-item>
-          <el-menu-item index="chgPwd">修改密码</el-menu-item>
+          <el-menu-item index="center" @click="updateDialogShow = true">个人中心</el-menu-item>
+          <el-menu-item index="chgPwd" @click="chgPwdDialogShow = true">修改密码</el-menu-item>
           <el-menu-item index="logout" @click="logout">退出登录</el-menu-item>
         </el-sub-menu>
       </el-menu>
@@ -76,6 +76,55 @@
       </el-main>
     </el-container>
   </el-container>
+
+  <!-- 修改密码对话框开始 -->
+  <el-dialog v-model="chgPwdDialogShow" title="修改密码" width="500">
+    <el-form>
+      <el-form-item label="原密码" label-width="20%">
+        <el-input v-model="chgPwdObj.oldPwd" type="password" placeholder="请输入原密码" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="新密码" label-width="20%">
+        <el-input v-model="chgPwdObj.newPwd" type="password" placeholder="请输入新密码" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="确认新密码" label-width="20%">
+        <el-input v-model="chgPwdObj.newPwd1" type="password" placeholder="请确认新密码" autocomplete="off" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="chgPwdDialogShow = false">取消</el-button>
+        <el-button type="primary" @click="changePassword">确认</el-button>
+      </div>
+    </template>
+  </el-dialog>
+  <!-- 修改密码对话框结束 -->
+
+
+  <!-- 修改管理员信息对话框开始 -->
+  <el-dialog v-model="updateDialogShow" title="修改管理员个人信息" width="500">
+    <el-form>
+      <el-form-item label="用户名" label-width="20%">
+        <el-input v-model="admin.username" disabled autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="电话" label-width="20%">
+        <el-input v-model="admin.phone" placeholder="请输入新电话" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="邮箱" label-width="20%">
+        <el-input v-model="admin.email" placeholder="请输入邮箱" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="真实姓名" label-width="20%">
+        <el-input v-model="admin.realname" placeholder="请输入真实姓名" autocomplete="off" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="updateDialogShow = false">取消</el-button>
+        <el-button type="primary" @click="changeInfo">确认</el-button>
+      </div>
+    </template>
+  </el-dialog>
+  <!-- 修改管理员信息对话框结束 -->
+
 </template>
 
 <script setup>
@@ -84,12 +133,53 @@ import router from "@/router/index.js";
 import { useTokenStore} from "@/stores/token.js";
 import adminApi from "@/api/adminApi.js";
 import {ref} from "vue";
+import {ElMessage} from "element-plus";
 
 
 const tokenStore = useTokenStore();
 const admin = ref({
-  username: null
+  username: null,
+  phone: null,
+  email: null,
+  realname: null
 });
+
+const chgPwdDialogShow = ref(false);
+
+const chgPwdObj = ref({
+  oldPwd: null,
+  newPwd: null,
+  newPwd1: null,
+})
+
+//是否显示管理员信息对话框
+const updateDialogShow = ref(false);
+
+function changeInfo() {
+  adminApi.changeInfo(admin.value)
+      .then(resp => {
+        if (resp.code == 10000) {
+          ElMessage.success(resp.msg);
+          updateDialogShow.value = false;
+        } else {
+          ElMessage.error(resp.msg);
+        }
+        getInfo();
+      })
+}
+
+function changePassword() {
+  adminApi.changePassword(chgPwdObj.value)
+      .then(resp => {
+        if (resp.code == 10000) {
+          ElMessage.success(resp.msg);
+          //重置token并退出
+          logout()
+        } else {
+          ElMessage.error(resp.msg);
+        }
+      })
+}
 
 function logout() {
   //重置store中的token

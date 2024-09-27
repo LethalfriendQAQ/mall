@@ -69,8 +69,9 @@ public class AdminController {
         return RespBean.ok("添加成功");
     }
     //修改
-    @PutMapping
-    public RespBean update(@RequestBody Admin admin) throws StException {
+    @PutMapping("/changeInfo")
+    public RespBean changeInfo(@RequestBody Admin admin) throws StException {
+        admin.setUsername(null);
         adminService.update(admin);
         return RespBean.ok("修改成功");
     }
@@ -109,9 +110,16 @@ public class AdminController {
 
     //修改密码
     @PutMapping("/changePassword")
-    public RespBean changePassword(String oldPwd, String newPwd, Integer id) {
-
-        return RespBean.ok("");
+    public RespBean changePassword(String oldPwd, String newPwd, String newPwd1, @RequestHeader("token") String token) throws StException {
+        if (!newPwd.equals(newPwd1)) {
+            throw new StException("两次输入的新密码不一致");
+        }
+        //解析token
+        Map<String, Object> map = JwtUtil.parseJwtToMap(token);
+        //获取用户id - 根据id查询用户信息
+        Integer id = (Integer) map.get("id");
+        adminService.changePassword(oldPwd, newPwd, id);
+        return RespBean.ok("修改成功");
     }
     //修改管理员信息
 }
