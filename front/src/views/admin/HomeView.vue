@@ -88,7 +88,7 @@ function logout() {
   //重置store中的token
   tokenStore.$reset();
   //跳转到登录页
-  router.push('/login');
+  router.push('/admin/login');
 }
 
 

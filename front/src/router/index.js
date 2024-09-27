@@ -8,16 +8,23 @@ import OrderListView from "@/views/admin/OrderListView.vue";
 import UserListView from "@/views/admin/UserListView.vue";
 import LoginView from "@/views/admin/LoginView.vue";
 import {useTokenStore} from "@/stores/token.js";
+import UserLoginView from "@/views/user/LoginView.vue";
+import UserHomeView from "@/views/user/HomeView.vue";
+
+
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
+            path: '/',
+            name: 'user_home',
+            component: UserHomeView
+        }, {
             path: '/admin/login',
             name: 'admin_login',
             component: LoginView
-        },
-        {
+        }, {
             path: '/admin/home',
             name: 'admin_home',
             component: HomeView,
@@ -49,23 +56,34 @@ const router = createRouter({
                     component: UserListView
                 }
             ]
-        },
+        }, {
+            path: '/user/login',
+            name: 'user_login',
+            component: UserLoginView
+        }
     ]
 })
 //导航守卫
 router.beforeEach((to, from) => {
-    //to - 要访问的位置
-    //from - 其实位置
-    if(to.path == '/admin/login') {
+    //to - 跳转到的位置
+    //from - 原位置
+    //TODO 将来还会对其他页面放行 例如：前台首页，搜索页，详情页，用户登录注册页
+    if(to.path == '/admin/login' || to.path == '/user/login' || to.path == '/') {
         return true;
     } else {
         const tokenStore = useTokenStore();
 
         //判断store中是否有token
-        if(!tokenStore.token) {
-            return "/admin/login";
-        } else {
+        if(tokenStore.token) {
             return true;
+        } else {
+            //判断跳转到管理员的登录页还是用户的登录页
+            let currentPath = router.currentRoute.value.path;
+            if (currentPath.startsWith("/admin")) {
+                return "/admin/login";
+            } else {
+                return "/user/login";
+            }
         }
     }
 });

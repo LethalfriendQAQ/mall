@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h1>管理员登录</h1>
-    <el-form :model="admin" :rules="rules" ref="form" label-width="60px">
+    <el-form :model="admin" :rules="rules" ref="form" label-width="60px" @keydown.enter="login">
       <el-form-item label="用户名" prop="username" label-width="65px">
         <el-input type="text" v-model="admin.username"></el-input>
       </el-form-item>
