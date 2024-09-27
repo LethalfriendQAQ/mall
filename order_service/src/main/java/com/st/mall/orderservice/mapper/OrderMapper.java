@@ -1,6 +1,6 @@
 package com.st.mall.orderservice.mapper;
 
-import cn.hutool.db.sql.Order;
+import com.st.mall.common.bean.Order;
 
 import java.util.List;
 

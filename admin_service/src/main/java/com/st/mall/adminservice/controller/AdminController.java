@@ -68,7 +68,7 @@ public class AdminController {
         adminService.insert(admin);
         return RespBean.ok("添加成功");
     }
-    //修改
+    //修改管理员信息
     @PutMapping("/changeInfo")
     public RespBean changeInfo(@RequestBody Admin admin) throws StException {
         admin.setUsername(null);
@@ -121,5 +121,5 @@ public class AdminController {
         adminService.changePassword(oldPwd, newPwd, id);
         return RespBean.ok("修改成功");
     }
-    //修改管理员信息
+
 }

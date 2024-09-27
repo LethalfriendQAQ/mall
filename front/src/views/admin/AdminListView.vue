@@ -78,7 +78,6 @@ const pageInfo = ref({
 function selectByPage(pageNum) {
   adminApi.selectByPage(condition.value, pageNum, 5)
       .then(resp => {
-        console.log(resp);
         pageInfo.value = resp.data;
       })
 }

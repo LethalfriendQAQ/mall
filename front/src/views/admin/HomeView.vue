@@ -6,10 +6,10 @@
           default-active="1"
           class="el-menu-demo"
           mode="horizontal"
-          background-color="#545c64"
+          background-color="#242424"
           text-color="#fff"
           :ellipsis="false"
-          active-text-color="#ffd04b"
+          active-text-color="#deff4b"
       >
         <el-menu-item index="1" style="width: 200px">在线商城</el-menu-item>
         <el-sub-menu index="2">
@@ -24,8 +24,8 @@
       <!--<el-aside width="300px" style="border-radius: 20px;margin: 10px;">-->
       <el-aside width="200px">
         <el-menu
-            active-text-color="#ffd04b"
-            background-color="#545c64"
+            active-text-color="#deff4b"
+            background-color="#242424"
             class="el-menu-vertical-demo"
             text-color="#fff"
             :router="true"
@@ -39,35 +39,35 @@
               <el-icon><Avatar /></el-icon>
               <span>管理员管理</span>
             </template>
-            <el-menu-item index="/admin/list">管理员列表</el-menu-item>
+            <el-menu-item index="/admin/list" style="background-color: #4a5054;">管理员列表</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="2">
             <template #title>
               <el-icon><GoodsFilled /></el-icon>
               <span>商品分类管理</span>
             </template>
-            <el-menu-item index="/admin/category">分类列表</el-menu-item>
+            <el-menu-item index="/admin/category" style="background-color: #4a5054;">分类列表</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="3">
             <template #title>
               <el-icon><Goods /></el-icon>
               <span>商品管理</span>
             </template>
-            <el-menu-item index="/admin/goods">商品列表</el-menu-item>
+            <el-menu-item index="/admin/goods" style="background-color: #4a5054;">商品列表</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="4">
             <template #title>
               <el-icon><UserFilled /></el-icon>
               <span>用户管理</span>
             </template>
-            <el-menu-item index="/admin/user">用户列表</el-menu-item>
+            <el-menu-item index="/admin/user" style="background-color: #4a5054;">用户列表</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="5">
             <template #title>
               <el-icon><Tickets /></el-icon>
               <span>订单管理</span>
             </template>
-            <el-menu-item index="/admin/order">订单列表</el-menu-item>
+            <el-menu-item index="/admin/order" style="background-color: #4a5054;">订单列表</el-menu-item>
           </el-sub-menu>
         </el-menu>
       </el-aside>

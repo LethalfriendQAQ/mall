@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.st.mall.orderservice.mapper.OrderMapper">
-    <insert id="insert" parameterType="order">
+    <insert id="insert" parameterType="com.st.mall.common.bean.Order">
         INSERT INTO `order`(
             `id`,
             `user_id`,
@@ -13,20 +13,21 @@
             `status`
         )
         VALUES (
-            #{id},
-            #{userId},
-            #{createTime},
-            #{express},
-            #{payType},
-            #{addrId},
-            #{addrDetail},
-            #{status}
+                   #{id},
+                   #{userId},
+                   #{createTime},
+                   #{express},
+                   #{payType},
+                   #{addrId},
+                   #{addrDetail},
+                   #{status}
                )
     </insert>
-    <update id="update" parameterType="order">
+
+    <update id="update" parameterType="com.st.mall.common.bean.Order">
         UPDATE `order`
         <set>
-            <if test="id!=null and id.length>0">
+            <if test="id!=null and id!=''">
                 `id`=#{id},
             </if>
             <if test="userId!=null">
@@ -35,7 +36,7 @@
             <if test="createTime!=null">
                 `create_time`=#{createTime},
             </if>
-            <if test="express!=null and express.length>0">
+            <if test="express!=null and express!=''">
                 `express`=#{express},
             </if>
             <if test="payType!=null">
@@ -44,22 +45,24 @@
             <if test="addrId!=null">
                 `addr_id`=#{addrId},
             </if>
-            <if test="addrDetail!=null and addrDetail.length>0">
+            <if test="addrDetail!=null and addrDetail!=''">
                 `addr_detail`=#{addrDetail},
             </if>
             <if test="status!=null">
-                `status`=#{status},
+                `status`=#{status}
             </if>
         </set>
         WHERE `id`=#{id}
     </update>
-    <delete id="delete">
+
+    <delete id="delete" parameterType="java.lang.Integer">
         DELETE FROM `order` WHERE `id`=#{id}
     </delete>
-    <select id="selectByCondition" resultType="order">
+
+    <select id="selectByCondition" resultType="com.st.mall.common.bean.Order">
         SELECT * FROM `order`
         <where>
-            <if test="id!=null and id.length>0">
+            <if test="id!=null and id!=''">
                 AND `id` LIKE CONCAT('%', #{id}, '%')
             </if>
             <if test="userId!=null">
@@ -70,7 +73,8 @@
             </if>
         </where>
     </select>
-    <select id="selectById" resultType="order">
+
+    <select id="selectById" resultType="com.st.mall.common.bean.Order">
         SELECT * FROM `order` WHERE `id`=#{id}
     </select>
 </mapper>
