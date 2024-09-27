@@ -27,7 +27,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         //获取请求方式
         String method = request.getMethod();
         //判断请求是否在白名单中 - 放行
-        if (whiteListConfig.getRules()
+        if (whiteListConfig.getRules() != null && whiteListConfig.getRules()
                 .stream()
                 .anyMatch(rule -> rule.getMethod().equalsIgnoreCase(method) && path.matches(rule.getRegPath()))) {
             return true;

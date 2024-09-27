@@ -13,7 +13,7 @@
       >
         <el-menu-item index="1" style="width: 200px">在线商城</el-menu-item>
         <el-sub-menu index="2">
-          <template #title>Admin</template>
+          <template #title>{{ admin.username }}</template>
           <el-menu-item index="center">个人中心</el-menu-item>
           <el-menu-item index="chgPwd">修改密码</el-menu-item>
           <el-menu-item index="logout" @click="logout">退出登录</el-menu-item>
@@ -82,7 +82,14 @@
 import {RouterView} from "vue-router";
 import router from "@/router/index.js";
 import { useTokenStore} from "@/stores/token.js";
+import adminApi from "@/api/adminApi.js";
+import {ref} from "vue";
+
+
 const tokenStore = useTokenStore();
+const admin = ref({
+  username: null
+});
 
 function logout() {
   //重置store中的token
@@ -91,7 +98,15 @@ function logout() {
   router.push('/admin/login');
 }
 
+//获取已登录用户的信息
+function getInfo() {
+  adminApi.getInfo()
+      .then(resp => {
+          admin.value = resp.data
+      })
+}
 
+getInfo()
 </script>
 
 <style scoped>

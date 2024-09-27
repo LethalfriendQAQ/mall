@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -95,8 +96,22 @@ public class AdminController {
         Admin admin = adminService.selectById(id);
         return RespBean.ok("", admin);
     }
-    @GetMapping("/test")
-    public RespBean test() {
-        return RespBean.ok("hhhhh");
+    @GetMapping("/info")
+    public RespBean getLogin(@RequestHeader("token") String token) {
+        //解析token
+        Map<String, Object> map = JwtUtil.parseJwtToMap(token);
+        //获取用户的id - 根据id查询用户的信息
+        Integer id = (Integer) map.get("id");
+        Admin admin = adminService.selectById(id);
+        //返回
+        return RespBean.ok("",admin);
     }
+
+    //修改密码
+    @PutMapping("/changePassword")
+    public RespBean changePassword(String oldPwd, String newPwd, Integer id) {
+
+        return RespBean.ok("");
+    }
+    //修改管理员信息
 }

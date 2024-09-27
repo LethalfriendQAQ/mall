@@ -31,6 +31,7 @@ public class AdminServiceImpl implements AdminService {
         return adminMapper.insert(admin) == 1;
     }
 
+    //修改个人信息
     @Override
     public boolean update(Admin admin) throws StException {
         //判断修改后的用户名是否重复
@@ -41,6 +42,32 @@ public class AdminServiceImpl implements AdminService {
                 .anyMatch(item -> item.getUsername().equals(admin.getUsername()))) {
             throw new StException("该用户名已存在");
         }
+        return adminMapper.update(admin) == 1;
+    }
+
+    @Override
+    public boolean changePassword(String oldPwd, String newPwd, Integer id) throws StException {
+        /**
+         * 判断原密码是否正确
+         * 1. 根据id查询用户信息，获取原密码和盐
+         * 2. 使用用户输入的原密码和盐加密
+         * 3. 和数据库中的原密码比较
+         */
+        Admin admin = adminMapper.selectById(id);
+        String salt = admin.getSalt();
+        //使用用户输入的原密码和盐加密
+        String md5InputOldPwd = SecureUtil.md5(SecureUtil.md5(oldPwd + salt));
+        //和数据库中的原密码比较
+        if (!admin.getPassword().equals(md5InputOldPwd)) {
+            throw new StException("原密码输入错误，请重新输入");
+        }
+        //对新密码结合盐进行加密
+        String md5NewPwd = SecureUtil.md5(SecureUtil.md5(newPwd + salt));
+        //修改密码
+        admin = new Admin();
+        admin.setId(id);
+        admin.setPassword(md5NewPwd);
+
         return adminMapper.update(admin) == 1;
     }
 

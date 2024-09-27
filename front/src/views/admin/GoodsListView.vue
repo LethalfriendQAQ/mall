@@ -142,6 +142,7 @@
       </el-form-item>
       <el-form-item label="图片" label-width="20%">
         <el-upload
+            :headers="headers"
             v-model:file-list="goodsAdd.picList"
             :action="SERVER_ADDR + '/category/upload'"
             name="pic"
@@ -215,6 +216,7 @@
       </el-form-item>
       <el-form-item label="图片" label-width="20%">
         <el-upload
+            :headers="headers"
             v-model:file-list="goodsUpdate.picList"
             list-type="picture-card"
             :action="SERVER_ADDR + '/category/upload'"
@@ -269,15 +271,13 @@ import goodsApi from "@/api/goodsApi.js";
 import {ref, shallowRef, onBeforeUnmount, onMounted, computed} from "vue";
 import {ElMessage} from "element-plus";
 import categoryApi from "@/api/categoryApi.js";
-import '@wangeditor/editor/dist/css/style.css' // 引入 css
+import '@wangeditor/editor/dist/css/style.css'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import {useTokenStore} from "@/stores/token.js";
 
-
 const tokenStore = useTokenStore();
-
 const headers = computed(() => {
-  let token = tokenStore.tokenStr;
+  const token = tokenStore.tokenStr;
   return {
     token
   }
@@ -298,6 +298,9 @@ const editorConfig = {
     uploadImage: {
       server: `${SERVER_ADDR.value}/goods/upload`,
       fieldName: 'pic',
+      headers: {
+        token: tokenStore.tokenStr
+      },
       customInsert(resp, insertFn) {                  // JS 语法
         // res 即服务端的返回结果
         let url = `${SERVER_ADDR.value}/goods/pic/${resp.data}`;

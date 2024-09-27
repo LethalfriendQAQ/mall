@@ -10,8 +10,11 @@ import java.util.List;
 public interface AdminService {
     //添加
     boolean insert(Admin admin) throws StException;
-    //修改
+    //修改个人信息
     boolean update(Admin admin) throws StException;
+
+    //修改密码
+    boolean changePassword(String oldPwd, String newPwd, Integer id) throws StException;
 
     boolean delete(Integer id);
     Admin selectById(Integer id);

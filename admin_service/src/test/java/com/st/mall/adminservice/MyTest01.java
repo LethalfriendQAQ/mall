@@ -21,6 +21,11 @@ public class MyTest01 {
     private AdminService adminService;
 
     @Test
+    public void test21() throws ParseException, StException {
+        adminService.changePassword("123", "admin", 1);
+    }
+
+    @Test
     public void test11() throws ParseException, StException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Admin admin = new Admin(null, "1212", "1212", "1212", "1111", "1111", "1", sdf.parse("2024-05-08 10:01:01"), 0);

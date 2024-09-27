@@ -110,7 +110,7 @@
       </el-form-item>
       <!--</el-form-item>-->
       <el-form-item label="图片" label-width="20%">
-        <el-upload class="avatar-uploader" :action="SERVER_ADDR + '/category/upload'" name="pic"
+        <el-upload class="avatar-uploader" :action="SERVER_ADDR + '/category/upload'" name="pic" :headers="headers"
                    :show-file-list="false" :before-upload="beforePicUpload" :on-success="PicAddUploadSuccess">
           <img v-if="categoryAdd.pic" :src="SERVER_ADDR + '/category/pic/' + categoryAdd.pic" class="avatar" />
           <el-icon v-else class="avatar-uploader-icon">
@@ -158,7 +158,7 @@
       </el-form-item>
       <!--</el-form-item>-->
       <el-form-item label="图片" label-width="20%">
-        <el-upload class="avatar-uploader" :action="SERVER_ADDR + '/category/upload'" name="pic"
+        <el-upload class="avatar-uploader" :action="SERVER_ADDR + '/category/upload'" name="pic" :headers="headers"
                    :show-file-list="false" :before-upload="beforePicUpload" :on-success="PicUpdateUploadSuccess">
           <img v-if="categoryUpdate.pic" :src="SERVER_ADDR + '/category/pic/' + categoryUpdate.pic" class="avatar" />
           <el-icon v-else class="avatar-uploader-icon">
@@ -180,8 +180,17 @@
 
 <script setup>
 import categoryApi from "@/api/categoryApi.js";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import {ElMessage} from "element-plus";
+import {useTokenStore} from "@/stores/token.js";
+
+const tokenStore = useTokenStore();
+const headers = computed(() => {
+  const token = tokenStore.tokenStr;
+  return {
+    token
+  }
+})
 
 //服务器路径
 const SERVER_ADDR = ref(import.meta.env.VITE_SERVER_ADDR);

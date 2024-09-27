@@ -12,14 +12,13 @@ const service = axios.create({
 service.interceptors.request.use(function (config) {
     const tokenStore = useTokenStore();
     // 如果不是登录请求就要在请求头中添加token
-    if (!config.url.startsWith("/admin/login")) {
+    if (tokenStore.tokenStr) {
         //将Store中的token放在请求头当中
         config.headers.token = tokenStore.tokenStr;
     }
     return config;
-}, function (error) {
-    // 对请求错误做些什么
-    return Promise.reject(error);
+}, error => {
+
 });
 
 
@@ -27,7 +26,7 @@ service.interceptors.request.use(function (config) {
 //axios的响应拦截器
 service.interceptors.response.use(resp => {
     //获取续期的jwt
-    let token = resp.headers.token;
+    const token = resp.headers.token;
 
     //检查token是否存在
     if (token) {
@@ -47,8 +46,12 @@ service.interceptors.response.use(resp => {
                 //将store中的token设置为初值
                 const tokenStore = useTokenStore();
                 tokenStore.$reset();
-                //跳转到登录页
-                router.push('/admin/login');
+                let currentPath = router.currentRoute.value.path;
+                if (currentPath.startsWith("/admin")) {
+                    return "/admin/login";
+                } else {
+                    return "/user/login";
+                }
             }
         });
     }
