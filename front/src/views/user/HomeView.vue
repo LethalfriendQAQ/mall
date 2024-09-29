@@ -3,7 +3,11 @@
     <el-header>
       <UserHeader />
     </el-header>
-    <el-main>Main</el-main>
+    <el-main>
+      <div class="center">
+        <RouterView />
+      </div>
+    </el-main>
     <el-footer>
       <UserFooter/>
     </el-footer>
@@ -18,5 +22,15 @@ import UserFooter from "@/components/user/home/UserFooter.vue";
 <style scoped>
 .el-header, .el-main, el-footer {
   padding: 0px;
+  height: auto;
+}
+.el-main {
+  height: 100%;
+}
+.el-footer {
+  margin-top: 20px;
+  padding: 10px 0;
+  height: 190px;
+  background-color: var(--theme-bg-color);
 }
 </style>

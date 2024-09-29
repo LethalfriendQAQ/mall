@@ -10,6 +10,9 @@ import LoginView from "@/views/admin/LoginView.vue";
 import {useTokenStore} from "@/stores/token.js";
 import UserLoginView from "@/views/user/LoginView.vue";
 import UserHomeView from "@/views/user/HomeView.vue";
+import UserIndexView from "@/views/user/IndexView.vue"
+import UserRegView from "@/views/user/RegView.vue"
+import UserSearchView from "@/views/user/SearchView.vue"
 
 
 
@@ -19,7 +22,27 @@ const router = createRouter({
         {
             path: '/',
             name: 'user_home',
-            component: UserHomeView
+            component: UserHomeView,
+            redirect: '/user/index',
+            children: [
+                {
+                    path: '/user/login',
+                    name: 'user_login',
+                    component: UserLoginView
+                }, {
+                    path: '/user/index',
+                    name: 'user_index',
+                    component: UserIndexView
+                }, {
+                    path: '/user/search',
+                    name: 'user_search',
+                    component: UserSearchView
+                }, {
+                    path: '/user/reg',
+                    name: 'user_reg',
+                    component: UserRegView
+                }
+            ]
         }, {
             path: '/admin/login',
             name: 'admin_login',
@@ -56,11 +79,7 @@ const router = createRouter({
                     component: UserListView
                 }
             ]
-        }, {
-            path: '/user/login',
-            name: 'user_login',
-            component: UserLoginView
-        }
+        },
     ]
 })
 //导航守卫
@@ -68,7 +87,13 @@ router.beforeEach((to, from) => {
     //to - 跳转到的位置
     //from - 原位置
     //TODO 将来还会对其他页面放行 例如：前台首页，搜索页，详情页，用户登录注册页
-    if(to.path == '/admin/login' || to.path == '/user/login' || to.path == '/') {
+    if(to.path == '/admin/login' ||
+        to.path == '/' ||
+        to.path == '/user/login' ||
+        to.path == '/user/index' ||
+        to.path == '/user/reg' ||
+        to.path == '/user/search'
+    ) {
         return true;
     } else {
         const tokenStore = useTokenStore();
@@ -78,7 +103,6 @@ router.beforeEach((to, from) => {
             return true;
         } else {
             //判断跳转到管理员的登录页还是用户的登录页
-            let currentPath = router.currentRoute.value.path;
             if (to.path.startsWith("/admin")) {
                 return "/admin/login";
             } else {

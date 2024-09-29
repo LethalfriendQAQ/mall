@@ -207,4 +207,8 @@ getInfo()
 .el-header {
   padding: 0px;
 }
+.el-container, .el-menu {
+  height: 100%;
+}
+
 </style>
