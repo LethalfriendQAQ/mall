@@ -4,6 +4,7 @@ import com.st.mall.common.bean.Category;
 import com.st.mall.common.bean.RespBean;
 import com.st.mall.common.exception.StException;
 import com.st.mall.common.service.CategoryService;
+import com.st.mall.goodsservice.mapper.CategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     //添加
     @PostMapping

@@ -84,6 +84,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .anyMatch(item -> item.getName().equals(name) && !item.getId().equals(category.getId()))) {
             throw new StException("修改之后的分类名和其他同级分类名相同");
         }
+
         //修改
         return categoryMapper.update(category) == 1;
     }

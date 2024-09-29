@@ -46,8 +46,15 @@
         <el-table-column prop="count" label="数量"/>
         <el-table-column label="是否推荐">
           <template #default="scope">
-            <el-tag type="success" v-if="scope.row.recom == 1">推荐</el-tag>
-            <el-tag type="warning" v-else>不推荐</el-tag>
+            <el-switch
+                v-model="scope.row.recom"
+                inline-prompt
+                :inactive-value="0"
+                :active-value="1"
+                inactive-text="不推荐"
+                active-text="推荐"
+                @change="chgRecom(scope.row.id, scope.row.recom, scope.row.parentId)"
+            />
           </template>
         </el-table-column>
         <el-table-column label="分类">
@@ -58,8 +65,15 @@
         <el-table-column prop="score" label="评分"/>
         <el-table-column label="是否上架">
           <template #default="scope">
-            <el-tag type="success" v-if="scope.row.status == 1">上架中</el-tag>
-            <el-tag type="warning" v-else>已下架</el-tag>
+            <el-switch
+                v-model="scope.row.status"
+                inline-prompt
+                :inactive-value="0"
+                :active-value="1"
+                inactive-text="已下架"
+                active-text="上架中"
+                @change="chgStatus(scope.row.id, scope.row.status)"
+            />
           </template>
         </el-table-column>
         <el-table-column label="图片">
@@ -386,6 +400,47 @@ const goodsUpdate = ref({
 });
 //是否想显示商品详情
 const detailDialogShow = ref(false);
+
+function chgRecom(id, recom, parentId) {
+  const goods = {
+    id,
+    recom,
+    parentId
+  }
+  goodsApi.update(goods)
+      .then(resp => {
+        if (resp.code == 10000) {
+          //弹出消息
+          ElMessage.success(resp.msg);
+          //刷新表格数据
+          selectByPage(pageInfo.value.pageNum);
+        } else {
+          //弹出消息
+          ElMessage.error(resp.msg);
+        }
+      });
+}
+
+
+function chgStatus(id, status, parentId) {
+  const goods = {
+    id,
+    status,
+    parentId
+  }
+  goodsApi.update(goods)
+      .then(resp => {
+        if (resp.code == 10000) {
+          //弹出消息
+          ElMessage.success(resp.msg);
+          //刷新表格数据
+          selectByPage(pageInfo.value.pageNum);
+        } else {
+          //弹出消息
+          ElMessage.error(resp.msg);
+        }
+      });
+}
 
 //显示商品详情对话框
 function showDetailDialog(goods) {

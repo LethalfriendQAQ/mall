@@ -51,14 +51,29 @@
           </el-table-column>
           <el-table-column label="是否推荐">
             <template #default="scope">
-              <el-tag type="success" v-if="scope.row.recom == 1">推荐</el-tag>
-              <el-tag type="warning" v-else>不推荐</el-tag>
+              <el-switch
+                  v-model="scope.row.recom"
+                  inline-prompt
+                  :inactive-value="0"
+                  :active-value="1"
+                  inactive-text="不推荐"
+                  active-text="推荐"
+                  @change="chgRecom(scope.row.id, scope.row.recom, scope.row.parentId)"
+              />
             </template>
           </el-table-column>
+
           <el-table-column label="是否上架">
             <template #default="scope">
-              <el-tag type="success" v-if="scope.row.status == 1">上架中</el-tag>
-              <el-tag type="warning" v-else>已下架</el-tag>
+              <el-switch
+                  v-model="scope.row.status"
+                  inline-prompt
+                  :inactive-value="0"
+                  :active-value="1"
+                  inactive-text="已下架"
+                  active-text="上架中"
+                  @change="chgStatus(scope.row.id, scope.row.status, scope.row.parentId)"
+              />
             </template>
           </el-table-column>
 
@@ -233,12 +248,55 @@ const categoryUpdate = ref({
 });
 //是否显示修改对话框
 const updateDialogShow = ref(false);
+
+
+
 //分页查询
 function selectByPage(pageNum) {
   categoryApi.selectByPage(condition.value, pageNum, 5)
       .then(resp => {
         pageInfo.value = resp.data;
       })
+}
+
+function chgRecom(id, recom, parentId) {
+  const category = {
+    id,
+    recom,
+    parentId
+  }
+  categoryApi.update(category)
+      .then(resp => {
+        if (resp.code == 10000) {
+          //弹出消息
+          ElMessage.success(resp.msg);
+          //刷新表格数据
+          selectByPage(pageInfo.value.pageNum);
+        } else {
+          //弹出消息
+          ElMessage.error(resp.msg);
+        }
+      });
+}
+
+function chgStatus(id, status, parentId) {
+  const category = {
+    id,
+    status,
+    parentId
+  }
+  categoryApi.update(category)
+      .then(resp => {
+        if (resp.code == 10000) {
+          //弹出消息
+          ElMessage.success(resp.msg);
+          //刷新表格数据
+          selectByPage(pageInfo.value.pageNum);
+        } else {
+          //弹出消息
+          ElMessage.error(resp.msg);
+        }
+      });
 }
 
 //获取所有的父分类
