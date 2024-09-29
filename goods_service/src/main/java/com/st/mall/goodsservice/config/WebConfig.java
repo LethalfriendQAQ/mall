@@ -23,6 +23,11 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
                 .addPathPatterns("/goods/**", "/category/**")
-                .excludePathPatterns("/category/allParent", "/category/pic/**", "/goods/pic/**");
+                .excludePathPatterns(
+                        "/category/allParent",
+                        "/category/pic/**",
+                        "/category/search",
+                        "/goods/pic/**"
+                );
     }
 }

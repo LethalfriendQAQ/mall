@@ -43,19 +43,34 @@
   <!-- 上架的第一级分类 -->
   <div class="center">
     <ul class="category" >
-      <li><RouterLink to="/" >手机</RouterLink></li>
-      <li><RouterLink to="/" >手机</RouterLink></li>
-      <li><RouterLink to="/" >手机</RouterLink></li>
-      <li><RouterLink to="/" >手机</RouterLink></li>
-      <li><RouterLink to="/" >手机</RouterLink></li>
-      <li><RouterLink to="/" >手机</RouterLink></li>
+      <li v-for="(category, index) in parentList" :key="index"><RouterLink to="/user/search" >{{ category.name }}</RouterLink></li>
     </ul>
   </div>
+  <!--  -->
+
+
 </template>
 
 <script setup>
 
 import {Search} from "@element-plus/icons-vue";
+import {ref} from "vue";
+import categoryApi from "@/api/categoryApi.js";
+
+const parentList = ref([])
+
+function getParent() {
+  const condition = ({
+    parentId: 0,
+    status: 1
+  });
+  categoryApi.selectByPage(condition)
+      .then(resp => {
+        parentList.value = resp.data;
+      })
+}
+
+getParent();
 </script>
 
 <style scoped>

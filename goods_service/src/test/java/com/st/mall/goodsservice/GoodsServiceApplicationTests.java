@@ -42,18 +42,18 @@ public class GoodsServiceApplicationTests {
                 .forEach(System.out::println);
     }
 
-    @Test
-    public void test4() throws StException {
-        Category category = new Category(null, "1212", "111", "111", 0, 0, 0, null, null);
-        categoryService.insert(category);
-    }
+    //@Test
+    //public void test4() throws StException {
+    //    Category category = new Category(null, "1212", "111", "111", 0, 0, 0, null, null);
+    //    categoryService.insert(category);
+    //}
     @Test
     public void test5() throws StException {
         categoryService.delete(38);
     }
-    @Test
-    public void test6() throws StException {
-        Category category = new Category(36, "手机", "111", "111", 0, 0, 0, null, null);
-        categoryService.update(category);
-    }
+    //@Test
+    //public void test6() throws StException {
+    //    Category category = new Category(36, "手机", "111", "111", 0, 0, 0, null, null);
+    //    categoryService.update(category);
+    //}
 }

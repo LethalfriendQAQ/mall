@@ -11,8 +11,12 @@ const categoryApi = {
         return service.put("/category", category);
     },
     selectByPage(condition, pageNum, pageSize) {
-        condition.pageNum = pageNum;
-        condition.pageSize = pageSize;
+        if (pageNum) {
+            condition.pageNum = pageNum;
+        }
+        if (pageSize) {
+            condition.pageSize = pageSize
+        }
         return service.get("/category/search", {
             params: condition
         })

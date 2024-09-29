@@ -38,8 +38,6 @@ public class CategoryController {
     //分页搜素
     @GetMapping("/search")
     public RespBean selectByPage(Category category, Integer pageNum, Integer pageSize) {
-        pageNum = pageNum == null ? 1 : pageNum;
-        pageSize = pageSize == null ? 5 : pageSize;
         Object data = categoryService.selectByCondition(category, pageNum, pageSize);
         return RespBean.ok("", data);
     }

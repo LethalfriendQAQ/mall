@@ -17,51 +17,17 @@
   </div>
 
   <!-- 推荐的商品 -->
-  <div class="recom">
-    <div class="categoryName">手机</div>
+  <div class="recom" v-for="(category, index) in parentList" :key="index">
+    <div class="categoryName">{{ category.name }}</div>
     <div class="goodsList">
       <ul>
-        <li>
-          <div class="pic"><el-image src="/src/assets/ad.png" /></div>
-          <div class="name">华为Mete60</div>
-          <div class="dscp">不买不爱国</div>
-          <div class="price">￥ 6999</div>
-        </li>
-        <li>
-          <div class="pic"><el-image src="/src/assets/ad.png" /></div>
-          <div class="name">华为Mete60</div>
-          <div class="dscp">不买不爱国</div>
-          <div class="price">￥ 6999</div>
-        </li>
-        <li>
-          <div class="pic"><el-image src="/src/assets/ad.png" /></div>
-          <div class="name">华为Mete60</div>
-          <div class="dscp">不买不爱国</div>
-          <div class="price">￥ 6999</div>
-        </li>
-        <li>
-          <div class="pic"><el-image src="/src/assets/ad.png" /></div>
-          <div class="name">华为Mete60</div>
-          <div class="dscp">不买不爱国</div>
-          <div class="price">￥ 6999</div>
-        </li>
-        <li>
-          <div class="pic"><el-image src="/src/assets/ad.png" /></div>
-          <div class="name">华为Mete60</div>
-          <div class="dscp">不买不爱国</div>
-          <div class="price">￥ 6999</div>
-        </li>
-        <li>
-          <div class="pic"><el-image src="/src/assets/ad.png" /></div>
-          <div class="name">华为Mete60</div>
-          <div class="dscp">不买不爱国</div>
-          <div class="price">￥ 6999</div>
-        </li>
-        <li>
-          <div class="pic"><el-image src="/src/assets/ad.png" /></div>
-          <div class="name">华为Mete60</div>
-          <div class="dscp">不买不爱国</div>
-          <div class="price">￥ 6999</div>
+        <li v-for="(goods, index) in category.goodsList" :key="index">
+          <div class="pic">
+            <el-image v-if="goods.picList && goods.picList.length > 0" :src="`${SERVER_ADDR}/goods/pic/${goods.picList[0].url}`" />
+          </div>
+          <div class="name">{{ goods.name }}</div>
+          <div class="dscp">{{ goods.dscp }}</div>
+          <div class="price">￥ {{ goods.price }}</div>
         </li>
       </ul>
     </div>
@@ -70,12 +36,31 @@
 
 <script setup>
   import {ref} from "vue";
+  import categoryApi from "@/api/categoryApi.js";
 
+  //已上架的父分类
+  const parentList = ref([])
+
+  //服务器的地址
+  const SERVER_ADDR = ref(import.meta.env.VITE_SERVER_ADDR);
+
+  function getParent() {
+    const condition = {
+      parentId: 0,
+      status: 1
+    };
+    categoryApi.selectByPage(condition)
+        .then(resp => {
+          parentList.value = resp.data;
+        })
+  }
   const banners = ref([
     "/src/assets/banner/banner1.png",
     "/src/assets/banner/banner2.png",
     "/src/assets/banner/banner3.png"
   ])
+
+  getParent();
 </script>
 
 <style scoped>
@@ -119,9 +104,15 @@
   .recom .name {
     font-size: 16px;
     font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .recom .dscp {
     color: #AAA;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .recom .price {
     font-size: 12px;

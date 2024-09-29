@@ -18,7 +18,7 @@ public class Category {
     private Integer parentId;//父分类id
     private Integer recom;//是否推荐 0-不推荐， 1-推荐
     private Integer status;//是否上架 0-下架， 1-上架
-
     private Category parent;//父分类
     private List<Category> childList; //当前分类下所有的子分类
+    private List<Goods> goodsList; //分类下的商品
 }
