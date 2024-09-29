@@ -79,7 +79,7 @@ router.beforeEach((to, from) => {
         } else {
             //判断跳转到管理员的登录页还是用户的登录页
             let currentPath = router.currentRoute.value.path;
-            if (currentPath.startsWith("/admin")) {
+            if (to.path.startsWith("/admin")) {
                 return "/admin/login";
             } else {
                 return "/user/login";

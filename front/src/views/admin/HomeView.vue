@@ -9,7 +9,7 @@
           background-color="#242424"
           text-color="#fff"
           :ellipsis="false"
-          active-text-color="#deff4b"
+          active-text-color="#b3ff24"
       >
         <el-menu-item index="1" style="width: 200px">在线商城</el-menu-item>
         <el-sub-menu index="2">
@@ -24,7 +24,7 @@
       <!--<el-aside width="300px" style="border-radius: 20px;margin: 10px;">-->
       <el-aside width="200px">
         <el-menu
-            active-text-color="#deff4b"
+            active-text-color="#b3ff24"
             background-color="#242424"
             class="el-menu-vertical-demo"
             text-color="#fff"

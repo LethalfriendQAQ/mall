@@ -1,7 +1,7 @@
 <template>
   <el-col :span="24">
     <el-card>
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
+      <el-form :inline="true" class="demo-form-inline">
         <el-form-item>
           <el-button type="primary" @click="addDialogShow = true">添加</el-button>
         </el-form-item>
@@ -40,7 +40,7 @@
           <el-table-column prop="name" label="名称"/>
           <el-table-column label="图片">
             <template #default="scope">
-              <el-avatar shape="square" :size="size" :src="SERVER_ADDR + '/category/pic/' + scope.row.pic" :title="SERVER_ADDR + '/category/pic/' + scope.row.pic"/>
+              <el-avatar shape="square" :src="SERVER_ADDR + '/category/pic/' + scope.row.pic" :title="SERVER_ADDR + '/category/pic/' + scope.row.pic"/>
             </template>
           </el-table-column>
           <el-table-column prop="dscp" label="描述"/>
