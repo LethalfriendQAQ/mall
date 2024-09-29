@@ -104,9 +104,10 @@ public class GoodsServiceImpl implements com.st.mall.common.service.GoodsService
         }
         //修改商品信息
         goodsMapper.update(goods);
+
         //修改图片 1.删除之前的图片 2.添加
-        goodsPicMapper.delete(newInfo.getId());
         if (newInfo.getPicList() != null && newInfo.getPicList().size() > 0) {
+            goodsPicMapper.delete(newInfo.getId());
             newInfo.getPicList().forEach(pic -> pic.setGoodsId(newInfo.getId()));
             goodsPicMapper.insert(newInfo.getPicList());
         }
