@@ -56,6 +56,9 @@
         </set>
         WHERE `id`=#{id}
     </update>
+    <update id="resetPassword" parameterType="admin">
+        UPDATE `admin` SET `password`=#{password} WHERE `id`=#{id}
+    </update>
     <delete id="delete">
         DELETE FROM `admin` WHERE `id`=#{id}
     </delete>

@@ -1,5 +1,6 @@
 package com.st.mall.adminservice.service;
 
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 @Service
 public class AdminServiceImpl implements AdminService {
     @Autowired
@@ -23,6 +25,12 @@ public class AdminServiceImpl implements AdminService {
         //判断添加的用户名有没有重复
         Admin condition = new Admin();
         condition.setUsername(admin.getUsername());
+        admin.setStatus(1);
+        admin.setCreateTime(new java.sql.Timestamp(System.currentTimeMillis()));
+        // 生成雪花 ID 字符串
+        String id = IdUtil.getSnowflakeNextIdStr();
+        // 取前八位
+        admin.setSalt(id.length() > 8 ? id.substring(0, 8) : id);
         if (adminMapper.selectByCondition(condition)
                 .stream()
                 .anyMatch(item -> item.getUsername().equals(admin.getUsername()))) {
@@ -43,6 +51,11 @@ public class AdminServiceImpl implements AdminService {
             throw new StException("该用户名已存在");
         }
         return adminMapper.update(admin) == 1;
+    }
+
+    @Override
+    public boolean resetPassword(Integer id) {
+        return false;
     }
 
     @Override
@@ -104,6 +117,10 @@ public class AdminServiceImpl implements AdminService {
         Admin admin = adminMapper.selectByUsername(username);
         if (admin == null) {
             throw new StException("用户名错误");
+        }
+
+        if (admin.getStatus().equals(0)) {
+            throw new StException("该管理员已被禁用");
         }
         //对用户输入的密码进行加密 - 使用MD5算法和盐进行加密
         String md5Pwd = SecureUtil.md5(SecureUtil.md5(password + admin.getSalt()));

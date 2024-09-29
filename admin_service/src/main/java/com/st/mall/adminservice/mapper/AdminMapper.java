@@ -10,6 +10,7 @@ public interface AdminMapper {
     int update(Admin admin);
 
     int delete(Integer id);
+    int resetPassword(Integer id, String password);
 
     Admin selectById(Integer id);
     List<Admin> selectByCondition(Admin condition);

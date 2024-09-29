@@ -2,6 +2,7 @@ package com.st.mall.adminservice.controller;
 
 import cn.hutool.captcha.LineCaptcha;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.github.pagehelper.PageInfo;
 import com.st.mall.common.bean.Admin;
 import com.st.mall.common.bean.RespBean;
@@ -72,6 +73,9 @@ public class AdminController {
     @PutMapping("/changeInfo")
     public RespBean changeInfo(@RequestBody Admin admin) throws StException {
         admin.setUsername(null);
+        if (admin.getPassword() == null) {
+            admin.setPassword(SecureUtil.md5(SecureUtil.md5("123" + admin.getSalt())));
+        }
         adminService.update(admin);
         return RespBean.ok("修改成功");
     }

@@ -12,6 +12,7 @@ public interface AdminService {
     boolean insert(Admin admin) throws StException;
     //修改个人信息
     boolean update(Admin admin) throws StException;
+    boolean resetPassword(Integer id);
 
     //修改密码
     boolean changePassword(String oldPwd, String newPwd, Integer id) throws StException;
