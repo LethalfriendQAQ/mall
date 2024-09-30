@@ -12,6 +12,8 @@ public interface GoodsMapper {
     int update(Goods goods);
 
     List<Goods> selectByCondition(Goods condition);
+    //根据条件查询
+    List<Goods> selectByCondition1(Goods condition);
 
     Goods selectById(Integer id);
 

@@ -27,7 +27,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/category/allParent",
                         "/category/pic/**",
                         "/category/search",
-                        "/goods/pic/**"
+                        "/goods/pic/**",
+                        "/goods/search"
                 );
     }
 }

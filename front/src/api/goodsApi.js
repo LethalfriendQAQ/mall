@@ -22,6 +22,12 @@ const goodsApi = {
         condition.pageNum = pageNum;
         condition.pageSize = pageSize;
         return service.get("/goods", { params: condition });
+    },
+    //分页搜索 - 注意：分类id既可以是父分类的id也可以是子分类的id
+    selectByPage1(condition, pageNum, pageSize) {
+        condition.pageNum = pageNum;
+        condition.pageSize = pageSize;
+        return service.get("/goods/search", { params: condition });
     }
 };
 

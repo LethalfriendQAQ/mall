@@ -1,12 +1,187 @@
 <template>
-  Search
+  <div class="category">
+    <!--显示所有上架商品-->
+    <ul>
+      <li @click="selectFirstCategory({})" :class="{active: !firstCaregorySelected.id}">全部</li>
+      <li v-for="(category, index) in firstCaregoryList"
+          :key="index"
+          :class="{active: category.id == firstCaregorySelected.id}"
+          @click="selectFirstCategory(category)">{{ category.name }}</li>
+    </ul>
+    <ul v-if="firstCaregorySelected.id">
+      <li @click="selectSecondCategory({})" :class="{active: !secondCaregorySelected.id}">全部</li>
+      <li v-for="(category, index) in secondCategoryList"
+          :key="index"
+          :class="{active: category.id == secondCaregorySelected.id}"
+          @click="selectSecondCategory(category)">{{ category.name }}</li>
+    </ul>
+  </div>
+
+  <!-- 显示搜索到的商品 -->
+  <div class="goodsList">
+    <ul>
+      <li v-for="(goods, index) in pageInfo.list" :key="index">
+        <div class="pic">
+          <el-image :src="`${SERVER_ADDR}/goods/pic/${goods.picList[0].url}`" />
+        </div>
+        <div class="name">{{ goods.name }}</div>
+        <div class="dscp">{{ goods.dscp }}</div>
+        <div class="price">￥ {{ goods.price }}</div>
+      </li>
+    </ul>
+    <el-row class="row-bg" justify="center" style="margin-top: 20px">
+      <el-pagination background layout="prev, pager, next" :total="pageInfo.total"
+                     :page-size="pageInfo.pageSize" @change="search"/>
+    </el-row>
+  </div>
 </template>
 
 <script setup>
+import {ref, watch} from "vue";
+import categoryApi from "@/api/categoryApi.js";
+import goodsApi from "@/api/goodsApi.js";
+//通过路径传递参数
+const props = defineProps({
+  categoryId: String
+});
+
+//所有需要显示的父分类
+const firstCaregoryList = ref([]);
+//所有要显示的子分类
+const secondCategoryList = ref([]);
+//被选中的父分类
+const firstCaregorySelected = ref({});
+//被选中的子分类
+const secondCaregorySelected = ref({});
+//被选中的分类id - 可能是父分类的id也可能是子分类的id
+const categoryId = ref(null);
+//分页信息
+const pageInfo = ref({
+  pages: 0,
+  pageSize: 0,
+  pageNum: 0
+});
+//服务器的地址
+const SERVER_ADDR = ref(import.meta.env.VITE_SERVER_ADDR);
+
+watch(props, () => {
+  getParent();
+})
+
+//点击父分类调用的函数
+function selectFirstCategory(category) {
+  //给选中的父分类赋值
+  firstCaregorySelected.value = category;
+  //清空 - 只要选择某个父分类就要清空所有需要显示的子分类
+  secondCategoryList.value = [];
+  //给被选中的分类id赋值
+  if (firstCaregorySelected.value.id) {
+    categoryId.value = firstCaregorySelected.value.id;
+  } else {
+    categoryId.value = null;
+  }
+
+  //给被选中的父分类下的子分类赋值
+  if (category.childList) {
+    //secondCategoryList.value = category.childList
+    category.childList
+        .filter(c => c.status == 1)
+        .forEach(c => secondCategoryList.value.push(c))
+  }
+  //查询商品
+  search(1);
+}
+
+//点击子分类调用的函数
+function selectSecondCategory(category) {
+  secondCaregorySelected.value = category;
+  //给被选中的分类id赋值
+  if (secondCaregorySelected.value.id) {
+    categoryId.value = secondCaregorySelected.value.id;
+  } else {
+    categoryId.value = firstCaregorySelected.value.id;
+  }
+}
 
 
+//获取父分类   上架   推荐
+function getParent() {
+  const condition = {
+    parentId: 0,
+    recom: 1,
+    status: 1
+  };
+  categoryApi.selectByPage(condition)
+      .then(resp => {
+        firstCaregoryList.value = resp.data;
+        //假设没有通过路径传递参数或者传递的id在父分类中不存在
+        let flag = true;
+        firstCaregoryList.value.forEach(c => {
+          if (props.categoryId == c.id) {
+            flag = false;
+            selectFirstCategory(c)
+          }
+        });
+        //假设成立
+        if (flag == true) {
+          //父分类就设置选择全部
+          selectFirstCategory({})
+        }
+      });
+}
+
+//搜索
+function search(pageNum) {
+  const condition = {
+    status: 1,
+    categoryId: categoryId.value
+  }
+  goodsApi.selectByPage1(condition, pageNum, 20)
+      .then(resp => {
+        pageInfo.value = resp.data;
+      });
+}
+
+search();
+getParent();
 </script>
 
 <style scoped>
+  .category ul li {
+    float: left;
+    margin: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
 
+  }
+  .active {
+    font-weight: bold;
+    color: var(--theme-color);
+  }
+
+  .goodsList ul li {
+    width: 224px;
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    background-color: #EEE;
+    cursor: pointer;
+  }
+  .goodsList ul li:hover {
+    box-shadow: 0px 0px 20px #999999;
+  }
+  .goodsList ul li:nth-child(5n) {
+    margin-right: 0px;
+  }
+  .name, .dscp, .price {
+    line-height: 25px;
+  }
+  .name {
+    font-size: 16px;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 </style>

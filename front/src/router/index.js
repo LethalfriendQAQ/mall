@@ -34,8 +34,9 @@ const router = createRouter({
                     name: 'user_index',
                     component: UserIndexView
                 }, {
-                    path: '/user/search',
+                    path: '/user/search/:categoryId?',
                     name: 'user_search',
+                    props: true,
                     component: UserSearchView
                 }, {
                     path: '/user/reg',
@@ -92,7 +93,7 @@ router.beforeEach((to, from) => {
         to.path == '/user/login' ||
         to.path == '/user/index' ||
         to.path == '/user/reg' ||
-        to.path == '/user/search'
+        to.path.startsWith('/user/search')
     ) {
         return true;
     } else {

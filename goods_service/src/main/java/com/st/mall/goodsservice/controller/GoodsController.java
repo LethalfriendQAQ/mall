@@ -45,6 +45,14 @@ public class GoodsController {
         PageInfo<Goods> pageInfo = goodsService.selectByCondition(condition, pageNum, pageSize);
         return RespBean.ok("查询成功", pageInfo);
     }
+    @GetMapping("/search")
+    public RespBean selectByPage1(Goods condition, Integer pageNum, Integer pageSize) {
+        pageNum = pageNum == null ? 1 : pageNum;
+        pageSize = pageSize == null ? 5 : pageSize;
+
+        PageInfo<Goods> pageInfo = goodsService.selectByCondition1(condition, pageNum, pageSize);
+        return RespBean.ok("查询成功", pageInfo);
+    }
 
     //根据id查询
     @GetMapping("/{id}")

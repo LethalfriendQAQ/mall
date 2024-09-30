@@ -12,12 +12,17 @@ spring:
     host: localhost
     port: 6379
 
+    main:
+      allow-bean-definition-overriding: true
+    debug: true
+
 mybatis:
 
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
   type-aliases-package: com.st.mall.common.bean
+
 #white-list:
 #  rules:
 #    - regPath: ""

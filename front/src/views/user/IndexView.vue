@@ -85,7 +85,7 @@
     margin-bottom: 20px;
     text-align: center;
     background-color: #EEE;
-
+    cursor: pointer;
   }
   .recom .goodsList ul li:hover {
     box-shadow: 0px 0px 20px #999999;
