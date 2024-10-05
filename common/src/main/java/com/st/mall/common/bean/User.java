@@ -1,6 +1,7 @@
 package com.st.mall.common.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,8 +16,11 @@ import java.util.Date;
 public class User implements Serializable {
     private Integer id;
     private String username;
+    @JsonIgnore
     private String password;
+    @JsonIgnore
     private String payPassword;
+    @JsonIgnore
     private String salt;
     private String realname;
     private String sex;

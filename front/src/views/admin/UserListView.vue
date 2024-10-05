@@ -26,15 +26,13 @@
       <el-table :data="pageInfo.list" border style="width: 100%">
         <el-table-column prop="id" label="ID" width="50px"/>
         <el-table-column prop="username" label="用户名"/>
-        <el-table-column prop="password" label="密码"/>
-        <el-table-column prop="salt" label="盐"/>
         <el-table-column prop="realname" label="真实姓名"/>
         <el-table-column prop="sex" label="性别"/>
-        <el-table-column prop="idCard" label="真实姓名"/>
-        <el-table-column prop="phone" label="真实姓名"/>
-        <el-table-column prop="email" label="真实姓名"/>
-        <el-table-column prop="regTime" label="真实姓名"/>
-        <el-table-column prop="money" label="真实姓名"/>
+        <el-table-column prop="idCard" label="身份证号"/>
+        <el-table-column prop="phone" label=" 电话号码"/>
+        <el-table-column prop="email" label="邮箱"/>
+        <el-table-column prop="regTime" label="注册时间"/>
+        <el-table-column prop="money" label="余额"/>
         <el-table-column label="当前状态">
           <template #default="scope">
             <el-tag type="info" v-if="scope.row.status == 0">未认证</el-tag>

@@ -1,5 +1,7 @@
 package com.st.mall.userservice.service;
 
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.st.mall.common.bean.User;
@@ -29,7 +31,15 @@ public class UserServiceImpl implements UserService {
                 .anyMatch(item -> item.getUsername().equals(user.getUsername()))) {
             throw new StException("该用户名已存在");
         }
-        user.setMoney(new BigDecimal(String.valueOf(user.getMoney())).setScale(2, RoundingMode.HALF_UP));
+        BigDecimal money = user.getMoney() == null ? BigDecimal.ZERO : new BigDecimal(user.getMoney().toString());
+        user.setMoney(money.setScale(2, RoundingMode.HALF_UP));
+        user.setStatus(0);
+        user.setRegTime(new java.sql.Timestamp(System.currentTimeMillis()));
+        // 生成雪花 ID 字符串
+        String id = IdUtil.getSnowflakeNextIdStr();
+        // 取前八位
+        user.setSalt(id.length() > 8 ? id.substring(0, 8) : id);
+        user.setPassword(SecureUtil.md5(SecureUtil.md5(user.getPassword() + user.getSalt())));
         userMapper.insert(user);
     }
 
