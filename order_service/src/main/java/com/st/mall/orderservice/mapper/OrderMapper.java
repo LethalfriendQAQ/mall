@@ -7,12 +7,12 @@ import java.util.List;
 public interface OrderMapper {
     int insert(Order order);
 
-    int delete(Integer id);
+    int delete(String  id);
 
     int update(Order order);
 
     List<Order> selectByCondition(Order condition);
     List<Order> selectByUserId(Integer userId);
 
-    Order selectById(Integer id);
+    Order selectById(String id);
 }

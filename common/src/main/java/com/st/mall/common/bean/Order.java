@@ -20,5 +20,5 @@ public class Order {
     private Integer addrId;
     private String addrDetail;
     private Integer status;
-    //private User user; //所属用户
+    private User user; //所属用户
 }

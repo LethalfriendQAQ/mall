@@ -1,4 +1,4 @@
-package com.st.mall.orderservice.mapper;
+package com.st.mall.userservice.mapper;
 
 import com.st.mall.common.bean.Addr;
 

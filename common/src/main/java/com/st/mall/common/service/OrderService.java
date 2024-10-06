@@ -15,7 +15,7 @@ public interface OrderService {
     void update(Order order) throws StException;
 
     //根据ID查询
-    Order selectById(Integer id);
+    Order selectById(String  id);
 
     //搜索 - 分页查询
     PageInfo<Order> selectByCondition(Order condition, Integer pageNum, Integer pageSize);

@@ -23,7 +23,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public RespBean selectById(@PathVariable("id") Integer id) {
+    public RespBean selectById(@PathVariable("id") String id) {
         Order order = orderService.selectById(id);
         return RespBean.ok("", order);
     }

@@ -31,7 +31,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order selectById(Integer id) {
+    public Order selectById(String  id) {
         return orderMapper.selectById(id);
     }
 
