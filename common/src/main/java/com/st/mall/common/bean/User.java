@@ -33,4 +33,5 @@ public class User implements Serializable {
     private BigDecimal money;
     private Integer status;
     private List<Order> orders;
+    private List<Addr> addrs;
 }

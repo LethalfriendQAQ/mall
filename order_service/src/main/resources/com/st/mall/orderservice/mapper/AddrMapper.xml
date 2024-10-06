@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.st.mall.orderservice.mapper.AddrMapper">
+    <insert id="insert"></insert>
+    <update id="update"></update>
+    <delete id="delete"></delete>
+    <select id="selectByUserId" resultType="com.st.mall.common.bean.Addr">
+        SELECT * FROM `addr` WHERE `user_id`=#{userId}
+    </select>
+    <select id="selectById" resultType="com.st.mall.common.bean.Addr">
+        SELECT * FROM `addr` WHERE `id`=#{id}
+    </select>
+</mapper>
