@@ -19,7 +19,11 @@
         <spring-boot.version>2.4.2</spring-boot.version>
     </properties>
     <dependencies>
-
+        <!--<dependency>-->
+        <!--    <groupId>com.st.mall</groupId>-->
+        <!--    <artifactId>user_service</artifactId>-->
+        <!--    <version>1.0.0</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.st.mall</groupId>
             <artifactId>common</artifactId>

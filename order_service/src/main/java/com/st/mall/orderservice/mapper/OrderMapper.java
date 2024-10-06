@@ -12,6 +12,7 @@ public interface OrderMapper {
     int update(Order order);
 
     List<Order> selectByCondition(Order condition);
+    List<Order> selectByUserId(Integer userId);
 
     Order selectById(Integer id);
 }

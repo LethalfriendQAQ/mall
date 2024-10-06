@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -31,4 +32,5 @@ public class User implements Serializable {
     private Date regTime;
     private BigDecimal money;
     private Integer status;
+    private List<Order> orders;
 }

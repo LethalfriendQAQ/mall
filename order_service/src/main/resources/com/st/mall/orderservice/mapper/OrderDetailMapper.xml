@@ -5,5 +5,7 @@
     <update id="update" parameterType="orderDetail"></update>
     <delete id="delete"></delete>
     <select id="selectByCondition" resultType="com.st.mall.common.bean.OrderDetail"></select>
-    <select id="selectById" resultType="com.st.mall.common.bean.OrderDetail"></select>
+    <select id="selectById" resultType="com.st.mall.common.bean.OrderDetail">
+        SELECT * FROM `order_detail` WHERE `id`=#{id}
+    </select>
 </mapper>
