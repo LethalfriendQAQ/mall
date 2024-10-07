@@ -14,7 +14,7 @@
         <result property="regTime" column="reg_time"/>
         <result property="money" column="money"/>
         <result property="status" column="status"/>
-        <collection property="orders" column="id" ofType="com.st.mall.common.bean.Order" select="com.st.mall.orderservice.mapper.OrderMapper.selectByUserId"/>
+        <!--<collection property="orders" column="id" ofType="com.st.mall.common.bean.Order" select="com.st.mall.orderservice.mapper.OrderMapper.selectByUserId"/>-->
         <collection property="addrs" column="id" ofType="com.st.mall.common.bean.Addr" select="com.st.mall.userservice.mapper.AddrMapper.selectByUserId" />
     </resultMap>
     <insert id="insert" parameterType="com.st.mall.common.bean.User">

@@ -4,7 +4,7 @@
     <resultMap id="orderMap" type="com.st.mall.common.bean.Order">
         <id column="id" property="id" />
         <result column="user_id" property="userId" />
-        <!--<association property="user" column="user_id" javaType="com.st.mall.common.bean.User" select="com.st.mall.userservice.mapper.UserMapper.selectById" />-->
+        <association property="user" column="user_id" javaType="com.st.mall.common.bean.User" select="com.st.mall.userservice.mapper.UserMapper.selectById" />
     </resultMap>
     <insert id="insert" parameterType="com.st.mall.common.bean.Order">
         INSERT INTO `order`(

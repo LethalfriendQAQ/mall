@@ -1,14 +1,14 @@
-# \u5E94\u7528\u7684\u7AEF\u53E3
+# 应用服务器端口
 server:
   port: 8091
-# \u8FDE\u63A5\u6C60
+# 配置连接池
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/mall?useSSL=false
     username: root
     password: 123456
-# \u914D\u7F6EMyBatis
+# 配置MyBatis
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
