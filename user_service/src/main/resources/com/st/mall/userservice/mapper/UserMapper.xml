@@ -104,4 +104,7 @@
     <select id="selectById" resultMap="userWithOrdersMap">
         SELECT * FROM `user` WHERE `id`=#{id}
     </select>
+    <select id="selectById1" resultType="com.st.mall.common.bean.User">
+        SELECT * FROM `user` WHERE `id`=#{id}
+    </select>
 </mapper>

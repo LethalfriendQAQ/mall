@@ -143,6 +143,9 @@
     <select id="selectById" resultMap="goodsMap">
         SELECT * FROM `goods` WHERE `id`=#{id}
     </select>
+    <select id="selectById1" resultType="com.st.mall.common.bean.Goods">
+        SELECT * FROM `goods` WHERE `id`=#{id}
+    </select>
     <select id="selectByCategoryId" resultMap="goodsMap1">
         SELECT
             g.*

@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.st.mall.orderservice.mapper.OrderDetailMapper">
+    <resultMap id="orderDetailWithGoodsMap" type="com.st.mall.common.bean.OrderDetail">
+        <id column="id" property="id" />
+        <association property="goods" column="goods_id" javaType="com.st.mall.common.bean.Goods" select="com.st.mall.goodsservice.mapper.GoodsMapper.selectById1" />
+    </resultMap>
     <insert id="insert" parameterType="orderDetail"></insert>
     <update id="update" parameterType="orderDetail"></update>
     <delete id="delete"></delete>
     <select id="selectByCondition" resultType="com.st.mall.common.bean.OrderDetail"></select>
     <select id="selectById" resultType="com.st.mall.common.bean.OrderDetail">
         SELECT * FROM `order_detail` WHERE `id`=#{id}
+    </select>
+    <select id="selectByOrderId" resultMap="orderDetailWithGoodsMap">
+        SELECT * FROM `order_detail` WHERE `order_id`=#{orderId}
     </select>
 </mapper>

@@ -14,4 +14,5 @@ public interface OrderDetailMapper {
     List<OrderDetail> selectByCondition(OrderDetail condition);
 
     OrderDetail selectById(Integer id);
+    OrderDetail selectByOrderId(Integer id);
 }

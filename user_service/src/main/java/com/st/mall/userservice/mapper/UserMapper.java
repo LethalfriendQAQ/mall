@@ -14,4 +14,5 @@ public interface UserMapper {
     List<User> selectByCondition(User condition);
 
     User selectById(Integer id);
+    User selectById1(Integer id);
 }
