@@ -21,7 +21,7 @@
     <div class="categoryName">{{ category.name }}</div>
     <div class="goodsList">
       <ul>
-        <li v-for="(goods, index) in category.goodsList" :key="index">
+        <li v-for="(goods, index) in category.goodsList" :key="index" @click="toGoodsView(goods.id)">
           <div class="pic">
             <el-image v-if="goods.picList && goods.picList.length > 0" :src="`${SERVER_ADDR}/goods/pic/${goods.picList[0].url}`" />
           </div>
@@ -37,13 +37,20 @@
 <script setup>
   import {ref} from "vue";
   import categoryApi from "@/api/categoryApi.js";
+  import { useRouter } from "vue-router";
 
+  const router = useRouter();
   //已上架的父分类
   const parentList = ref([])
 
   //服务器的地址
   const SERVER_ADDR = ref(import.meta.env.VITE_SERVER_ADDR);
 
+  const banners = ref([
+    "/src/assets/banner/banner1.png",
+    "/src/assets/banner/banner2.png",
+    "/src/assets/banner/banner3.png"
+  ])
   function getParent() {
     const condition = {
       parentId: 0,
@@ -54,11 +61,15 @@
           parentList.value = resp.data;
         })
   }
-  const banners = ref([
-    "/src/assets/banner/banner1.png",
-    "/src/assets/banner/banner2.png",
-    "/src/assets/banner/banner3.png"
-  ])
+  //跳转到商品详情页
+  function toGoodsView(id) {
+    router.push({
+      path: '/user/goods', //跳转到的位置，值和页面路由中配置的路径相同
+      query: {
+        id
+      }
+    })
+  }
 
   getParent();
 </script>

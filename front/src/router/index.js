@@ -13,6 +13,7 @@ import UserHomeView from "@/views/user/HomeView.vue";
 import UserIndexView from "@/views/user/IndexView.vue"
 import UserRegView from "@/views/user/RegView.vue"
 import UserSearchView from "@/views/user/SearchView.vue"
+import GoodsView from "@/views/user/GoodsView.vue";
 
 
 
@@ -42,6 +43,10 @@ const router = createRouter({
                     path: '/user/reg',
                     name: 'user_reg',
                     component: UserRegView
+                }, {
+                    path: '/user/goods',
+                    name: 'user_goods',
+                    component: GoodsView
                 }
             ]
         }, {
@@ -93,6 +98,7 @@ router.beforeEach((to, from) => {
         to.path == '/user/login' ||
         to.path == '/user/index' ||
         to.path == '/user/reg' ||
+        to.path == '/user/goods' ||
         to.path.startsWith('/user/search')
     ) {
         return true;

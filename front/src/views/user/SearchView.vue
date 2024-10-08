@@ -20,7 +20,7 @@
   <!-- 显示搜索到的商品 -->
   <div class="goodsList">
     <ul>
-      <li v-for="(goods, index) in pageInfo.list" :key="index">
+      <li v-for="(goods, index) in pageInfo.list" :key="index" @click="toGoodsView(goods.id)">
         <div class="pic">
           <el-image :src="`${SERVER_ADDR}/goods/pic/${goods.picList[0].url}`" />
         </div>
@@ -40,6 +40,10 @@
 import {ref, watch} from "vue";
 import categoryApi from "@/api/categoryApi.js";
 import goodsApi from "@/api/goodsApi.js";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
 //通过路径传递参数
 const props = defineProps({
   categoryId: String
@@ -140,6 +144,16 @@ function search(pageNum) {
       .then(resp => {
         pageInfo.value = resp.data;
       });
+}
+
+//跳转到商品详情页
+function toGoodsView(id) {
+  router.push({
+    path: '/user/goods', //跳转到的位置，值和页面路由中配置的路径相同
+    query: {
+      id
+    }
+  })
 }
 
 search();
