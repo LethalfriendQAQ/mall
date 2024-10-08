@@ -26,6 +26,7 @@ import UserFooter from "@/components/user/home/UserFooter.vue";
 }
 .el-main {
   height: 100%;
+  background-color: #f2f2f2;
 }
 .el-footer {
   margin-top: 20px;
