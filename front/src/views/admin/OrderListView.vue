@@ -62,8 +62,9 @@
             <el-tag type="primary" v-if="scope.row.status == 8">其他</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="230px">
           <template #default="scope">
+            <el-button type="primary" size="small" @click="selectById(scope.row.id)" round>订单详情</el-button>
             <el-button type="primary" size="small" @click="" round>修改</el-button>
             <el-popconfirm title="你确定要删除该分类吗？" confirm-button-text="确认" cancel-button-text="取消"
                            width="200px" @confirm="">
@@ -80,6 +81,57 @@
       </el-row>
     </el-card>
   </el-col>
+
+
+  <!-- 订单详情对话框开始 -->
+  <el-dialog v-model="orderDetailDialogShow" title="订单详情" width="1000">
+    <el-descriptions
+        class="margin-top"
+        :column="3"
+        :size="size"
+        border
+    >
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            <el-icon :style="iconStyle">
+              <user />
+            </el-icon>
+            用户名
+          </div>
+        </template>
+        {{ orderDetail.user.username }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            <el-icon :style="iconStyle">
+              <iphone />
+            </el-icon>
+            电话
+          </div>
+        </template>
+        {{ orderDetail.user.phone }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            <el-icon :style="iconStyle">
+              <office-building />
+            </el-icon>
+            Address
+          </div>
+        </template>
+        {{ orderDetail.addrDetail }}
+      </el-descriptions-item>
+    </el-descriptions>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="orderDetailDialogShow = false">关闭</el-button>
+      </div>
+    </template>
+  </el-dialog>
+  <!-- 订单详情对话框结束 -->
 </template>
 
 <script setup>
@@ -99,11 +151,28 @@ const pageInfo = ref({
   pageSize: 0,
   pageNum: 0,
 });
+const orderDetailDialogShow = ref(false);
+
+const orderDetail = ref({
+  user: {},
+  orderDetails: []
+})
+
+
 //分页查询
 function selectByPage(pageNum) {
   orderApi.selectByPage(condition.value, pageNum, 5)
       .then(resp => {
         pageInfo.value = resp.data;
+      })
+}
+
+function selectById(id) {
+  orderApi.selectById(id)
+      .then(resp => {
+        orderDetail.value = resp.data;
+        console.log(orderDetail.value);
+        orderDetailDialogShow.value = true;
       })
 }
 
