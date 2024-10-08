@@ -13,6 +13,7 @@ public interface UserMapper {
 
     List<User> selectByCondition(User condition);
 
+    User selectByUsername(String  username);
     User selectById(Integer id);
     User selectById1(Integer id);
 }

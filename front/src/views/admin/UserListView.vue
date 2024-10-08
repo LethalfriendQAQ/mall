@@ -122,7 +122,7 @@
 
 <script setup>
 import {ref} from "vue";
-import UserApi from "@/api/UserApi.js";
+import UserApi from "@/api/userApi.js";
 import goodsApi from "@/api/goodsApi.js";
 import {ElMessage} from "element-plus";
 

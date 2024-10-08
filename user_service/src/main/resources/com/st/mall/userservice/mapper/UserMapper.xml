@@ -45,6 +45,18 @@
             #{status}
                )
     </insert>
+    <insert id="insert1" parameterType="com.st.mall.common.bean.User">
+        INSERT INTO `user`(
+            `username`,
+            `password`,
+            `salt`
+        )
+        VALUES (
+                   #{username},
+                   #{password},
+                   #{salt},
+               )
+    </insert>
     <update id="update" parameterType="user">
         UPDATE `user`
         <set>
@@ -106,5 +118,8 @@
     </select>
     <select id="selectById1" resultType="com.st.mall.common.bean.User">
         SELECT * FROM `user` WHERE `id`=#{id}
+    </select>
+    <select id="selectByUsername" resultType="com.st.mall.common.bean.User">
+        SELECT * FROM `user` WHERE `username`=#{username}
     </select>
 </mapper>

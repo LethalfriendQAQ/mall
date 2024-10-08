@@ -5,6 +5,11 @@ import com.st.mall.common.bean.User;
 import com.st.mall.common.exception.StException;
 
 public interface UserService {
+    //登录
+    User login(String username, String password) throws StException;
+
+    //注册
+    void reg(User user);
     //添加
     void insert(User user) throws StException;
 

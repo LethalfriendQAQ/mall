@@ -1,6 +1,13 @@
 import service from "@/api/index.js";
+import qs from 'qs'
 
 const userApi = {
+    reg(user) {
+      return service.post("/user/reg", qs.stringify(user))
+    },
+    captcha() {
+        return service.get("/user/captcha")
+    },
     // 添加
     insert(user) {
         return service.post("/user", user);

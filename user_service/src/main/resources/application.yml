@@ -8,6 +8,13 @@ spring:
     url: jdbc:mysql://localhost:3306/mall?useSSL=false
     username: root
     password: 123456
+
+redis:
+  host: loaclhost
+  port: 6379
+
+debug: true
+
 # 配置MyBatis
 mybatis:
   configuration:

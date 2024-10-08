@@ -21,6 +21,35 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Override
+    public User login(String username, String password) throws StException {
+        //根据用户名查询判断用户是否存在
+        User user = userMapper.selectByUsername(username);
+        if (user == null) {
+            throw new StException("该用户不存在");
+        }
+        //判断用户是否禁用或注销
+        if (user.getStatus().equals(2) || user.getStatus().equals(3)) {
+            throw new StException("该用户已被禁用或注销");
+        }
+        //对用户输入的密码进行加密 - 使用MD5算法和盐进行加密
+        String md5Pwd = SecureUtil.md5(SecureUtil.md5(password + user.getSalt()));
+        //对加密之后的密码和数据库中的密码进行比较
+        if (!md5Pwd.equals(user.getPassword())) {
+            throw new StException("密码错误");
+        }
+        return user;
+    }
+
+    //@Override
+    public void reg(User user) {
+        //判断该用户名在系统中是否存在
+        //生成盐
+        //对密码进行加密
+        //添加用户
+    }
+
     @Override
     public void insert(User user) throws StException {
         //判断添加的用户名有没有重复
