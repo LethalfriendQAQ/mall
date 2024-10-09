@@ -4,7 +4,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.st.mall")
 @MapperScan(basePackages = {"com.st.mall.orderservice.mapper", "com.st.mall.userservice.mapper", "com.st.mall.goodsservice.mapper"})
 public class OrderServiceApplication {
 
