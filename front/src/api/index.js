@@ -48,9 +48,9 @@ service.interceptors.response.use(resp => {
                 tokenStore.$reset();
                 let currentPath = router.currentRoute.value.path;
                 if (currentPath.startsWith("/admin")) {
-                    return "/admin/login";
+                    router.push('/admin/login') ;
                 } else {
-                    return "/user/login";
+                    router.push('/user/login') ;
                 }
             }
         });

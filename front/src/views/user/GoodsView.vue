@@ -34,7 +34,7 @@
           />
         </div>
         <div class="goodsBtn">
-          <el-button type="primary"><el-icon><ShoppingCart /></el-icon>加入购物车</el-button>
+          <el-button type="primary" @click="insertCart"><el-icon><ShoppingCart /></el-icon>加入购物车</el-button>
           <el-button type="success"><el-icon><Money /></el-icon>直接购买</el-button>
           <el-button type="warning" v-if="!collectInfo" @click="collect"><el-icon><StarFilled /></el-icon>收藏</el-button>
           <el-button type="danger" v-else @click="cancelCollect"><el-icon><Star /></el-icon>取消收藏</el-button>
@@ -58,6 +58,7 @@ import {ref} from "vue";
 import collectApi from "@/api/collectApi.js";
 import {ElMessage} from "element-plus";
 import { useTokenStore } from "@/stores/token.js";
+import cartApi from "@/api/cartApi.js";
 
 const tokenStore = useTokenStore();
 //商品收藏的状态
@@ -68,6 +69,21 @@ const SERVER_ADDR = ref(import.meta.env.VITE_SERVER_ADDR);
 const route = useRoute();
 
 const goods = ref({});
+
+//加入购物车
+function insertCart() {
+  cartApi.insert(goods.value.id)
+      .then(resp => {
+        console.log(resp);
+        if(resp.code == 10000) {
+          ElMessage.success(resp.msg);
+        } else {
+          ElMessage.error(resp.msg);
+        }
+      })
+}
+
+
 //根据商品id查询商品的详情信息
 function selectById() {
   let id = route.query.id;
