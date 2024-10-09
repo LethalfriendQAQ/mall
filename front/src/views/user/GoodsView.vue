@@ -36,8 +36,8 @@
         <div class="goodsBtn">
           <el-button type="primary"><el-icon><ShoppingCart /></el-icon>加入购物车</el-button>
           <el-button type="success"><el-icon><Money /></el-icon>直接购买</el-button>
-          <el-button type="info"><el-icon><StarFilled /></el-icon>收藏</el-button>
-          <el-button type="danger"><el-icon><Star /></el-icon>取消收藏</el-button>
+          <el-button type="info" v-if="!collectInfo" @click="collect"><el-icon><StarFilled /></el-icon>收藏</el-button>
+          <el-button type="danger" v-else @click="cancelCollect"><el-icon><Star /></el-icon>取消收藏</el-button>
         </div>
       </div>
     </el-col>
@@ -55,6 +55,11 @@
 import { useRoute } from "vue-router";
 import goodsApi from "@/api/goodsApi.js";
 import {ref} from "vue";
+import collectApi from "@/api/collectApi.js";
+import {ElMessage} from "element-plus";
+
+//商品收藏的状态
+const collectInfo = ref(null);
 
 //服务器的地址
 const SERVER_ADDR = ref(import.meta.env.VITE_SERVER_ADDR);
@@ -67,7 +72,42 @@ function selectById() {
   goodsApi.selectById(id)
       .then(resp => {
         goods.value = resp.data;
+        //获取当前商品收藏的情况
+        getCollectInfo();
       });
+}
+function getCollectInfo() {
+  collectApi.selectByGoodsIdAndUserId(goods.value.id)
+      .then(resp => {
+        collectInfo.value = resp.data
+      })
+}
+
+//收藏
+function collect() {
+  collectApi.insert(goods.value.id)
+      .then(resp => {
+        if(resp.code == 10000) {
+          ElMessage.success(resp.msg);
+          //刷新收藏的状态
+          getCollectInfo();
+        } else {
+          ElMessage.error(resp.msg);
+        }
+      })
+}
+
+function cancelCollect() {
+  collectApi.delete(collectInfo.value.id)
+      .then(resp => {
+        if(resp.code == 10000) {
+          ElMessage.success(resp.msg);
+          //刷新收藏的状态
+          getCollectInfo();
+        } else {
+          ElMessage.error(resp.msg);
+        }
+      })
 }
 
 selectById();

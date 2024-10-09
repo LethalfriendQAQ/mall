@@ -19,7 +19,7 @@ public class CollectController {
     private CollectService collectService;
 
     @PostMapping("/{goodsId}")
-    public RespBean insert (Integer goodsId, @RequestHeader("token") String token) throws StException {
+    public RespBean insert (@PathVariable("goodsId") Integer goodsId, @RequestHeader("token") String token) throws StException {
         Map<String, Object> map = JwtUtil.parseJwtToMap(token);
         Integer userId = (Integer) map.get("id");
 
@@ -33,7 +33,7 @@ public class CollectController {
     }
 
     @DeleteMapping("/{id}")
-    public RespBean delete(@PathVariable("id") Integer id, @PathVariable("token") String token) throws StException {
+    public RespBean delete(@PathVariable("id") Integer id, @RequestHeader("token") String token) throws StException {
         //解析token获取用户id
         Map<String, Object> map = JwtUtil.parseJwtToMap(token);
         Integer userId = (Integer) map.get("id");
@@ -41,7 +41,7 @@ public class CollectController {
         return RespBean.ok("删除成功");
     }
     @GetMapping("/{goodsId}")
-    public RespBean selectByGoodsIdAndUserId(@PathVariable("goodsId") Integer goodsId, @PathVariable("token") String token) {
+    public RespBean selectByGoodsIdAndUserId(@PathVariable("goodsId") Integer goodsId, @RequestHeader("token") String token) {
         //解析token获取用户id
         Map<String, Object> map = JwtUtil.parseJwtToMap(token);
         Integer userId = (Integer) map.get("id");
