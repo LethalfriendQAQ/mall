@@ -64,7 +64,7 @@
         </el-table-column>
         <el-table-column label="操作" width="230px">
           <template #default="scope">
-            <el-button type="primary" size="small" @click="selectById(scope.row.id)" round>订单详情</el-button>
+            <el-button type="success" size="small" @click="selectById(scope.row.id)" round>订单详情</el-button>
             <el-button type="primary" size="small" @click="" round>修改</el-button>
             <el-popconfirm title="你确定要删除该分类吗？" confirm-button-text="确认" cancel-button-text="取消"
                            width="200px" @confirm="">
@@ -119,7 +119,7 @@
             <el-icon :style="iconStyle">
               <office-building />
             </el-icon>
-            Address
+            地址
           </div>
         </template>
         {{ orderDetail.addrDetail }}

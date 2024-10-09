@@ -2,8 +2,14 @@ import service from "@/api/index.js";
 import qs from 'qs'
 
 const userApi = {
-    reg(user) {
-      return service.post("/user/reg", qs.stringify(user))
+    getInfo(userInfo) {
+        return service.get("/user/info", qs.stringify(userInfo))
+    },
+    login(userInfo) {
+        return service.post("/user/login", qs.stringify(userInfo))
+    },
+    reg(userInfo) {
+      return service.post("/user/reg", qs.stringify(userInfo))
     },
     captcha() {
         return service.get("/user/captcha")
