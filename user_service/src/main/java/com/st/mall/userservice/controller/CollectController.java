@@ -38,7 +38,7 @@ public class CollectController {
         Map<String, Object> map = JwtUtil.parseJwtToMap(token);
         Integer userId = (Integer) map.get("id");
         collectService.delete(id, userId);
-        return RespBean.ok("删除成功");
+        return RespBean.ok("取消收藏成功");
     }
     @GetMapping("/{goodsId}")
     public RespBean selectByGoodsIdAndUserId(@PathVariable("goodsId") Integer goodsId, @RequestHeader("token") String token) {

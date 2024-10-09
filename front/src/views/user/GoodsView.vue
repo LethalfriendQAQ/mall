@@ -36,7 +36,7 @@
         <div class="goodsBtn">
           <el-button type="primary"><el-icon><ShoppingCart /></el-icon>加入购物车</el-button>
           <el-button type="success"><el-icon><Money /></el-icon>直接购买</el-button>
-          <el-button type="info" v-if="!collectInfo" @click="collect"><el-icon><StarFilled /></el-icon>收藏</el-button>
+          <el-button type="warning" v-if="!collectInfo" @click="collect"><el-icon><StarFilled /></el-icon>收藏</el-button>
           <el-button type="danger" v-else @click="cancelCollect"><el-icon><Star /></el-icon>取消收藏</el-button>
         </div>
       </div>
@@ -57,7 +57,9 @@ import goodsApi from "@/api/goodsApi.js";
 import {ref} from "vue";
 import collectApi from "@/api/collectApi.js";
 import {ElMessage} from "element-plus";
+import { useTokenStore } from "@/stores/token.js";
 
+const tokenStore = useTokenStore();
 //商品收藏的状态
 const collectInfo = ref(null);
 
@@ -72,8 +74,11 @@ function selectById() {
   goodsApi.selectById(id)
       .then(resp => {
         goods.value = resp.data;
-        //获取当前商品收藏的情况
-        getCollectInfo();
+        //判断用户是否已经登录
+        if (tokenStore.tokenStr != null) {
+          //获取当前商品收藏的情况
+          getCollectInfo();
+        }
       });
 }
 function getCollectInfo() {
