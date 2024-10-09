@@ -4,7 +4,7 @@
         <el-image src="/src/assets/ad.png" />
       </el-col>
       <el-col :span="12" style="float: right">
-        <el-form label-width="auto" class="regForm" :rules="rules">
+        <el-form label-width="auto" class="regForm" :rules="rules" :model="userInfo" @keydown.enter="reg">
           <h3 style="text-align: center; margin-bottom: 20px;">用户注册</h3>
           <el-form-item label="用户名" prop="username" label-width="20%">
             <el-input prefix-icon="UserFilled" v-model="userInfo.username" placeholder="请输入用户名" autocomplete="off" />
@@ -17,7 +17,7 @@
             <el-image style="margin-left: 5px" :src="imageBase64Data" @click="getCaptcha" />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" class="regBtn" @click="reg">确定</el-button>
+            <el-button type="primary" class="regBtn" @click="reg">注册</el-button>
           </el-form-item>
         </el-form>
       </el-col>

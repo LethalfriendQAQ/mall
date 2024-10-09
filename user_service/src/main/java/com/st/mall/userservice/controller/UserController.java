@@ -63,7 +63,7 @@ public class UserController {
     }
 
     @GetMapping("/info")
-    public RespBean getLogin(@RequestHeader("token") String token) {
+    public RespBean getInfo(@RequestHeader("token") String token) {
         //解析token
         Map<String, Object> map = JwtUtil.parseJwtToMap(token);
         //获取用户的id - 根据id查询用户的信息
