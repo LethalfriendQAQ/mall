@@ -13,6 +13,9 @@ const cartApi = {
     },
     selectCartList() {
         return service.get("/cart");
+    },
+    selectById(id) {
+        return service.get(`/cart/${id}`)
     }
 }
 export default cartApi;

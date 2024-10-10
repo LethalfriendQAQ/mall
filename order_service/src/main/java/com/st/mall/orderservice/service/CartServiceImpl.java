@@ -43,7 +43,7 @@ public class CartServiceImpl implements CartService {
             throw new StException("该购物车不存在！");
         }
         //判断被删除的购物车是否属于当前的用户
-        if (cart.getUserId().equals(userId)) {
+        if (!cart.getUserId().equals(userId)) {
             throw new StException("该购物车属于其他用户！");
         }
         //删除

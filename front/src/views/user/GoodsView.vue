@@ -78,19 +78,19 @@ function insertCart() {
       .then(resp => {
         console.log(resp);
         if(resp.code == 10000) {
-          ElMessageBox.confirm(
-              '加入购物车成功，是否跳转到购物车页面?',
-              '提示',
-              {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'info',
-              }
-          )
-              .then(() => {
-                //点击确定按钮的回调
-                router.push("/user/cart");
-              });
+          // ElMessageBox.confirm(
+          //     '加入购物车成功，是否跳转到购物车页面?',
+          //     '提示',
+          //     {
+          //       confirmButtonText: '确定',
+          //       cancelButtonText: '取消',
+          //       type: 'info',
+          //     }
+          // )
+          //     .then(() => {
+          //       //点击确定按钮的回调
+          //       router.push("/user/cart");
+          //     });
         } else {
           ElMessage.error(resp.msg);
         }

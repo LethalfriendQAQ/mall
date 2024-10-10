@@ -60,7 +60,7 @@
       <el-row>
         <el-col :span="24">
           <div class="copy">
-            Copyright © 2024-2099
+            Copyright © 2024-2099 Lethalfriend
           </div>
         </el-col>
       </el-row>
