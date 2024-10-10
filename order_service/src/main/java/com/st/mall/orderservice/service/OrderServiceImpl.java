@@ -3,18 +3,27 @@ package com.st.mall.orderservice.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.st.mall.common.bean.Order;
+import com.st.mall.common.bean.OrderDetail;
+import com.st.mall.common.bean.User;
 import com.st.mall.common.exception.StException;
+import com.st.mall.common.service.OrderDetailService;
 import com.st.mall.common.service.OrderService;
+import com.st.mall.common.service.UserService;
 import com.st.mall.orderservice.mapper.OrderMapper;
+import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@DubboService
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderMapper orderMapper;
+    @Autowired
+    private OrderDetailService orderDetailService;
+    @DubboReference
+    private UserService userService;
     @Override
     public void insert(Order order) throws StException {
 
@@ -31,8 +40,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order selectById(String  id) {
-        return orderMapper.selectById(id);
+    public Order selectById(String id) {
+        Order order = orderMapper.selectById(id);
+        List<OrderDetail> orderDetails = orderDetailService.selectByOrderId(id);
+        User user = userService.selectById(order.getUserId());
+        order.setUser(user);
+        order.setOrderDetails(orderDetails);
+        return order;
     }
 
     @Override

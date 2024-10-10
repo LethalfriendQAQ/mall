@@ -9,6 +9,16 @@ spring:
     username: root
     password: 123456
 
+dubbo:
+  application:
+    name: user_service
+    qos-port: 28091
+  protocol:
+    name: dubbo
+    port: 38091
+  registry:
+    address: zookeeper://localhost:2181
+
 redis:
   host: loaclhost
   port: 6379

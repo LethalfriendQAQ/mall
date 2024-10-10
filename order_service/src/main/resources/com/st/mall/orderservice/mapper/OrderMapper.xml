@@ -3,8 +3,6 @@
 <mapper namespace="com.st.mall.orderservice.mapper.OrderMapper">
     <resultMap id="orderMap" type="com.st.mall.common.bean.Order">
         <id column="id" property="id" />
-        <result column="user_id" property="userId" />
-        <association property="user" column="user_id" javaType="com.st.mall.common.bean.User" select="com.st.mall.userservice.mapper.UserMapper.selectById1" />
         <collection property="orderDetails" column="id" ofType="com.st.mall.common.bean.OrderDetail" select="com.st.mall.orderservice.mapper.OrderDetailMapper.selectByOrderId" />
     </resultMap>
     <insert id="insert" parameterType="com.st.mall.common.bean.Order">
