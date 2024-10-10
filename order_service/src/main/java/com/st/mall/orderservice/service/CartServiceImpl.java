@@ -7,6 +7,8 @@ import com.st.mall.orderservice.mapper.CartMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CartServiceImpl implements CartService {
     @Autowired
@@ -28,11 +30,39 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public boolean update(Cart cart) throws StException {
-        //判断该购物车是否存在
-        if (cartMapper.selectById(cart.getId()) == null) {
+    public boolean delete(Integer id, Integer userId) throws StException {
+        //判断购物车是否存在
+        Cart cart = cartMapper.selectById(id);
+        if (cart == null) {
+            throw new StException("该购物车不存在！");
+        }
+        //判断被删除的购物车是否属于当前的用户
+        if (cart.getUserId().equals(userId)) {
+            throw new StException("该购物车属于其他用户！");
+        }
+        //删除
+        return cartMapper.delete(id) == 1;
+    }
+
+    @Override
+    public boolean update(Cart cart, Integer userId) throws StException {
+        //判断购物车是否存在
+        Cart c = cartMapper.selectById(cart.getId());
+        if (c == null) {
             throw new StException("该购物车记录不存在无法修改");
         }
+        if (!c.getUserId().equals(userId)) {
+            throw new StException("该购物车属于其他用户！");
+        }
+        //判断库存是否充足
+        //if (cart.getCount() != null && cart.getCount() > 商品库存)
         return cartMapper.update(cart) == 1;
+    }
+
+    @Override
+    public List<Cart> search(Cart condition) {
+        List<Cart> carts = cartMapper.selectByCondition(condition);
+        //TODO 调用goods_service查询购物车对应的商品
+        return carts;
     }
 }

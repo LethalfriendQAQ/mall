@@ -4,7 +4,7 @@
         <el-image src="/src/assets/ad.png" />
       </el-col>
       <el-col :span="12" style="float: right">
-        <el-form label-width="auto" class="regForm" :rules="rules" :model="userInfo" @keydown.enter="reg">
+        <el-form  class="regForm" :rules="rules" :model="userInfo" @keydown.enter="reg">
           <h3 style="text-align: center; margin-bottom: 20px;">用户注册</h3>
           <el-form-item label="用户名" prop="username" label-width="20%">
             <el-input prefix-icon="UserFilled" v-model="userInfo.username" placeholder="请输入用户名" autocomplete="off" />

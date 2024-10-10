@@ -14,6 +14,7 @@ import UserIndexView from "@/views/user/IndexView.vue"
 import UserRegView from "@/views/user/RegView.vue"
 import UserSearchView from "@/views/user/SearchView.vue"
 import GoodsView from "@/views/user/GoodsView.vue";
+import CartView from "@/views/user/CartView.vue";
 
 
 
@@ -47,6 +48,10 @@ const router = createRouter({
                     path: '/user/goods',
                     name: 'user_goods',
                     component: GoodsView
+                }, {
+                    path: '/user/cart',
+                    name: 'user_cart',
+                    component: CartView
                 }
             ]
         }, {

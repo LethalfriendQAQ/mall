@@ -56,10 +56,12 @@ import { useRoute } from "vue-router";
 import goodsApi from "@/api/goodsApi.js";
 import {ref} from "vue";
 import collectApi from "@/api/collectApi.js";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 import { useTokenStore } from "@/stores/token.js";
 import cartApi from "@/api/cartApi.js";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const tokenStore = useTokenStore();
 //商品收藏的状态
 const collectInfo = ref(null);
@@ -76,7 +78,19 @@ function insertCart() {
       .then(resp => {
         console.log(resp);
         if(resp.code == 10000) {
-          ElMessage.success(resp.msg);
+          ElMessageBox.confirm(
+              '加入购物车成功，是否跳转到购物车页面?',
+              '提示',
+              {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'info',
+              }
+          )
+              .then(() => {
+                //点击确定按钮的回调
+                router.push("/user/cart");
+              });
         } else {
           ElMessage.error(resp.msg);
         }

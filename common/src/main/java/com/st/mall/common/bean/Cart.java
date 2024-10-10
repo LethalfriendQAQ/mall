@@ -12,4 +12,5 @@ public class Cart {
     private Integer count;
     private Integer userId;
     private Integer goodsId;
+    private Goods goods;
 }
