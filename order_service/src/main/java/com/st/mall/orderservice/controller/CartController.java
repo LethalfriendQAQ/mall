@@ -61,4 +61,10 @@ public class CartController {
         List<Cart> cartList = cartService.search(condition);
         return RespBean.ok("", cartList);
     }
+
+    @GetMapping("/{id}")
+    public RespBean selectById(@PathVariable("id") Integer id) {
+        Cart cart = cartService.selectById(id);
+        return RespBean.ok("", cart);
+    }
 }

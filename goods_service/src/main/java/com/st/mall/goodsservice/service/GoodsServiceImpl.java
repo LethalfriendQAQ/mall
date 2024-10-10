@@ -8,13 +8,13 @@ import com.st.mall.common.exception.StException;
 import com.st.mall.goodsservice.mapper.CategoryMapper;
 import com.st.mall.goodsservice.mapper.GoodsMapper;
 import com.st.mall.goodsservice.mapper.GoodsPicMapper;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
+@DubboService
 public class GoodsServiceImpl implements com.st.mall.common.service.GoodsService {
     @Autowired
     private CategoryMapper categoryMapper;

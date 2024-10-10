@@ -65,7 +65,7 @@
         DELETE FROM `order` WHERE `id`=#{id}
     </delete>
 
-    <select id="selectByCondition" resultMap="orderMap">
+    <select id="selectByCondition" resultType="order">
         SELECT * FROM `order`
         <where>
             <if test="id!=null and id!=''">
@@ -80,7 +80,7 @@
         </where>
     </select>
 
-    <select id="selectById" resultMap="orderMap">
+    <select id="selectById" resultType="order">
         SELECT * FROM `order` WHERE `id`=#{id}
     </select>
     <select id="selectByUserId" parameterType="order" resultType="com.st.mall.common.bean.Order">

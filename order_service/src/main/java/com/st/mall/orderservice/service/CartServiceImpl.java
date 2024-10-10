@@ -1,9 +1,12 @@
 package com.st.mall.orderservice.service;
 
 import com.st.mall.common.bean.Cart;
+import com.st.mall.common.bean.Goods;
 import com.st.mall.common.exception.StException;
 import com.st.mall.common.service.CartService;
+import com.st.mall.common.service.GoodsService;
 import com.st.mall.orderservice.mapper.CartMapper;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +16,9 @@ import java.util.List;
 public class CartServiceImpl implements CartService {
     @Autowired
     private CartMapper cartMapper;
+    @DubboReference
+    private GoodsService goodsService;
+
 
     @Override
     public boolean insertOrUpdate(Cart cart) {
@@ -55,14 +61,28 @@ public class CartServiceImpl implements CartService {
             throw new StException("该购物车属于其他用户！");
         }
         //判断库存是否充足
-        //if (cart.getCount() != null && cart.getCount() > 商品库存)
+        Goods goods = goodsService.selectById(c.getGoodsId());
+        if (cart.getCount() != null && cart.getCount() > goods.getCount()) {
+            //当商品数量超过库存，就设置购物车数量为库存
+            cart.setCount(goods.getCount());
+        }
         return cartMapper.update(cart) == 1;
     }
 
     @Override
     public List<Cart> search(Cart condition) {
         List<Cart> carts = cartMapper.selectByCondition(condition);
-        //TODO 调用goods_service查询购物车对应的商品
+        //调用goods_service查询购物车对应的商品
+        carts.stream()
+                .forEach(cart -> {
+                    Goods goods = goodsService.selectById(cart.getGoodsId());
+                    cart.setGoods(goods);
+                });
         return carts;
+    }
+
+    @Override
+    public Cart selectById(Integer id) {
+        return cartMapper.selectById(id);
     }
 }

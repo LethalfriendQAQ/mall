@@ -8,6 +8,16 @@ spring:
     username: root
     password: 123456
 
+dubbo:
+  application:
+    name: goods_service
+    qos-port: 28090
+  protocol:
+    name: dubbo
+    port: 38090
+  registry:
+    address: zookeeper://localhost:2181
+
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

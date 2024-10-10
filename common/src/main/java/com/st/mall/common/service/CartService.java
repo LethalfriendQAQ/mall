@@ -10,4 +10,6 @@ public interface CartService {
     boolean delete(Integer id, Integer userId) throws StException;
     boolean update(Cart cart, Integer userId) throws StException;
     List<Cart> search(Cart condition);
+
+    Cart selectById(Integer id);
 }
