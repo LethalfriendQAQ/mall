@@ -9,7 +9,6 @@ spring:
     password: 123456
 
 mybatis:
-
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
@@ -26,3 +25,7 @@ white-list:
 # /goods/** GET
 st:
   picDir: D:/situ/code/Project02/pic/
+
+logging:
+  level:
+    org.springframework: DEBUG

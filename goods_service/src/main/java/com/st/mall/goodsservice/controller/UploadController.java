@@ -16,7 +16,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping({"/category", "/goods"})
 public class UploadController {
-    @Value("${st.picDir}")
+    @Value("${st.picDir: D:/situ/code/Project02/pic/}")
     private String pidDir;
 
     @PostMapping("/upload")

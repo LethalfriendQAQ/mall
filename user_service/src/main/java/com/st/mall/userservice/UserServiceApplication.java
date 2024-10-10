@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = "com.st.mall")
-@MapperScan(basePackages = {"com.st.mall.userservice.mapper", "com.st.mall.orderservice.mapper"})
+@MapperScan(basePackages = {"com.st.mall.userservice.mapper"})
 public class UserServiceApplication {
 
     public static void main(String[] args) {
