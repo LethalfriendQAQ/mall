@@ -17,6 +17,12 @@ import GoodsView from "@/views/user/GoodsView.vue";
 import CartView from "@/views/user/CartView.vue";
 import CreateOrderView from "@/views/user/CreateOrderView.vue";
 import CenterView from "@/views/user/CenterView.vue";
+import AddrListView from "@/views/user/center/AddrListView.vue";
+import CollectListView from "@/views/user/center/CollectListView.vue";
+import UserOrderListView from "@/views/user/center/OrderListView.vue";
+import InfoView from "@/views/user/center/InfoView.vue";
+import PasswordView from "@/views/user/center/PasswordView.vue";
+import RechargeView from "@/views/user/center/RechargeView.vue";
 
 
 
@@ -61,7 +67,34 @@ const router = createRouter({
                 }, {
                     path: '/user/center',
                     name: 'user_center',
-                    component: CenterView
+                    component: CenterView,
+                    children: [
+                        {
+                            path: '/user/addrList',
+                            name: 'user_addrList',
+                            component: AddrListView
+                        }, {
+                            path: '/user/collectList',
+                            name: 'user_collectList',
+                            component: CollectListView
+                        }, {
+                            path: '/user/info',
+                            name: 'user_info',
+                            component: InfoView
+                        }, {
+                            path: '/user/orderList',
+                            name: 'user_orderList',
+                            component: UserOrderListView
+                        }, {
+                            path: '/user/password',
+                            name: 'user_password',
+                            component: PasswordView
+                        }, {
+                            path: '/user/recharge',
+                            name: 'user_recharge',
+                            component: RechargeView
+                        }
+                    ]
                 }
             ]
         }, {
