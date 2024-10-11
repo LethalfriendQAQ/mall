@@ -50,6 +50,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> selectByUserId(Integer userId) {
+        return orderMapper.selectByUserId(userId);
+    }
+
+    @Override
     public PageInfo<Order> selectByCondition(Order condition, Integer pageNum, Integer pageSize) {
         //设置分页参数
         PageHelper.startPage(pageNum, pageSize);

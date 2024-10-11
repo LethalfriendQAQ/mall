@@ -4,10 +4,13 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.st.mall.common.bean.Order;
 import com.st.mall.common.bean.User;
 import com.st.mall.common.exception.StException;
+import com.st.mall.common.service.OrderService;
 import com.st.mall.common.service.UserService;
 import com.st.mall.userservice.mapper.UserMapper;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +24,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+    @DubboReference
+    private OrderService orderService;
 
     @Override
     public User login(String username, String password) throws StException {
@@ -93,7 +98,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User selectById(Integer id) {
-        return userMapper.selectById(id);
+        List<Order> orders = orderService.selectByUserId(id);
+        User user = userMapper.selectById(id);
+        user.setOrders(orders);
+        return user;
     }
 
     @Override
