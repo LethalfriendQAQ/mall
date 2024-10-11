@@ -68,6 +68,7 @@ const router = createRouter({
                     path: '/user/center',
                     name: 'user_center',
                     component: CenterView,
+                    redirect: '/user/info',
                     children: [
                         {
                             path: '/user/addrList',

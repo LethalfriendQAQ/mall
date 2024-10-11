@@ -11,6 +11,7 @@ public interface AddrMapper {
 
     int update(Addr addr);
     List<Addr> selectByUserId(Integer userId);
+    List<Addr> selectByCondition(Addr condition);
 
     Addr selectById(Integer id);
 }
