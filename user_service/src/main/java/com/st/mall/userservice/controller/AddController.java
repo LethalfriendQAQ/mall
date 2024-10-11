@@ -22,7 +22,7 @@ public class AddController {
     public RespBean insert(@RequestBody Addr addr, @RequestHeader("token") String token) {
         Map<String, Object> map = JwtUtil.parseJwtToMap(token);
         Integer userId = (Integer) map.get("id");
-
+        addr.setUserId(userId);
         addrService.insert(addr);
         return RespBean.ok("添加成功");
     }
@@ -41,7 +41,7 @@ public class AddController {
         Map<String, Object> map = JwtUtil.parseJwtToMap(token);
         Integer userId = (Integer) map.get("id");
         addrService.update(addr, userId);
-        return RespBean.ok("修改成功");
+        return RespBean.ok("修改成功", addr);
     }
 
     @GetMapping
@@ -58,6 +58,6 @@ public class AddController {
     @GetMapping("/{id}")
     public RespBean selectById(@PathVariable("id") Integer id) {
         Addr addr = addrService.selectById(id);
-        return RespBean.ok("查询成功");
+        return RespBean.ok("", addr);
     }
 }

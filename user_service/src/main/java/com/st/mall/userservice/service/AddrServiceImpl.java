@@ -48,7 +48,7 @@ public class AddrServiceImpl implements AddrService {
         if (!a.getUserId().equals(userId)) {
             throw new StException("该地址属于其他用户，无法删除");
         }
-        return addrMapper.update(a);
+        return addrMapper.update(addr);
     }
 
     @Override
