@@ -53,11 +53,11 @@ public class AddrServiceImpl implements AddrService {
 
     @Override
     public List<Addr> selectByCondition(Addr condition) {
-        return null;
+        return addrMapper.selectByCondition(condition);
     }
 
     @Override
     public Addr selectById(Integer id) {
-        return null;
+        return addrMapper.selectById(id);
     }
 }
