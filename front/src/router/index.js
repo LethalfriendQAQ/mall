@@ -15,6 +15,8 @@ import UserRegView from "@/views/user/RegView.vue"
 import UserSearchView from "@/views/user/SearchView.vue"
 import GoodsView from "@/views/user/GoodsView.vue";
 import CartView from "@/views/user/CartView.vue";
+import CreateOrderView from "@/views/user/CreateOrderView.vue";
+import CenterView from "@/views/user/CenterView.vue";
 
 
 
@@ -52,6 +54,14 @@ const router = createRouter({
                     path: '/user/cart',
                     name: 'user_cart',
                     component: CartView
+                }, {
+                    path: '/user/createOrder',
+                    name: 'user_createOrder',
+                    component: CreateOrderView
+                }, {
+                    path: '/user/center',
+                    name: 'user_center',
+                    component: CenterView
                 }
             ]
         }, {

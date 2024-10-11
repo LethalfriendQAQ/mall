@@ -8,6 +8,13 @@ const cartApi = {
     delete(id) {
         return service.delete(`/cart/${id}`);
     },
+    deleteByIds(ids) {
+        return service.delete("/cart",  {
+            data: {
+                ids
+            }
+        });
+    },
     update(cart) {
         return service.put("/cart", cart);
     },

@@ -51,6 +51,23 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public boolean deleteByIds(List<Integer> ids, Integer userId) throws StException {
+        for (Integer id : ids) {
+            //判断购物车是否存在
+            Cart cart = cartMapper.selectById(id);
+            if (cart == null) {
+                throw new StException("该购物车不存在！");
+            }
+            //判断被删除的购物车是否属于当前的用户
+            if (!cart.getUserId().equals(userId)) {
+                throw new StException("该购物车属于其他用户！");
+            }
+        }
+
+        return cartMapper.deleteByIds(ids) == ids.size();
+    }
+
+    @Override
     public boolean update(Cart cart, Integer userId) throws StException {
         //判断购物车是否存在
         Cart c = cartMapper.selectById(cart.getId());

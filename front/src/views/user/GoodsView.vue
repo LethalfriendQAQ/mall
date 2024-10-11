@@ -35,7 +35,7 @@
         </div>
         <div class="goodsBtn">
           <el-button type="primary" @click="insertCart"><el-icon><ShoppingCart /></el-icon>加入购物车</el-button>
-          <el-button type="success"><el-icon><Money /></el-icon>直接购买</el-button>
+          <el-button type="success" @click="toCreateOrderPage"><el-icon><Money /></el-icon>直接购买</el-button>
           <el-button type="warning" v-if="!collectInfo" @click="collect"><el-icon><StarFilled /></el-icon>收藏</el-button>
           <el-button type="danger" v-else @click="cancelCollect"><el-icon><Star /></el-icon>取消收藏</el-button>
         </div>
@@ -72,25 +72,36 @@ const route = useRoute();
 
 const goods = ref({});
 
+//跳转到生成订单的页面
+function toCreateOrderPage() {
+  //获取已选中的购物车的id
+  let goodsId = route.query.id;
+  router.push({
+    path: "/user/createOrder",
+    query: {
+      goodsId
+    }
+  });
+}
+
 //加入购物车
 function insertCart() {
   cartApi.insert(goods.value.id)
       .then(resp => {
-        console.log(resp);
         if(resp.code == 10000) {
-          // ElMessageBox.confirm(
-          //     '加入购物车成功，是否跳转到购物车页面?',
-          //     '提示',
-          //     {
-          //       confirmButtonText: '确定',
-          //       cancelButtonText: '取消',
-          //       type: 'info',
-          //     }
-          // )
-          //     .then(() => {
-          //       //点击确定按钮的回调
-          //       router.push("/user/cart");
-          //     });
+          ElMessageBox.confirm(
+              '加入购物车成功，是否跳转到购物车页面?',
+              '提示',
+              {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'info',
+              }
+          )
+              .then(() => {
+                //点击确定按钮的回调
+                router.push("/user/cart");
+              });
         } else {
           ElMessage.error(resp.msg);
         }

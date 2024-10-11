@@ -8,6 +8,7 @@ import com.st.mall.common.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -66,5 +67,15 @@ public class CartController {
     public RespBean selectById(@PathVariable("id") Integer id) {
         Cart cart = cartService.selectById(id);
         return RespBean.ok("", cart);
+    }
+    @DeleteMapping
+    public RespBean deleteByIds(@RequestBody Map<String, ArrayList<Integer>> data, @RequestHeader("token") String token) throws StException {
+        //解析token获取用户id
+        Map<String, Object> map = JwtUtil.parseJwtToMap(token);
+        Integer userId = (Integer) map.get("id");
+
+        ArrayList<Integer> ids = data.get("ids");
+        cartService.deleteByIds(ids, userId);
+        return RespBean.ok("删除成功");
     }
 }
