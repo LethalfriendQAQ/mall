@@ -9,7 +9,6 @@
         INSERT INTO `order`(
             `id`,
             `user_id`,
-            `create_time`,
             `express`,
             `pay_type`,
             `addr_id`,
@@ -19,7 +18,6 @@
         VALUES (
                    #{id},
                    #{userId},
-                   #{createTime},
                    #{express},
                    #{payType},
                    #{addrId},

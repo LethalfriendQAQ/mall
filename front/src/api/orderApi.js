@@ -1,6 +1,9 @@
 import service from "@/api/index.js";
 
 const orderApi = {
+    insert(orderVo) {
+        return service.post("/order", orderVo);
+    },
     // 根据ID查询
     selectById(id) {
         return service.get(`/order/${id}`);

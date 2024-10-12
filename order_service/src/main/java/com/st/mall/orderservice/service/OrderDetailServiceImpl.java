@@ -31,6 +31,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         orderDetails.stream()
                 .forEach(orderDetail -> {
                     Goods goods = goodsService.selectById(orderDetail.getGoodsId());
+                    goods.setCategory(null);
                     orderDetail.setGoods(goods);
                 });
         return orderDetails;

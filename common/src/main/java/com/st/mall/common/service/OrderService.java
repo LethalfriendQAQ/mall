@@ -2,13 +2,14 @@ package com.st.mall.common.service;
 
 import com.github.pagehelper.PageInfo;
 import com.st.mall.common.bean.Order;
+import com.st.mall.common.bean.OrderVo;
 import com.st.mall.common.exception.StException;
 
 import java.util.List;
 
 public interface OrderService {
     //添加
-    void insert(Order order) throws StException;
+    void insert(OrderVo orderVo) throws StException;
 
     //根据ID删除
     void delete(Integer id) throws StException;

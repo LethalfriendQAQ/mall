@@ -4,12 +4,12 @@ import com.st.mall.common.bean.Addr;
 import com.st.mall.common.exception.StException;
 import com.st.mall.common.service.AddrService;
 import com.st.mall.userservice.mapper.AddrMapper;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@DubboService
 public class AddrServiceImpl implements AddrService {
     @Autowired
     private AddrMapper addrMapper;
