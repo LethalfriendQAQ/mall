@@ -99,6 +99,20 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public List<Cart> selectByIds(Integer[] cardIds, Integer userId) throws StException {
+        List<Cart> cartList = cartMapper.selectByIds(cardIds);
+        for (Cart cart : cartList) {
+            if (!cart.getUserId().equals(userId)) {
+                throw new StException("非法购物车");
+            }
+            //查询并设置购物车商品的信息
+            Goods goods = goodsService.selectById(cart.getGoodsId());
+            cart.setGoods(goods);
+        }
+        return cartList;
+    }
+
+    @Override
     public Cart selectById(Integer id) {
         return cartMapper.selectById(id);
     }

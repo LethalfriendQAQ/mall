@@ -16,9 +16,9 @@ public class JwtUtil {
 
     //生成JWT
     public static String generateJwt(Map<String, Object> map) {
-        //超时时间半小时
+        //超时时间1小时
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.SECOND, 30*60); //token超时时间半小时
+        calendar.add(Calendar.SECOND, 60*60); //token超时时间一个小时
 
         //设置payload
         String token = JWT.create()

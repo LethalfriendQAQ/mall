@@ -35,7 +35,7 @@
         </div>
         <div class="goodsBtn">
           <el-button type="primary" @click="insertCart"><el-icon><ShoppingCart /></el-icon>加入购物车</el-button>
-          <el-button type="success" @click="toCreateOrderPage"><el-icon><Money /></el-icon>直接购买</el-button>
+          <!--<el-button type="success" @click="toCreateOrderPage"><el-icon><Money /></el-icon>直接购买</el-button>-->
           <el-button type="warning" v-if="!collectInfo" @click="collect"><el-icon><StarFilled /></el-icon>收藏</el-button>
           <el-button type="danger" v-else @click="cancelCollect"><el-icon><Star /></el-icon>取消收藏</el-button>
         </div>
@@ -73,16 +73,16 @@ const route = useRoute();
 const goods = ref({});
 
 //跳转到生成订单的页面
-function toCreateOrderPage() {
-  //获取已选中的购物车的id
-  let goodsId = route.query.id;
-  router.push({
-    path: "/user/createOrder",
-    query: {
-      goodsId
-    }
-  });
-}
+// function toCreateOrderPage() {
+//   //获取已选中的购物车的id
+//   let goodsId = route.query.id;
+//   router.push({
+//     path: "/user/createOrder",
+//     query: {
+//       goodsId
+//     }
+//   });
+// }
 
 //加入购物车
 function insertCart() {
@@ -179,7 +179,7 @@ selectById();
   color: #999999;
 }
 .info .price {
-  //color: var(--theme-color);
+  color: var(--theme-color);
   font-size: 18px;
 }
 .info .markPrice {

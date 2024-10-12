@@ -48,4 +48,11 @@
             </if>
         </where>
     </select>
+    <select id="selectByIds" resultType="com.st.mall.common.bean.Cart">
+        SELECT * FROM `cart`
+        WHERE
+        <foreach collection="cartIds" item="id" open="`id` IN(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

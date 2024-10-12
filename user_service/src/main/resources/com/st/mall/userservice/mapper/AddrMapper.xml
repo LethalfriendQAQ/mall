@@ -98,5 +98,6 @@
                 AND `status`=#{status}
             </if>
         </where>
+        ORDER BY `status` desc
     </select>
 </mapper>

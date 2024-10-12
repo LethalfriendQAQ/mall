@@ -78,4 +78,12 @@ public class CartController {
         cartService.deleteByIds(ids, userId);
         return RespBean.ok("删除成功");
     }
+    @GetMapping("/ids")
+    public RespBean selectByIds(Integer[] cartIds, @RequestHeader("token") String token) throws StException {
+        //解析token获取用户id
+        Map<String, Object> map = JwtUtil.parseJwtToMap(token);
+        Integer userId = (Integer) map.get("id");
+        List<Cart> cartList = cartService.selectByIds(cartIds, userId);
+        return RespBean.ok("", cartList);
+    }
 }

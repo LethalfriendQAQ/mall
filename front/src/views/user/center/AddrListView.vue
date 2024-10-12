@@ -5,7 +5,7 @@
   </el-row>
   <div>
     <ul class="addrList">
-      <li v-for="(addr, index) in addrList" :key="index">
+      <li v-for="(addr, index) in addrList" :key="index" :class="{defaultAddr: addr.status == 1}">
         <div class="area" :title="`${addr.province} - ${addr.city} - ${addr.district} - ${addr.street}`">
           {{addr.province}} - {{addr.city}} - {{addr.district}} - {{addr.street}}
         </div>
@@ -13,7 +13,8 @@
         <div class="contect">{{addr.contact}}</div>
         <div class="phone">{{addr.phone}}</div>
         <div class="option">
-          <el-button size="small" >设为默认</el-button>
+          <span v-if="addr.status == 1" class="defaultInfo">默认地址</span>
+          <el-button size="small" v-else @click="setDefault(addr.id)">设为默认</el-button>
           <el-button size="small" @click="showUpdateDialog(addr.id)">编辑</el-button>
           <el-popconfirm title="你确定要删除该地址吗？" confirm-button-text="确认" cancel-button-text="取消"
                          width="200px" @confirm="deleteAddr(addr.id)">
@@ -166,6 +167,25 @@ const district = ref({});
 //当前用户的所有地址信息
 const addrList = ref([]);
 
+
+function setDefault(id) {
+  let addr = {
+    id,
+    status: 1
+  }
+  addrApi.update(addr)
+      .then(resp => {
+        if (resp.code == 10000) {
+          ElMessage.success(resp.msg);
+          //查询当前用户的所有地址
+          getAddrList();
+        } else {
+          ElMessage.error(resp.msg);
+        }
+      })
+}
+
+
 //删除地址
 function deleteAddr(id) {
   addrApi.delete(id)
@@ -179,8 +199,6 @@ function deleteAddr(id) {
         }
       })
 }
-
-
 
 //省被选中之后调用
 function selectProvince(value) {
@@ -356,7 +374,7 @@ getAddrList();
     color: #AAAAAA;
   }
   .addrList li .contect {
-    //color: var(--theme-color);
+    color: var(--theme-color);
     font-weight: bold;
   }
   .addrList li .phone {
@@ -364,5 +382,16 @@ getAddrList();
   }
   .addrList li .option {
     text-align: right;
+  }
+  .addrList .defaultInfo {
+    font-weight: bold;
+    color: var(--theme-color);
+    margin-right: 10px;
+  }
+  .addrList .defaultAddr {
+    border: 1px solid var(--theme-color);
+  }
+  .addrList .defaultAddr:hover {
+    box-shadow: 0px 0px 20px var(--theme-color);
   }
 </style>

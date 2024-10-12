@@ -17,4 +17,5 @@ public interface CartMapper {
     Cart selectById(Integer id);
 
     List<Cart> selectByCondition(Cart condition);
+    List<Cart> selectByIds(@Param("cartIds") Integer[] cartIds);
 }

@@ -2,6 +2,7 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus';
 import router from '@/router';
 import { useTokenStore } from "@/stores/token.js";
+import { useUserStore } from "@/stores/user.js";
 
 //创建Axios的对象
 const service = axios.create({
@@ -45,6 +46,8 @@ service.interceptors.response.use(resp => {
             onClose: () => {
                 //将store中的token设置为初值
                 const tokenStore = useTokenStore();
+                const userStore = useUserStore();
+                userStore.$reset();
                 tokenStore.$reset();
                 let currentPath = router.currentRoute.value.path;
                 if (currentPath.startsWith("/admin")) {
