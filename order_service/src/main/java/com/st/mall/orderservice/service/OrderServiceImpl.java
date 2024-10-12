@@ -64,4 +64,9 @@ public class OrderServiceImpl implements OrderService {
         PageInfo<Order> pageInfo = new PageInfo<>(orders);
         return pageInfo;
     }
+
+    @Override
+    public List<Order> selectByCondition(Order condition) {
+        return orderMapper.selectByCondition(condition);
+    }
 }

@@ -11,6 +11,9 @@ const orderApi = {
         condition.pageSize = pageSize;
         return service.get("/order", { params: condition });
     },
+    selectByUserId() {
+        return service.get("/order/selectByUserId")
+    }
 }
 
 export default orderApi;

@@ -22,4 +22,5 @@ public interface OrderService {
 
     //搜索 - 分页查询
     PageInfo<Order> selectByCondition(Order condition, Integer pageNum, Integer pageSize);
+    List<Order> selectByCondition(Order condition);
 }

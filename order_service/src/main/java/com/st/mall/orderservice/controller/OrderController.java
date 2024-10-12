@@ -4,8 +4,12 @@ import com.github.pagehelper.PageInfo;
 import com.st.mall.common.bean.Order;
 import com.st.mall.common.bean.RespBean;
 import com.st.mall.common.service.OrderService;
+import com.st.mall.common.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -26,5 +30,15 @@ public class OrderController {
     public RespBean selectById(@PathVariable("id") String id) {
         Order order = orderService.selectById(id);
         return RespBean.ok("", order);
+    }
+    @GetMapping("/selectByUserId")
+    public RespBean selectByUserId(@RequestHeader("token") String token) {
+        Map<String, Object> map = JwtUtil.parseJwtToMap(token);
+        Integer userId = (Integer) map.get("id");
+
+        Order condition = new Order();
+        condition.setUserId(userId);
+        List<Order> orders = orderService.selectByCondition(condition);
+        return RespBean.ok("查询成功", orders);
     }
 }
