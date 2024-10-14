@@ -50,9 +50,7 @@ public class OrderController {
         Map<String, Object> map = JwtUtil.parseJwtToMap(token);
         Integer userId = (Integer) map.get("id");
 
-        Order condition = new Order();
-        condition.setUserId(userId);
-        List<Order> orders = orderService.selectByCondition(condition);
+        List<Order> orders = orderService.selectByUserId(userId);
         return RespBean.ok("查询成功", orders);
     }
 }
