@@ -1,6 +1,7 @@
 package com.st.mall.orderservice.service;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.st.mall.common.bean.*;
@@ -13,6 +14,7 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -54,13 +56,14 @@ public class OrderServiceImpl implements OrderService {
         Addr addr = addrService.selectById(orderVo.getAddrId());
         //设置地址详情
         order.setAddrDetail(
-                addr.getContact() + " " +
-                addr.getPhone() + " " +
+
                 addr.getProvince() +
                 addr.getCity() +
                 addr.getDistrict() +
                 addr.getStreet() +
-                addr.getAddress()
+                addr.getAddress()+ " " +
+                addr.getContact() + " " +
+                addr.getPhone()
         );
         //添加订单
         order.setUserId(orderVo.getUserId());
@@ -106,6 +109,8 @@ public class OrderServiceImpl implements OrderService {
         }
         //删除购物车
         cartMapper.deleteByIds(Arrays.asList(orderVo.getCartIds()));
+
+        orderVo.setOrderId(orderId);
     }
 
     @Override
@@ -119,12 +124,22 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order selectById(String id) {
+    public Order selectById(String id, Integer userId) throws StException {
         Order order = orderMapper.selectById(id);
+        //判断是否属于当前用户
+        if (!order.getUserId().equals(userId)) {
+            throw new StException("订单不属于当前用户无法支付");
+        }
         List<OrderDetail> orderDetails = orderDetailService.selectByOrderId(id);
         User user = userService.selectById(order.getUserId());
         order.setUser(user);
         order.setOrderDetails(orderDetails);
+
+        //查询订单详情对应的商品的信息
+        for (OrderDetail orderDetail : orderDetails) {
+            //使用dubbo调用goodsService查询
+            goodsService.selectById(orderDetail.getGoodsId());
+        }
         return order;
     }
 
@@ -133,7 +148,7 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orderList = orderMapper.selectByUserId(userId);
         orderList.stream()
                 .forEach(order -> {
-                    List<OrderDetail> orderDetails = orderDetailService.selectByOrderId(order.getId());
+                        List<OrderDetail> orderDetails = orderDetailService.selectByOrderId(order.getId());
                     order.setOrderDetails(orderDetails);
                 });
         return orderList;
@@ -153,5 +168,61 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> selectByCondition(Order condition) {
         return orderMapper.selectByCondition(condition);
+    }
+
+    @Override
+    public void pay(OrderVo orderVo) throws StException {
+        //根据orderId查询订单
+        Order order = orderMapper.selectById(orderVo.getOrderId());
+        order.setOrderDetails(orderDetailMapper.selectByOrderId(order.getId()));
+        //判断订单是否存在
+        if (order == null) {
+            throw new StException("订单不存在，无法支付");
+        }
+        //判断订单是否属于当前用户
+        if (!order.getUserId().equals(orderVo.getUserId())) {
+            throw new StException("订单不属于当前用户，无法支付");
+        }
+        //判断订单是否是未支付的状态 status.equals(0)
+        if (!order.getStatus().equals(0)) {
+            throw new StException("订单状态错误，无法支付");
+        }
+
+
+        //根据用户id查询用户
+        User user = userService.selectById(orderVo.getUserId());
+        //判断支付密码是否存在,支付密码是否正确
+        String payPasswordSQl = user.getPayPassword();
+        if (payPasswordSQl == null) {
+            throw new StException("没有说设置支付密码，请设置之后再下单");
+        }
+        //对用户输入的密码进行加密
+        String md5Pwd = SecureUtil.md5(SecureUtil.md5(orderVo.getPayPwd() + user.getSalt()));
+        if (!md5Pwd.equals(payPasswordSQl)) {
+            throw new StException("支付密码错误");
+        }
+        //计算当前订单的总金额
+        BigDecimal sum = new BigDecimal("0");
+        for (OrderDetail orderDetail : order.getOrderDetails()) {
+            BigDecimal count = new BigDecimal(orderDetail.getCount());
+            BigDecimal price = orderDetail.getPrice();
+            sum = sum.add(price.multiply(count));
+        }
+        //判断余额是否充足
+        if (user.getMoney().compareTo(sum) < 0) {
+            throw new StException("余额不足");
+        }
+        //扣除余额
+        User u = new User();
+        u.setId(user.getId());
+        u.setMoney(user.getMoney().subtract(sum));
+        userService.update(u);
+
+        //设置status为1
+        order.setStatus(1);
+        //设置payType为0
+        order.setPayType(0);
+        //更新订单
+        orderMapper.update(order);
     }
 }

@@ -46,10 +46,12 @@ import {ElMessage} from "element-plus";
 import cartApi from "@/api/cartApi.js";
 import orderApi from "@/api/orderApi.js";
 import OrderApi from "@/api/orderApi.js";
+import { useRouter} from "vue-router";
 
 //服务器的地址
 const SERVER_ADDR = ref(import.meta.env.VITE_SERVER_ADDR);
 
+const router = useRouter();
 const route = useRoute();
 const addrList = ref([]);
 //购物车的id
@@ -80,6 +82,13 @@ function createOrder() {
       .then(resp => {
         if (resp.code == 10000) {
           ElMessage.success(resp.msg);
+          //去支付页面
+          router.push({
+            path: '/user/pay',
+            query: {
+              orderId: resp.data.orderId
+            }
+          });
         } else {
           ElMessage.error(resp.msg);
         }

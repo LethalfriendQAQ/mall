@@ -23,6 +23,7 @@ import UserOrderListView from "@/views/user/center/OrderListView.vue";
 import InfoView from "@/views/user/center/InfoView.vue";
 import PasswordView from "@/views/user/center/PasswordView.vue";
 import RechargeView from "@/views/user/center/RechargeView.vue";
+import PayView from "@/views/user/PayView.vue";
 
 
 
@@ -64,6 +65,10 @@ const router = createRouter({
                     path: '/user/createOrder',
                     name: 'user_createOrder',
                     component: CreateOrderView
+                }, {
+                    path: '/user/pay',
+                    name: 'user_pay',
+                    component: PayView
                 }, {
                     path: '/user/center',
                     name: 'user_center',

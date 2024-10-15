@@ -28,7 +28,7 @@
       </el-col>
       <el-col :span="5">{{ cart.goods.name }}</el-col>
       <el-col :span="4">{{ cart.goods.color }} - {{ cart.goods.version }}</el-col>
-      <el-col :span="2">{{ cart.goods.price }}</el-col>
+      <el-col :span="2">{{ cart.goods.price.toFixed(2) }}</el-col>
       <el-col :span="6">
         <el-input-number
             v-model="cart.count"
@@ -37,7 +37,7 @@
             @change="updateCount(cart)"
         />
       </el-col>
-      <el-col :span="2">{{ cart.goods.price * cart.count }}</el-col>
+      <el-col :span="2">{{ (cart.goods.price * cart.count).toFixed(2) }}</el-col>
       <el-col :span="1">
         <el-button type="danger" :icon="Delete" circle  @click="deleteById(cart.id)"/>
       </el-col>
@@ -61,7 +61,7 @@
         已选择{{ checkedCount }}件商品
       </el-col>
       <el-col :span="3">
-        总价 ￥{{ total }}
+        总价 ￥{{ total.toFixed(2) }}
       </el-col>
       <el-col :span="2">
         <el-button type="danger" @click="toCreateOrderPage">结算</el-button>

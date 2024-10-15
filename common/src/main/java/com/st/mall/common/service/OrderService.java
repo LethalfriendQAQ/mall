@@ -18,10 +18,12 @@ public interface OrderService {
     void update(Order order) throws StException;
 
     //根据ID查询
-    Order selectById(String  id);
+    Order selectById(String  id, Integer userId) throws StException;
     List<Order> selectByUserId(Integer userId);
 
     //搜索 - 分页查询
     PageInfo<Order> selectByCondition(Order condition, Integer pageNum, Integer pageSize);
     List<Order> selectByCondition(Order condition);
+
+    void pay(OrderVo orderVo) throws StException;
 }

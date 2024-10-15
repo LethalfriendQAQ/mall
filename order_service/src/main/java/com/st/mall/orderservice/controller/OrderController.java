@@ -29,7 +29,7 @@ public class OrderController {
         orderVo.setUserId(userId);
         //添加订单
         orderService.insert(orderVo);
-        return RespBean.ok("添加订单成功");
+        return RespBean.ok("添加订单成功", orderVo);
     }
     @GetMapping
     public RespBean selectByCondition(Order condition, Integer pageNum, Integer pageSize) {
@@ -41,9 +41,11 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public RespBean selectById(@PathVariable("id") String id) {
-        Order order = orderService.selectById(id);
-        return RespBean.ok("", order);
+    public RespBean selectById(@PathVariable("id") String id, @RequestHeader("token") String token) throws StException {
+        Map<String, Object> map = JwtUtil.parseJwtToMap(token);
+        Integer userId = (Integer) map.get("id");
+        Order order = orderService.selectById(id, userId);
+        return RespBean.ok("根据id查询订单成功", order);
     }
     @GetMapping("/selectByUserId")
     public RespBean selectByUserId(@RequestHeader("token") String token) {
@@ -52,5 +54,14 @@ public class OrderController {
 
         List<Order> orders = orderService.selectByUserId(userId);
         return RespBean.ok("查询成功", orders);
+    }
+
+    @PostMapping("/pay")
+    public RespBean pay(@RequestBody OrderVo orderVo, @RequestHeader("token") String token) throws StException {
+        Map<String, Object> map = JwtUtil.parseJwtToMap(token);
+        Integer userId = (Integer) map.get("id");
+        orderVo.setUserId(userId);
+        orderService.pay(orderVo);
+        return RespBean.ok("支付成功");
     }
 }

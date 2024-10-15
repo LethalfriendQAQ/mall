@@ -74,6 +74,7 @@ public class UserServiceImpl implements UserService {
         // 取前八位
         user.setSalt(id.length() > 8 ? id.substring(0, 8) : id);
         user.setPassword(SecureUtil.md5(SecureUtil.md5(user.getPassword() + user.getSalt())));
+        user.setPayPassword(SecureUtil.md5(SecureUtil.md5(user.getPassword() + user.getSalt())));
         userMapper.insert(user);
     }
 

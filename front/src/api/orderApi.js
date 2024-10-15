@@ -16,6 +16,9 @@ const orderApi = {
     },
     selectByUserId() {
         return service.get("/order/selectByUserId")
+    },
+    pay(orderVo) {
+        return service.post("/order/pay", orderVo)
     }
 }
 
