@@ -74,12 +74,13 @@
                 AND `status`=#{status}
             </if>
         </where>
+        ORDER BY `id` DESC
     </select>
 
     <select id="selectById" resultType="order">
         SELECT * FROM `order` WHERE `id`=#{id}
     </select>
     <select id="selectByUserId" parameterType="order" resultType="com.st.mall.common.bean.Order">
-        SELECT * FROM `order` WHERE `user_id`=#{userId}
+        SELECT * FROM `order` WHERE `user_id`=#{userId} ORDER BY `id` DESC
     </select>
 </mapper>

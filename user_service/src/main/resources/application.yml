@@ -3,13 +3,35 @@ server:
   port: 8091
 # 配置连接池
 spring:
+  application:
+    name: user_service
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/mall?useSSL=false
     username: root
     password: 123456
-
+seata:
+  registry:
+    type: zk
+    zk:
+      service-addr: 127.0.0.1:2181
+      session-timeout: 6000
+      connect-timeout: 2000
+  tx-service-group: mall
+  service:
+    vgroup-mapping:
+      mall: seata
+  store:
+    mode: db
+    db:
+      datasource: druid
+      db-type: mysql
+      url: jdbc:mysql://localhost:3306/seata
+      user: root
+      password: 123456
 dubbo:
+  consumer:
+    timeout: 5000
   application:
     name: user_service
     qos-port: 28091
@@ -20,7 +42,7 @@ dubbo:
     address: zookeeper://localhost:2181
 
 redis:
-  host: loaclhost
+  host: localhost
   port: 6379
 
 debug: true

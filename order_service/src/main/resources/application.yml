@@ -3,11 +3,25 @@ server:
   port: 8093
 
 spring:
+  application:
+    name: order_service
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/mall?useSSL=false
     username: root
     password: 123456
+seata:
+  registry:
+    type: zk
+    zk:
+      service-addr: 127.0.0.1:2181
+      session-timeout: 6000
+      connect-timeout: 2000
+  tx-service-group: mall
+  service:
+    vgroup-mapping:
+      mall: seata
+
 
 dubbo:
   application:
@@ -18,6 +32,7 @@ dubbo:
     port: 38093
   registry:
     address: zookeeper://localhost:2181
+
 debug: true
 mybatis:
   configuration:

@@ -39,6 +39,20 @@ public class OrderController {
         PageInfo<Order> pageInfo = orderService.selectByCondition(condition, pageNum, pageSize);
         return RespBean.ok("查询成功", pageInfo);
     }
+    @GetMapping("/user")
+    public RespBean selectByUser(Integer pageNum, Integer pageSize, @RequestHeader("token") String token) {
+        Map<String, Object> map = JwtUtil.parseJwtToMap(token);
+        Integer userId = (Integer) map.get("id");
+
+        pageNum = pageNum == null ? 1 : pageNum;
+        pageSize = pageSize == null ? 5 : pageSize;
+
+        Order condition = new Order();
+        condition.setUserId(userId);
+
+        PageInfo<Order> pageInfo = orderService.selectByCondition(condition, pageNum, pageSize);
+        return RespBean.ok("查询成功", pageInfo);
+    }
 
     @GetMapping("/{id}")
     public RespBean selectById(@PathVariable("id") String id, @RequestHeader("token") String token) throws StException {

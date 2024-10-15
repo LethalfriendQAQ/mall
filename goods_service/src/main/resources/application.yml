@@ -2,12 +2,27 @@ server:
   port: 8090
 
 spring:
+  application:
+    name: goods_service
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/mall?useSSL=false
     username: root
     password: 123456
-
+seata:
+  registry:
+    type: zk
+    zk:
+      service-addr: 127.0.0.1:2181
+      session-timeout: 6000
+      connect-timeout: 2000
+      username:
+      password:
+  tx-service-group: mall
+  service:
+    # 事务分组与集群映射的关系
+    vgroup-mapping:
+      mall: seata
 dubbo:
   application:
     name: goods_service

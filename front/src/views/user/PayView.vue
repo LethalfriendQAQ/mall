@@ -80,6 +80,7 @@ function getOrder() {
   orderApi.selectById(orderId)
       .then(resp => {
         if (resp.code == 10000) {
+          console.log(resp);
           order.value = resp.data;
           for (let orderDetail of order.value.orderDetails) {
             total.value += orderDetail.count * orderDetail.price;

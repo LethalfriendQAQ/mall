@@ -10,6 +10,7 @@ import com.st.mall.common.service.*;
 import com.st.mall.orderservice.mapper.CartMapper;
 import com.st.mall.orderservice.mapper.OrderDetailMapper;
 import com.st.mall.orderservice.mapper.OrderMapper;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,10 @@ public class OrderServiceImpl implements OrderService {
     private AddrService addrService;
     @DubboReference
     private GoodsService goodsService;
+
+
+    //生成订单
+    @GlobalTransactional(rollbackFor = Exception.class)
     @Override
     public void insert(OrderVo orderVo) throws StException {
         /**
@@ -158,10 +163,15 @@ public class OrderServiceImpl implements OrderService {
     public PageInfo<Order> selectByCondition(Order condition, Integer pageNum, Integer pageSize) {
         //设置分页参数
         PageHelper.startPage(pageNum, pageSize);
-        //查询
-        List<Order> orders = orderMapper.selectByCondition(condition);
+        List<Order> orderList = orderMapper.selectByCondition(condition);
+
+        orderList.stream()
+                .forEach(order -> {
+                    List<OrderDetail> orderDetails = orderDetailService.selectByOrderId(order.getId());
+                    order.setOrderDetails(orderDetails);
+                });
         //创建分页信息
-        PageInfo<Order> pageInfo = new PageInfo<>(orders);
+        PageInfo<Order> pageInfo = new PageInfo<>(orderList);
         return pageInfo;
     }
 
@@ -170,6 +180,8 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.selectByCondition(condition);
     }
 
+    //支付
+    @GlobalTransactional(rollbackFor = Exception.class)
     @Override
     public void pay(OrderVo orderVo) throws StException {
         //根据orderId查询订单

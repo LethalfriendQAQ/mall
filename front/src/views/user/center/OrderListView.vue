@@ -2,124 +2,207 @@
   <el-row style="margin-bottom: 20px">
     <el-col :span="12" style="font-size: 18px; font-weight: bold">我的订单</el-col>
   </el-row>
-  <!--&lt;!&ndash;显示我的订单&ndash;&gt;-->
-  <!--<div class="orderList">-->
-  <!--  <ul class="order">-->
-  <!--    <li v-for="(order, index) in orderList" :key="index">-->
-  <!--      <el-row>-->
-  <!--        <el-col :span="5">{{ order.createTime }}</el-col>-->
-  <!--        <el-col :span="15">订单号：{{ order.id }}</el-col>-->
-  <!--        <el-col :span="4" style="text-align: right">删除</el-col>-->
-  <!--      </el-row>-->
-  <!--      <el-row v-for="(orderDetail, index) in order.orderDetails" :key="index">-->
-  <!--        <el-col :span="3">图片</el-col>-->
-  <!--        <el-col :span="6">{{ orderDetail.goods.name }}</el-col>-->
-  <!--        <el-col :span="3">x{{ orderDetail.count }}</el-col>-->
-  <!--        <el-col :span="3">收货人</el-col>-->
-  <!--        <el-col :span="3">{{ orderDetail.goods.markPrice }}</el-col>-->
-  <!--        <el-col :span="3">再次购买</el-col>-->
-  <!--        <el-col :span="3">-->
-  <!--          <div>{{ orderDetail.status }}</div>-->
-  <!--          <div>订单状态</div>-->
-  <!--        </el-col>-->
-  <!--      </el-row>-->
-  <!--    </li>-->
-  <!--  </ul>-->
-  <!--</div>-->
   <!--显示我的订单-->
-  <table class="orderList">
-    <tr class="order" v-for="(order, index) in orderList" :key="index">
-      <el-row>
-        <el-col :span="5">{{ order.createTime }}</el-col>
-        <el-col :span="15">订单号：{{ order.id }}</el-col>
-        <el-col :span="4" style="text-align: right">删除</el-col>
-      </el-row>
-      <tr v-for="(orderDetail, index) in order.orderDetails" :key="index">
-        <td style="width: 10%;">图片</td>
-        <td style="width: 30%;">{{ orderDetail.goods.name }}</td>
-        <td style="width: 10%;">x{{ orderDetail.count }}</td>
-        <td style="width: 15%;">{{ orderDetail.goods.markPrice }}</td>
-        <td style="width: 15%;">
-          <el-button type="warning" size="small">再次购买</el-button>
-        </td>
-        <td style="width: 10%;">收货人</td>
-        <td style="width: 10%;">
-          <div>{{ orderDetail.status }}</div>
-          <div>订单状态</div>
-        </td>
-      </tr>
-    </tr>
-  </table>
+  <div class="order-list">
+    <el-card v-for="(order, index) in pageInfo.list" :key="index" class="order-item" style="margin-bottom: 20px">
+      <div class="order-header">
+        <el-row>
+          <el-col :span="6">订单时间：{{ order.createTime }}</el-col>
+          <el-col :span="12">订单号：{{ order.id }}</el-col>
+          <el-col :span="6" class="text-right">
+            <el-button type="text" @click="deleteOrder(order.id)" title="删除订单">
+              <el-icon style="color: red;"><Delete /></el-icon>
+            </el-button>
+          </el-col>
+        </el-row>
+      </div>
+
+      <!--订单详情，商品列表-->
+      <div class="order-details">
+        <el-row v-for="(orderDetail, index) in order.orderDetails" :key="index" class="order-detail-item">
+          <!-- 商品图片 -->
+          <el-col :span="4" class="goods-image">
+            <el-image style="width: 50px; height: 50px" :src="`${SERVER_ADDR}/goods/pic/${orderDetail.goods.picList[0].url}`" />
+          </el-col>
+
+          <!-- 商品信息 -->
+          <el-col :span="10" class="goods-info">
+            <p class="goods-name">{{ orderDetail.goods.name }}</p>
+            <p class="goods-price">单价：￥{{ orderDetail.goods.price }}</p>
+          </el-col>
+
+          <!-- 商品数量 -->
+          <el-col :span="3" class="goods-count">数量：x{{ orderDetail.count }}</el-col>
+
+          <!-- 再次购买 -->
+          <el-col :span="4" class="order-actions text-right">
+            <el-button type="success" size="small" style="margin-top: 15px" @click="buyAgain(orderDetail.goods.id)">再次购买</el-button>
+          </el-col>
+        </el-row>
+      </div>
+
+      <!-- 合并订单状态和订单总金额 -->
+      <div class="order-status-footer">
+        <el-row justify="end">
+          <el-col :span="7" class="order-status text-right">
+            <div v-if="order.status == 0">
+              <el-button type="danger" size="small" @click="toPayPage(order.id)">立即付款</el-button>
+            </div>
+            <div v-else>
+              <el-tag type="primary">{{ ["已支付", "已发货", "已收货", "退货退款", "仅退款", "售后", "其他"][order.status - 1] }}</el-tag>
+            </div>
+          </el-col>
+          <el-col :span="5" class="order-total text-right">
+            <p>订单总金额：<strong>￥{{ order.totalAmount }}</strong></p>
+          </el-col>
+        </el-row>
+      </div>
+    </el-card>
+  </div>
+  <el-row class="row-bg" justify="center" style="margin-top: 20px">
+    <el-pagination background layout="prev, pager, next" :total="pageInfo.total"
+                   :page-size="pageInfo.pageSize" @change="selectOrders"/>
+  </el-row>
 </template>
 
 <script setup>
-import {ref} from "vue";
-import {ElMessage} from "element-plus";
+import { ref } from "vue";
+import { ElMessage } from "element-plus";
 import orderApi from "@/api/orderApi.js";
+import {useRouter} from "vue-router";
 
-const orderList = ref([])
-const orderDetails = ref([]);
-//服务器的地址
+const router = useRouter();
+const orderList = ref([]);
+const pageInfo = ref({
+  pages: 0,
+  pageSize: 0,
+  pageNum: 0
+})
 const SERVER_ADDR = ref(import.meta.env.VITE_SERVER_ADDR);
-function selectOrders() {
-  orderApi.selectByUserId()
+
+
+function toPayPage(id) {
+  router.push({
+    path: '/user/pay',
+    query: {
+      orderId: id
+    }
+  })
+}
+
+function buyAgain(id) {
+  router.push({
+    path: '/user/goods',
+    query: {
+      id
+    }
+  })
+}
+
+
+
+function selectOrders(pageNum, pageSize) {
+  orderApi.selectByUser(pageNum, pageSize)
       .then(resp => {
-        console.log(resp);
         if (resp.code == 10000) {
-          orderList.value = resp.data;
+          pageInfo.value = resp.data;
+          orderList.value = pageInfo.value.list;
+          orderList.value.forEach(order => {
+            let orderTotal = 0;
+            if (Array.isArray(order.orderDetails)) {
+              order.orderDetails.forEach(detail => {
+                if (detail.price && detail.count) {
+                  orderTotal += detail.price * detail.count;
+                }
+              });
+            }
+            order.totalAmount = orderTotal; // 存储每个订单的总金额
+          });
         } else {
           ElMessage.error(resp.msg);
         }
-      })
+      });
 }
 
-selectOrders();
+selectOrders(1, 5);
 </script>
 
 <style scoped>
-/*.orderList {
-  background-color: #FFFFFF;
-}
-.orderList .order li {
-  margin: 20px 0px;
-  border: 1px solid #222;
-  background-color: #FFFFFF;
-}
-.orderList .order li .el-row {
-  height: 50px;
-}*/
-
-/*.orderList {
-  width: 100%;
-  background-color: #FFFFFF;
-}
-.orderList .order {
-  margin: 20px 0px;
-  border: 1px solid #222;
-  background-color: #FFFFFF;
-}
-.orderList .order li {
-  height: 50px;
-}*/
-.orderList {
-  width: 100%;
-  border-collapse: collapse;
-}
-.orderList .order {
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  display: block;
-}
-.orderList tr {
-
-}
-.orderList td {
-  padding: 8px;
-  text-align: center;
+.order-list {
+  margin: 20px 0;
 }
 
-.orderList .order td {
-  text-align: left;
+.order-item {
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 10px;
 }
 
+.order-header, .order-footer {
+  background-color: #f5f5f5;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.order-details {
+  padding: 10px 0;
+}
+
+.goods-image img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.goods-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.goods-name {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.goods-price {
+  color: var(--theme-color);
+}
+
+.goods-count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.order-status {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.order-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.order-actions .el-button {
+  margin-bottom: 5px;
+}
+
+.order-total {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.order-status-footer {
+  padding: 10px 0;
+  border-top: 1px solid #f0f0f0;
+}
 </style>

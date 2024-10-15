@@ -17,6 +17,14 @@ const orderApi = {
     selectByUserId() {
         return service.get("/order/selectByUserId")
     },
+    selectByUser(pageNum, pageSize) {
+        return service.get("/order/user", {
+            params: {
+                pageNum,
+                pageSize
+            }
+        })
+    },
     pay(orderVo) {
         return service.post("/order/pay", orderVo)
     }

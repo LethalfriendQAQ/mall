@@ -92,7 +92,6 @@ public class AdminController {
         pageSize = pageSize == null ? 5 : pageSize;
 
         PageInfo<Admin> pageInfo = adminService.selectByCondition(condition, pageNum, pageSize);
-        System.out.println(pageInfo);
         return RespBean.ok("查询成功", pageInfo);
     }
     //根据id查询
