@@ -35,6 +35,12 @@ const userApi = {
         condition.pageNum = pageNum;
         condition.pageSize = pageSize;
         return service.get("/user", { params: condition });
+    },
+    changePassword(chgPwdObj) {
+        return service.put("/user/changePassword", qs.stringify(chgPwdObj))
+    },
+    changePayPassword(chgPayPwdObj) {
+        return service.put("/user/changePayPassword", qs.stringify(chgPayPwdObj))
     }
 }
 export default userApi;

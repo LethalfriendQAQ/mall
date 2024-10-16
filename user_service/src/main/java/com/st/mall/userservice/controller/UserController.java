@@ -119,4 +119,32 @@ public class UserController {
         User user = userService.selectById(id);
         return RespBean.ok("", user);
     }
+
+    //修改密码
+    @PutMapping("/changePassword")
+    public RespBean changePassword(String oldPwd, String newPwd, String newPwd1, @RequestHeader("token") String token) throws StException {
+        if (!newPwd.equals(newPwd1)) {
+            throw new StException("两次输入的新密码不一致");
+        }
+        //解析token
+        Map<String, Object> map = JwtUtil.parseJwtToMap(token);
+        //获取用户id - 根据id查询用户信息
+        Integer id = (Integer) map.get("id");
+        userService.changePassword(oldPwd, newPwd, id);
+        return RespBean.ok("修改成功");
+    }
+
+
+    @PutMapping("/changePayPassword")
+    public RespBean changePayPassword(String oldPwd, String newPwd, String newPwd1, @RequestHeader("token") String token) throws StException {
+        if (!newPwd.equals(newPwd1)) {
+            throw new StException("两次输入的新密码不一致");
+        }
+        //解析token
+        Map<String, Object> map = JwtUtil.parseJwtToMap(token);
+        //获取用户id - 根据id查询用户信息
+        Integer id = (Integer) map.get("id");
+        userService.changePayPassword(oldPwd, newPwd, id);
+        return RespBean.ok("修改成功");
+    }
 }

@@ -115,4 +115,44 @@ public class UserServiceImpl implements UserService {
         PageInfo<User> pageInfo = new PageInfo<>(users);
         return pageInfo;
     }
+
+    @Override
+    public boolean changePassword(String oldPwd, String newPwd, Integer id) throws StException {
+        User user = userMapper.selectById(id);
+        String salt = user.getSalt();
+        //使用用户输入的原密码和盐加密
+        String md5InputOldPwd = SecureUtil.md5(SecureUtil.md5(oldPwd + salt));
+        //和数据库中的原密码比较
+        if (!user.getPassword().equals(md5InputOldPwd)) {
+            throw new StException("原密码输入错误，请重新输入");
+        }
+        //对新密码结合盐进行加密
+        String md5NewPwd = SecureUtil.md5(SecureUtil.md5(newPwd + salt));
+        //修改密码
+        user = new User();
+        user.setId(id);
+        user.setPassword(md5NewPwd);
+
+        return userMapper.update(user) == 1;
+    }
+
+    @Override
+    public boolean changePayPassword(String oldPwd, String newPwd, Integer id) throws StException {
+        User user = userMapper.selectById(id);
+        String salt = user.getSalt();
+        //使用用户输入的原密码和盐加密
+        String md5InputOldPwd = SecureUtil.md5(SecureUtil.md5(oldPwd + salt));
+        //和数据库中的原密码比较
+        if (!user.getPayPassword().equals(md5InputOldPwd)) {
+            throw new StException("原密码输入错误，请重新输入");
+        }
+        //对新密码结合盐进行加密
+        String md5NewPwd = SecureUtil.md5(SecureUtil.md5(newPwd + salt));
+        //修改密码
+        user = new User();
+        user.setId(id);
+        user.setPayPassword(md5NewPwd);
+
+        return userMapper.update(user) == 1;
+    }
 }

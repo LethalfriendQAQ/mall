@@ -24,4 +24,7 @@ public interface UserService {
 
     //搜索 - 分页查询
     PageInfo<User> selectByCondition(User condition, Integer pageNum, Integer pageSize);
+    //修改密码
+    boolean changePassword(String oldPwd, String newPwd, Integer id) throws StException;
+    boolean changePayPassword(String oldPwd, String newPwd, Integer id) throws StException;
 }

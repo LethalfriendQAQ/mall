@@ -66,6 +66,9 @@
             <if test="password!=null and password.length>0">
                 `password`=#{password},
             </if>
+            <if test="payPassword!=null and payPassword.length>0">
+                `pay_password`=#{payPassword},
+            </if>
             <if test="salt!=null and salt.length>0">
                 `salt`=#{salt},
             </if>
