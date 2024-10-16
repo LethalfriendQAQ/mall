@@ -41,6 +41,9 @@ const userApi = {
     },
     changePayPassword(chgPayPwdObj) {
         return service.put("/user/changePayPassword", qs.stringify(chgPayPwdObj))
+    },
+    setPayPwd(setPayPwd) {
+        return service.put("/user/setPayPwd", qs.stringify(setPayPwd))
     }
 }
 export default userApi;

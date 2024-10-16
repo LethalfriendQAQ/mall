@@ -19,7 +19,7 @@ public class User implements Serializable {
     private String username;
     @JsonIgnore
     private String password;
-    @JsonIgnore
+    //@JsonIgnore
     private String payPassword;
     @JsonIgnore
     private String salt;

@@ -147,4 +147,17 @@ public class UserController {
         userService.changePayPassword(oldPwd, newPwd, id);
         return RespBean.ok("修改成功");
     }
+    @PutMapping("/setPayPwd")
+    public RespBean setPayPwd(String password, String payPassword, @RequestHeader("token") String token) throws StException {
+        //解析token
+        Map<String, Object> map = JwtUtil.parseJwtToMap(token);
+        //获取用户id - 根据id查询用户信息
+        Integer id = (Integer) map.get("id");
+        User user = new User();
+        user.setId(id);
+        user.setPassword(password);
+        user.setPayPassword(payPassword);
+        userService.byPwdUpdate(user);
+        return RespBean.ok("设置成功");
+    }
 }

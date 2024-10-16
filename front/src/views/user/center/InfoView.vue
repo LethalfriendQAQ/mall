@@ -62,9 +62,6 @@ function updateInfo() {
       })
 }
 
-const onSubmit = () => {
-  console.log('submit!', form.value);
-}
 </script>
 
 <style scoped>
