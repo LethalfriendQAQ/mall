@@ -50,9 +50,11 @@ public class CollectController {
         return RespBean.ok("查询成功", collect);
     }
     @GetMapping
-    public RespBean selectByPage(Integer pageNum, Integer pageSize, Integer userId) {
+    public RespBean selectByPage(Integer pageNum, Integer pageSize, @RequestHeader("token") String token) {
+        Map<String, Object> map = JwtUtil.parseJwtToMap(token);
+        Integer userId = (Integer) map.get("id");
         pageNum = pageNum == null ? 1 : pageNum;
-        pageSize = pageSize == null ? 5 : pageSize;
+        pageSize = pageSize == null ? 8 : pageSize;
 
         PageInfo<Collect> pageInfo = collectService.selectByPage(pageNum, pageSize, userId);
         return RespBean.ok("查询成功", pageInfo);

@@ -3,18 +3,23 @@ package com.st.mall.userservice.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.st.mall.common.bean.Collect;
+import com.st.mall.common.bean.Goods;
 import com.st.mall.common.exception.StException;
 import com.st.mall.common.service.CollectService;
+import com.st.mall.common.service.GoodsService;
 import com.st.mall.userservice.mapper.CollectMapper;
+import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@DubboService
 public class CollectServiceImpl implements CollectService {
     @Autowired
     private CollectMapper collectMapper;
+    @DubboReference
+    private GoodsService goodsService;
 
     @Override
     public boolean insert(Collect collect) throws StException {
@@ -56,6 +61,12 @@ public class CollectServiceImpl implements CollectService {
         //设置分页参数
         PageHelper.startPage(pageNum, pageSize);
         List<Collect> collects = collectMapper.selectByUserId(userId);
+        collects.stream()
+                .forEach(collect -> {
+                    Goods goods = goodsService.selectById(collect.getGoodsId());
+                    goods.setCategory(null);
+                    collect.setGoods(goods);
+                });
         //创建分页信息
         PageInfo<Collect> pageInfo = new PageInfo<>(collects);
         return pageInfo;

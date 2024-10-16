@@ -15,10 +15,13 @@ const collectApi = {
         return service.get(`/collect/${goodsId}`);
     },
     // 分页查询
-    selectByPage(condition, pageNum, pageSize) {
-        condition.pageNum = pageNum;
-        condition.pageSize = pageSize;
-        return service.get("/collect", { params: condition });
+    selectByPage(pageNum, pageSize) {
+        return service.get("/collect", {
+            params: {
+                pageNum,
+                pageSize
+            }
+        })
     }
 }
 export default collectApi;
