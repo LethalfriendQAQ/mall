@@ -47,7 +47,6 @@ const pageInfo = ref({
 function cancelCollect(id) {
   collectApi.delete(id)
       .then(resp => {
-        console.log(resp);
         if(resp.code == 10000) {
           ElMessage.success(resp.msg);
           //刷新收藏的状态

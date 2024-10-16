@@ -29,7 +29,7 @@ const menuItems = [
   { label: '个人信息', route: '/user/info' },
   { label: '我的订单', route: '/user/orderList' },
   { label: '我的收藏', route: '/user/collectList' },
-  { label: '修改密码', route: '/user/password' },
+  { label: '账户安全', route: '/user/password' },
   { label: '地址管理', route: '/user/addrList' },
   { label: '账户充值', route: '/user/recharge' },
 ];
