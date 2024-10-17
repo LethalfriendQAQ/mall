@@ -56,13 +56,13 @@
         <div slot="header" class="clearfix">
           <el-tag type="warning">实名认证</el-tag>
         </div>
-        <div v-if="info.status == 1">
+        <div v-if="user.status == 1">
           <p>已认证：{{ info.realname }}</p>
           <el-button type="primary" plain disabled>已实名认证</el-button>
         </div>
         <div v-else>
           <p>未认证</p>
-          <el-button type="primary">实名认证</el-button>
+          <el-button type="primary" @click="setRealnameDialogShow = true">实名认证</el-button>
         </div>
       </el-card>
     </el-col>
@@ -133,11 +133,32 @@
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="setPayPwdDialogShow = false">取消</el-button>
-        <el-button type="primary" @click="update">确认</el-button>
+        <el-button type="primary" @click="setPayPassword">确认</el-button>
       </div>
     </template>
   </el-dialog>
   <!-- 设置支付密码对话框结束 -->
+
+  <!-- 设置实名认证对话框开始 -->
+  <el-dialog v-model="setRealnameDialogShow" title="设置实名认证" width="500">
+    <el-form-item label="登录密码" label-width="20%">
+      <el-input v-model="setRealname.password" type="password" placeholder="请输入登录密码" autocomplete="off" />
+    </el-form-item>
+    <el-form-item label="真实姓名" label-width="20%">
+      <el-input v-model="setRealname.realname" placeholder="请输入真实姓名" autocomplete="off" />
+    </el-form-item>
+    <el-form-item label="身份证号" label-width="20%">
+      <el-input v-model="setRealname.idCard" placeholder="请输入身份证号" autocomplete="off" />
+    </el-form-item>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="setRealnameDialogShow = false">取消</el-button>
+        <el-button type="primary" @click="setRealName">确认</el-button>
+      </div>
+    </template>
+  </el-dialog>
+  <!-- 设置实名认证对话框结束 -->
+
 
 </template>
 
@@ -152,6 +173,7 @@ const userStore = useUserStore();
 const chgPwdDialogShow = ref(false);
 const chgPayPwdDialogShow = ref(false);
 const setPayPwdDialogShow = ref(false);
+const setRealnameDialogShow = ref(false);
 const chgPwdObj = ref({
   oldPwd: null,
   newPwd: null,
@@ -177,6 +199,12 @@ const setPayPwd = ref({
   password: "",
   payPassword: ""
 })
+const setRealname = ref({
+  realname: "",
+  password: "",
+  idCard: ""
+})
+
 
 const user = ref({
   username: '',
@@ -239,12 +267,25 @@ function selectById() {
       })
 }
 
-function update() {
+function setPayPassword() {
   userApi.setPayPwd(setPayPwd.value)
       .then(resp => {
         if (resp.code == 10000) {
           ElMessage.success(resp.msg);
           setPayPwdDialogShow.value = false;
+          selectById();
+        } else {
+          ElMessage.error(resp.msg);
+        }
+      })
+}
+
+function setRealName() {
+  userApi.setRealname(setRealname.value)
+      .then(resp => {
+        if (resp.code == 10000) {
+          ElMessage.success(resp.msg);
+          setRealnameDialogShow.value = false;
           selectById();
         } else {
           ElMessage.error(resp.msg);

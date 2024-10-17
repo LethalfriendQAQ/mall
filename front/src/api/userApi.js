@@ -44,6 +44,12 @@ const userApi = {
     },
     setPayPwd(setPayPwd) {
         return service.put("/user/setPayPwd", qs.stringify(setPayPwd))
+    },
+    setRealname(setRealName) {
+        return service.put("/user/setRealname", qs.stringify(setRealName))
+    },
+    recharge(recharge) {
+        return service.put("/user/recharge", qs.stringify(recharge))
     }
 }
 export default userApi;

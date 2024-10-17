@@ -12,6 +12,7 @@ import com.st.mall.common.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -157,6 +158,35 @@ public class UserController {
         user.setId(id);
         user.setPassword(password);
         user.setPayPassword(payPassword);
+        userService.byPwdUpdate(user);
+        return RespBean.ok("设置成功");
+    }
+
+    @PutMapping("/setRealname")
+    public RespBean setRealname(String password, String realname, String idCard, @RequestHeader("token") String token) throws StException {
+        //解析token
+        Map<String, Object> map = JwtUtil.parseJwtToMap(token);
+        //获取用户id - 根据id查询用户信息
+        Integer id = (Integer) map.get("id");
+        User user = new User();
+        user.setId(id);
+        user.setPassword(password);
+        user.setRealname(realname);
+        user.setIdCard(idCard);
+        userService.byPwdUpdate(user);
+        return RespBean.ok("设置成功");
+    }
+
+    @PutMapping("/recharge")
+    public RespBean recharge(String password, BigDecimal money, @RequestHeader("token") String token) throws StException {
+        //解析token
+        Map<String, Object> map = JwtUtil.parseJwtToMap(token);
+        //获取用户id - 根据id查询用户信息
+        Integer id = (Integer) map.get("id");
+        User user = new User();
+        user.setId(id);
+        user.setPassword(password);
+        user.setMoney(money);
         userService.byPwdUpdate(user);
         return RespBean.ok("设置成功");
     }

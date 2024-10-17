@@ -107,15 +107,22 @@ public class UserServiceImpl implements UserService {
         User u = userMapper.selectById(user.getId());
         String salt = u.getSalt();
         //使用用户输入的原密码和盐加密
-        String md5InputOldPwd = SecureUtil.md5(SecureUtil.md5(user.getPassword() + salt));
+        String md5InputPwd = SecureUtil.md5(SecureUtil.md5(user.getPassword() + salt));
         //和数据库中的原密码比较
-        if (!u.getPassword().equals(md5InputOldPwd)) {
+        if (!u.getPassword().equals(md5InputPwd)) {
             throw new StException("密码输入错误，请重新输入");
         }
         if (u.getPayPassword() == "" || u.getPayPassword() == null) {
             String setPayPwd = SecureUtil.md5(SecureUtil.md5(user.getPayPassword() + u.getSalt()));
             user.setPayPassword(setPayPwd);
         }
+        if (u.getRealname() == null) {
+            user.setStatus(1);
+        }
+        BigDecimal money = user.getMoney();
+        BigDecimal m = u.getMoney();
+        BigDecimal total = m.add(money);
+        user.setMoney(total);
         user.setPassword(null);
         userMapper.update(user);
     }
