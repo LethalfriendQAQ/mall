@@ -27,6 +27,10 @@ const orderApi = {
     },
     pay(orderVo) {
         return service.post("/order/pay", orderVo)
+    },
+    // 根据ID查询
+    adminSelectById(id) {
+        return service.get(`/order/adminSelectById/${id}`);
     }
 }
 

@@ -19,6 +19,7 @@ public interface OrderService {
 
     //根据ID查询
     Order selectById(String  id, Integer userId) throws StException;
+    Order adminSelectById(String  id) throws StException;
     List<Order> selectByUserId(Integer userId);
 
     //搜索 - 分页查询

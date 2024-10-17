@@ -10,7 +10,6 @@ import com.st.mall.common.service.*;
 import com.st.mall.orderservice.mapper.CartMapper;
 import com.st.mall.orderservice.mapper.OrderDetailMapper;
 import com.st.mall.orderservice.mapper.OrderMapper;
-import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
 
 
     //生成订单
-    @GlobalTransactional(rollbackFor = Exception.class)
+    //@GlobalTransactional(rollbackFor = Exception.class)
     @Override
     public void insert(OrderVo orderVo) throws StException {
         /**
@@ -149,6 +148,22 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Order adminSelectById(String id) throws StException {
+        Order order = orderMapper.selectById(id);
+        List<OrderDetail> orderDetails = orderDetailService.selectByOrderId(id);
+        User user = userService.selectById(order.getUserId());
+        order.setUser(user);
+        order.setOrderDetails(orderDetails);
+
+        //查询订单详情对应的商品的信息
+        for (OrderDetail orderDetail : orderDetails) {
+            //使用dubbo调用goodsService查询
+            goodsService.selectById(orderDetail.getGoodsId());
+        }
+        return order;
+    }
+
+    @Override
     public List<Order> selectByUserId(Integer userId) {
         List<Order> orderList = orderMapper.selectByUserId(userId);
         orderList.stream()
@@ -181,7 +196,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     //支付
-    @GlobalTransactional(rollbackFor = Exception.class)
+    //@GlobalTransactional(rollbackFor = Exception.class)
     @Override
     public void pay(OrderVo orderVo) throws StException {
         //根据orderId查询订单

@@ -69,6 +69,11 @@ public class OrderController {
         List<Order> orders = orderService.selectByUserId(userId);
         return RespBean.ok("查询成功", orders);
     }
+    @GetMapping("/adminSelectById/{id}")
+    public RespBean adminSelectById(@PathVariable("id") String id) throws StException {
+        Order order = orderService.adminSelectById(id);
+        return RespBean.ok("查询成功", order);
+    }
 
     @PostMapping("/pay")
     public RespBean pay(@RequestBody OrderVo orderVo, @RequestHeader("token") String token) throws StException {
