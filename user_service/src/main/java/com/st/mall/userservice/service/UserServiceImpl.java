@@ -128,6 +128,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void cancelAccount(User user) throws StException {
+        User u = userMapper.selectById(user.getId());
+        String salt = u.getSalt();
+        //使用用户输入的原密码和盐加密
+        String md5InputPwd = SecureUtil.md5(SecureUtil.md5(user.getPassword() + salt));
+        //和数据库中的原密码比较
+        if (!u.getPassword().equals(md5InputPwd)) {
+            throw new StException("密码输入错误，请重新输入");
+        }
+        user.setStatus(3);
+        user.setPassword(null);
+        userMapper.update(user);
+    }
+
+    @Override
     public User selectById(Integer id) {
         List<Order> orders = orderService.selectByUserId(id);
         User user = userMapper.selectById(id);

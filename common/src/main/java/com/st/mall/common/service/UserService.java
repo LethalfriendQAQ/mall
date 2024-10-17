@@ -19,6 +19,7 @@ public interface UserService {
     //根据ID修改
     void update(User user) throws StException;
     void byPwdUpdate(User user) throws StException;
+    void cancelAccount(User user) throws StException;
 
     //根据ID查询
     User selectById(Integer id);

@@ -3,19 +3,6 @@
     <el-col :span="12" style="font-size: 18px; font-weight: bold">账号安全</el-col>
   </el-row>
   <el-row :gutter="20" class="safe" :model="info">
-    <!-- 修改手机号 -->
-    <!--<el-col :span="8">
-      <el-card shadow="hover" class="box-card">
-        <el-icon style="font-size: 150px"><Iphone /></el-icon>
-        <div slot="header" class="clearfix">
-          <el-tag type="warning">手机号</el-tag>
-        </div>
-        <div>
-          <p>当前手机号：{{ info.phone }}</p>
-          <el-button type="primary">修改手机号</el-button>
-        </div>
-      </el-card>
-    </el-col>-->
 
     <!-- 修改登录密码 -->
     <el-col :span="8">
@@ -76,7 +63,7 @@
         </div>
         <div>
           <p>彻底关闭不再使用该账号</p>
-          <el-button type="primary">确定注销账号</el-button>
+          <el-button type="primary" @click="cancelAccountDialogShow = true">确定注销账号</el-button>
         </div>
       </el-card>
     </el-col>
@@ -159,6 +146,19 @@
   </el-dialog>
   <!-- 设置实名认证对话框结束 -->
 
+  <!-- 注销账号对话框开始 -->
+  <el-dialog v-model="cancelAccountDialogShow" title="注销账号" width="500">
+    <el-form-item label="登录密码" label-width="20%">
+      <el-input v-model="cancelAccount.password" type="password" placeholder="请输入登录密码" autocomplete="off" />
+    </el-form-item>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="cancelAccountDialogShow = false">取消</el-button>
+        <el-button type="danger" @click="cancelYourAccount">确认</el-button>
+      </div>
+    </template>
+  </el-dialog>
+  <!-- 注销账号对话框结束 -->
 
 </template>
 
@@ -168,12 +168,17 @@ import {onMounted, ref} from "vue";
 import {ElMessage} from "element-plus";
 import userApi from "@/api/userApi.js";
 import { useUserStore } from "@/stores/user.js";
+import { useTokenStore } from "@/stores/token.js";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const userStore = useUserStore();
+const tokenStore = useTokenStore();
 const chgPwdDialogShow = ref(false);
 const chgPayPwdDialogShow = ref(false);
 const setPayPwdDialogShow = ref(false);
 const setRealnameDialogShow = ref(false);
+const cancelAccountDialogShow = ref(false);
 const chgPwdObj = ref({
   oldPwd: null,
   newPwd: null,
@@ -221,6 +226,10 @@ const user = ref({
   status: 0
 });
 
+const cancelAccount = ref({
+  password: ""
+})
+
 onMounted(() => {
   if (userStore.userInfo) {
     info.value.username = userStore.userInfo.username;
@@ -232,6 +241,16 @@ onMounted(() => {
     info.value.status = userStore.userInfo.status;
   }
 });
+
+//退出
+function logout() {
+  //清空token
+  tokenStore.$reset();
+  //清空用户信息
+  userStore.$reset();
+  //跳转到前台首页
+  router.push("/user/index");
+}
 
 function changePassword() {
   userApi.changePassword(chgPwdObj.value)
@@ -287,6 +306,19 @@ function setRealName() {
           ElMessage.success(resp.msg);
           setRealnameDialogShow.value = false;
           selectById();
+        } else {
+          ElMessage.error(resp.msg);
+        }
+      })
+}
+
+function cancelYourAccount() {
+  userApi.cancelAccount(cancelAccount.value)
+      .then(resp => {
+        if (resp.code == 10000) {
+          ElMessage.success("注销成功");
+          cancelAccountDialogShow.value = false;
+          logout();
         } else {
           ElMessage.error(resp.msg);
         }

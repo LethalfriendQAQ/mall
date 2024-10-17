@@ -50,6 +50,9 @@ const userApi = {
     },
     recharge(recharge) {
         return service.put("/user/recharge", qs.stringify(recharge))
+    },
+    cancelAccount(cancelAccount) {
+        return service.put("/user/cancelAccount", qs.stringify(cancelAccount))
     }
 }
 export default userApi;

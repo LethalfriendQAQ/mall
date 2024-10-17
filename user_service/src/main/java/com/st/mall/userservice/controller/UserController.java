@@ -190,4 +190,16 @@ public class UserController {
         userService.byPwdUpdate(user);
         return RespBean.ok("设置成功");
     }
+    @PutMapping("/cancelAccount")
+    public RespBean cancelAccount(String password, @RequestHeader("token") String token) throws StException {
+        //解析token
+        Map<String, Object> map = JwtUtil.parseJwtToMap(token);
+        //获取用户id - 根据id查询用户信息
+        Integer id = (Integer) map.get("id");
+        User user = new User();
+        user.setId(id);
+        user.setPassword(password);
+        userService.cancelAccount(user);
+        return RespBean.ok("设置成功");
+    }
 }
