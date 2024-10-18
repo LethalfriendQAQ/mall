@@ -123,8 +123,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void update(Order order) throws StException {
-
+    public void updateStatus(String id, Integer status) throws StException {
+        Order order = orderMapper.selectById(id);
+        order.setStatus(status);
+        orderMapper.updateStatus(order);
     }
 
     @Override

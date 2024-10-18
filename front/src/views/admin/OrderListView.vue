@@ -58,10 +58,10 @@
             <el-tag type="primary" v-if="scope.row.status == 8">其他</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="160px">
+        <el-table-column label="操作" width="190px">
           <template #default="scope">
             <el-button type="success" size="small" @click="selectById(scope.row.id)" round>订单详情</el-button>
-            <el-button type="primary" size="small" @click="" round>修改</el-button>
+            <el-button type="primary" size="small" @click="selectById1(scope.row.id)" round>修改状态</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -149,11 +149,40 @@
     </template>
   </el-dialog>
   <!-- 订单详情对话框结束 -->
+
+  <!--修改订单状态对话框开始-->
+  <el-dialog v-model="updateStatusDialogShow" title="修改订单状态" style="width: 300px;">
+    <el-form-item>
+      <el-select
+          v-model="updateStatus.status"
+          placeholder="请选择订单状态"
+          style="width: 150px"
+      >
+        <el-option label="未支付" value="0"/>
+        <el-option label="已支付" value="1"/>
+        <el-option label="已发货" value="2"/>
+        <el-option label="已收货" value="3"/>
+        <el-option label="退贷退款" value="4"/>
+        <el-option label="退换货" value="5"/>
+        <el-option label="仅退款" value="6"/>
+        <el-option label="售后" value="7"/>
+        <el-option label="其他" value="8"/>
+      </el-select>
+    </el-form-item>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="updateStatusDialogShow = false">取消</el-button>
+        <el-button type="primary" @click="changeStatus">确定</el-button>
+      </div>
+    </template>
+  </el-dialog>
+  <!--修改订单状态对话框结束-->
 </template>
 
 <script setup>
 import {ref} from "vue";
 import orderApi from "@/api/orderApi.js";
+import {ElMessage} from "element-plus";
 
 //总金额
 const total = ref(0);
@@ -172,6 +201,7 @@ const pageInfo = ref({
   pageNum: 0,
 });
 const orderDetailDialogShow = ref(false);
+const updateStatusDialogShow = ref(false);
 
 const order = ref({
   user: {},
@@ -179,6 +209,35 @@ const order = ref({
 })
 
 const orderDetailList = ref([]);
+
+const updateStatus = ref({
+  id: "",
+  status: null
+})
+
+function changeStatus() {
+  orderApi.adminUpdateStatus(updateStatus.value.id, updateStatus.value.status) // Ensure you pass both id and status here
+      .then(resp => {
+        if (resp.code == 10000) {
+          ElMessage.success("设置成功");
+          updateStatusDialogShow.value = false;
+          selectByPage(pageInfo.value.pageNum);
+        } else {
+          ElMessage.error(resp.msg);
+        }
+      });
+}
+
+
+function selectById1(id) {
+  updateStatus.value.id = id;
+  orderApi.adminSelectById(id)
+      .then(resp => {
+        order.value = resp.data;
+        updateStatus.value.status = order.value.status;
+        updateStatusDialogShow.value = true;
+      })
+}
 
 //分页查询
 function selectByPage(pageNum) {
@@ -200,6 +259,7 @@ function selectById(id) {
         orderDetailDialogShow.value = true;
       })
 }
+
 
 function clear() {
   if (orderDetailDialogShow.value = false) {

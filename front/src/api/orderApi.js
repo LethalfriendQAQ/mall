@@ -1,4 +1,5 @@
 import service from "@/api/index.js";
+import qs from "qs";
 
 const orderApi = {
     insert(orderVo) {
@@ -31,7 +32,16 @@ const orderApi = {
     // 根据ID查询
     adminSelectById(id) {
         return service.get(`/order/adminSelectById/${id}`);
+    },
+    adminUpdateStatus(id, status) {
+        return service.put("/order/adminUpdateStatus", null, { // Notice the null here for the body
+            params: {
+                id,
+                status
+            }
+        });
     }
+
 }
 
 export default orderApi;

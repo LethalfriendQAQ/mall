@@ -56,6 +56,11 @@
         </set>
         WHERE `id`=#{id}
     </update>
+    <update id="updateStatus" parameterType="com.st.mall.common.bean.Order">
+            UPDATE `order`
+            SET status = #{status}
+            WHERE id = #{id}
+    </update>
 
     <delete id="delete" parameterType="java.lang.Integer">
         DELETE FROM `order` WHERE `id`=#{id}

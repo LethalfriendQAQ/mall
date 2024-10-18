@@ -15,7 +15,7 @@ public interface OrderService {
     void delete(Integer id) throws StException;
 
     //根据ID修改
-    void update(Order order) throws StException;
+    void updateStatus(String id,Integer status) throws StException;
 
     //根据ID查询
     Order selectById(String  id, Integer userId) throws StException;

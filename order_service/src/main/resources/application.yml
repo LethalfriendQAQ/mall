@@ -32,6 +32,9 @@ dubbo:
     port: 38093
   registry:
     address: zookeeper://localhost:2181
+  consumer:
+    timeout: 3000
+
 
 debug: true
 mybatis:

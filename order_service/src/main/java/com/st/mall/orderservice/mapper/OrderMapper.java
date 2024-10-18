@@ -10,6 +10,7 @@ public interface OrderMapper {
     int delete(String  id);
 
     int update(Order order);
+    int updateStatus(Order order);
 
     List<Order> selectByCondition(Order condition);
     List<Order> selectByUserId(Integer userId);
