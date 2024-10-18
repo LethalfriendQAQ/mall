@@ -99,6 +99,7 @@ function pay() {
   })
       .then(resp => {
         if (resp.code == 10000) {
+          ElMessage.success("支付成功");
           //跳转到用户的订单详情页
           router.push("/user/orderList");
         } else {

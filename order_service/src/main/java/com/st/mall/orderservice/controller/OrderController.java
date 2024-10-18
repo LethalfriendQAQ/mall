@@ -74,8 +74,8 @@ public class OrderController {
         Order order = orderService.adminSelectById(id);
         return RespBean.ok("查询成功", order);
     }
-    @PutMapping("/adminUpdateStatus")
-    public RespBean adminUpdateStatus(@RequestParam String id, @RequestParam Integer status) throws StException {
+    @PutMapping("/updateStatus")
+    public RespBean updateStatus(@RequestParam String id, @RequestParam Integer status) throws StException {
         orderService.updateStatus(id, status);
         return RespBean.ok("支付成功");
     }

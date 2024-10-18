@@ -50,6 +50,7 @@
             </div>
             <div v-else>
               <el-tag type="primary">{{ ["已支付", "已发货", "已收货", "退货退款", "仅退款", "售后", "其他"][order.status - 1] }}</el-tag>
+              <el-button style="margin-left: 20px" type="success" size="small" v-if="order.status == 2" @click="changeStatus(order.id)">确认收货</el-button>
             </div>
           </el-col>
           <el-col :span="5" class="order-total text-right">
@@ -80,6 +81,23 @@ const pageInfo = ref({
 })
 const SERVER_ADDR = ref(import.meta.env.VITE_SERVER_ADDR);
 
+
+
+function changeStatus(id) {
+  const updateStatus = ref({
+    id,
+    status: 3
+  })
+  orderApi.updateStatus(updateStatus.value.id, updateStatus.value.status)
+      .then(resp => {
+        if (resp.code == 10000) {
+          ElMessage.success("收货成功");
+          selectOrders(pageInfo.value.pageNum);
+        } else {
+          ElMessage.error(resp.msg);
+        }
+      });
+}
 
 function toPayPage(id) {
   router.push({

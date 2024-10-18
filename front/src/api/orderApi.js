@@ -33,8 +33,8 @@ const orderApi = {
     adminSelectById(id) {
         return service.get(`/order/adminSelectById/${id}`);
     },
-    adminUpdateStatus(id, status) {
-        return service.put("/order/adminUpdateStatus", null, { // Notice the null here for the body
+    updateStatus(id, status) {
+        return service.put("/order/updateStatus", null, { // Notice the null here for the body
             params: {
                 id,
                 status

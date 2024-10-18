@@ -216,7 +216,7 @@ const updateStatus = ref({
 })
 
 function changeStatus() {
-  orderApi.adminUpdateStatus(updateStatus.value.id, updateStatus.value.status) // Ensure you pass both id and status here
+  orderApi.updateStatus(updateStatus.value.id, updateStatus.value.status) // Ensure you pass both id and status here
       .then(resp => {
         if (resp.code == 10000) {
           ElMessage.success("设置成功");
