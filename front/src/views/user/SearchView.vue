@@ -154,7 +154,7 @@ getParent();
 }
 
 .category ul li {
-  margin: 10px 15px;
+  margin: 10px 10px;
   font-size: 14px;
   cursor: pointer;
   padding: 5px 10px;
@@ -208,5 +208,9 @@ getParent();
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.goodsList .price {
+  font-size: 12px;
+  color: var(--theme-color);
 }
 </style>
