@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import {ref, watch} from "vue";
+import { ref, watch } from "vue";
 import categoryApi from "@/api/categoryApi.js";
 import goodsApi from "@/api/goodsApi.js";
 import { useRouter } from "vue-router";
@@ -70,43 +70,27 @@ const SERVER_ADDR = ref(import.meta.env.VITE_SERVER_ADDR);
 
 watch(props, () => {
   getParent();
-})
+});
 
 //点击父分类调用的函数
 function selectFirstCategory(category) {
-  //给选中的父分类赋值
   firstCaregorySelected.value = category;
-  //清空 - 只要选择某个父分类就要清空所有需要显示的子分类
   secondCategoryList.value = [];
-  //给被选中的分类id赋值
-  if (firstCaregorySelected.value.id) {
-    categoryId.value = firstCaregorySelected.value.id;
-  } else {
-    categoryId.value = null;
-  }
+  categoryId.value = firstCaregorySelected.value.id || null;
 
-  //给被选中的父分类下的子分类赋值
   if (category.childList) {
-    //secondCategoryList.value = category.childList
     category.childList
         .filter(c => c.status == 1)
-        .forEach(c => secondCategoryList.value.push(c))
+        .forEach(c => secondCategoryList.value.push(c));
   }
-  //查询商品
   search(1);
 }
 
 //点击子分类调用的函数
 function selectSecondCategory(category) {
   secondCaregorySelected.value = category;
-  //给被选中的分类id赋值
-  if (secondCaregorySelected.value.id) {
-    categoryId.value = secondCaregorySelected.value.id;
-  } else {
-    categoryId.value = firstCaregorySelected.value.id;
-  }
+  categoryId.value = secondCaregorySelected.value.id || firstCaregorySelected.value.id;
 }
-
 
 //获取父分类   上架   推荐
 function getParent() {
@@ -118,18 +102,15 @@ function getParent() {
   categoryApi.selectByPage(condition)
       .then(resp => {
         firstCaregoryList.value = resp.data;
-        //假设没有通过路径传递参数或者传递的id在父分类中不存在
         let flag = true;
         firstCaregoryList.value.forEach(c => {
           if (props.categoryId == c.id) {
             flag = false;
-            selectFirstCategory(c)
+            selectFirstCategory(c);
           }
         });
-        //假设成立
-        if (flag == true) {
-          //父分类就设置选择全部
-          selectFirstCategory({})
+        if (flag) {
+          selectFirstCategory({});
         }
       });
 }
@@ -139,7 +120,7 @@ function search(pageNum) {
   const condition = {
     status: 1,
     categoryId: categoryId.value
-  }
+  };
   goodsApi.selectByPage1(condition, pageNum, 20)
       .then(resp => {
         pageInfo.value = resp.data;
@@ -149,11 +130,11 @@ function search(pageNum) {
 //跳转到商品详情页
 function toGoodsView(id) {
   router.push({
-    path: '/user/goods', //跳转到的位置，值和页面路由中配置的路径相同
+    path: '/user/goods',
     query: {
       id
     }
-  })
+  });
 }
 
 search();
@@ -161,41 +142,71 @@ getParent();
 </script>
 
 <style scoped>
-  .category ul li {
-    float: left;
-    margin: 10px 20px;
-    font-size: 14px;
-    cursor: pointer;
+.category {
+  margin: 20px 0;
+}
 
-  }
-  .active {
-    font-weight: bold;
-    color: var(--theme-color);
-  }
+.category ul {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  list-style: none;
+}
 
-  .goodsList ul li {
-    width: 224px;
-    float: left;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    text-align: center;
-    background-color: #EEE;
-    cursor: pointer;
-  }
-  .goodsList ul li:hover {
-    box-shadow: 0px 0px 20px #999999;
-  }
-  .goodsList ul li:nth-child(5n) {
-    margin-right: 0px;
-  }
-  .name, .dscp, .price {
-    line-height: 25px;
-  }
-  .name {
-    font-size: 16px;
-    font-weight: bold;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+.category ul li {
+  margin: 10px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.category ul li:hover {
+  background-color: #f0f0f0; /* Hover effect */
+}
+
+.active {
+  font-weight: bold;
+  color: var(--theme-color);
+  background-color: #e0e0e0; /* Active background */
+}
+
+.goodsList {
+  margin-top: 20px;
+}
+
+.goodsList ul {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  list-style: none;
+}
+
+.goodsList ul li {
+  width: calc(19% - 10px); /* 每行显示5个商品，保持更小 */
+  margin: 0 11px 20px; /* 左右5px的间距，底部20px的间距 */
+  text-align: center;
+  background-color: #EEE;
+  cursor: pointer;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
+}
+
+.goodsList ul li:hover {
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+}
+
+.name, .dscp, .price {
+  line-height: 25px;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 </style>

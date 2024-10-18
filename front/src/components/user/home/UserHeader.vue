@@ -5,13 +5,13 @@
         <el-col :span="20">
           <ul>
             <li><RouterLink to="/">商城首页</RouterLink></li>
-            <li><RouterLink to="">商城首页</RouterLink></li>
-            <li><RouterLink to="">商城首页</RouterLink></li>
-            <li><RouterLink to="">商城首页</RouterLink></li>
-            <li><RouterLink to="">商城首页</RouterLink></li>
-            <li><RouterLink to="">商城首页</RouterLink></li>
-            <li><RouterLink to="">商城首页</RouterLink></li>
-            <li><RouterLink to="">商城首页</RouterLink></li>
+            <li><RouterLink to="">分类1</RouterLink></li>
+            <li><RouterLink to="">分类2</RouterLink></li>
+            <li><RouterLink to="">分类3</RouterLink></li>
+            <li><RouterLink to="">分类4</RouterLink></li>
+            <li><RouterLink to="">分类5</RouterLink></li>
+            <li><RouterLink to="">分类6</RouterLink></li>
+            <li><RouterLink to="">分类7</RouterLink></li>
           </ul>
         </el-col>
         <el-col :span="4">
