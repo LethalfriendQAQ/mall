@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import {ref, watch} from "vue";
 import categoryApi from "@/api/categoryApi.js";
 import goodsApi from "@/api/goodsApi.js";
 import { useRouter } from "vue-router";
@@ -70,27 +70,45 @@ const SERVER_ADDR = ref(import.meta.env.VITE_SERVER_ADDR);
 
 watch(props, () => {
   getParent();
-});
+})
 
 //点击父分类调用的函数
 function selectFirstCategory(category) {
+  //给选中的父分类赋值
   firstCaregorySelected.value = category;
+  //清空 - 只要选择某个父分类就要清空所有需要显示的子分类
   secondCategoryList.value = [];
-  categoryId.value = firstCaregorySelected.value.id || null;
+  //给被选中的分类id赋值
+  if (firstCaregorySelected.value.id) {
+    categoryId.value = firstCaregorySelected.value.id;
+  } else {
+    categoryId.value = null;
+  }
 
+  //给被选中的父分类下的子分类赋值
   if (category.childList) {
+    //secondCategoryList.value = category.childList
     category.childList
         .filter(c => c.status == 1)
-        .forEach(c => secondCategoryList.value.push(c));
+        .forEach(c => secondCategoryList.value.push(c))
   }
+  //查询商品
   search(1);
 }
 
 //点击子分类调用的函数
 function selectSecondCategory(category) {
   secondCaregorySelected.value = category;
-  categoryId.value = secondCaregorySelected.value.id || firstCaregorySelected.value.id;
+  //给被选中的分类id赋值
+  if (secondCaregorySelected.value.id) {
+    categoryId.value = secondCaregorySelected.value.id;
+  } else {
+    categoryId.value = firstCaregorySelected.value.id;
+  }
+  //查询商品
+  search(1);
 }
+
 
 //获取父分类   上架   推荐
 function getParent() {
@@ -102,15 +120,18 @@ function getParent() {
   categoryApi.selectByPage(condition)
       .then(resp => {
         firstCaregoryList.value = resp.data;
+        //假设没有通过路径传递参数或者传递的id在父分类中不存在
         let flag = true;
         firstCaregoryList.value.forEach(c => {
           if (props.categoryId == c.id) {
             flag = false;
-            selectFirstCategory(c);
+            selectFirstCategory(c)
           }
         });
-        if (flag) {
-          selectFirstCategory({});
+        //假设成立
+        if (flag == true) {
+          //父分类就设置选择全部
+          selectFirstCategory({})
         }
       });
 }
@@ -120,7 +141,7 @@ function search(pageNum) {
   const condition = {
     status: 1,
     categoryId: categoryId.value
-  };
+  }
   goodsApi.selectByPage1(condition, pageNum, 20)
       .then(resp => {
         pageInfo.value = resp.data;
@@ -130,11 +151,11 @@ function search(pageNum) {
 //跳转到商品详情页
 function toGoodsView(id) {
   router.push({
-    path: '/user/goods',
+    path: '/user/goods', //跳转到的位置，值和页面路由中配置的路径相同
     query: {
       id
     }
-  });
+  })
 }
 
 search();
