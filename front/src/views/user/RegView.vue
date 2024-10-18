@@ -1,7 +1,7 @@
 <template>
   <el-row style="margin-top: 15px">
       <el-col :span="12">
-        <el-image src="/src/assets/ad.png" />
+        <el-image style="height: 270px; margin-left: 90px" src="/src/assets/iphone16_2.png" />
       </el-col>
       <el-col :span="12" style="float: right">
         <el-form  class="regForm" :rules="rules" :model="userInfo" @keydown.enter="reg">

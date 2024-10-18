@@ -13,6 +13,7 @@ import com.st.mall.orderservice.mapper.OrderMapper;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -37,8 +38,8 @@ public class OrderServiceImpl implements OrderService {
 
 
     //生成订单
-    //@GlobalTransactional(rollbackFor = Exception.class)
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void insert(OrderVo orderVo) throws StException {
         /**
          * 1. 生成订单
@@ -198,8 +199,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     //支付
-    //@GlobalTransactional(rollbackFor = Exception.class)
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void pay(OrderVo orderVo) throws StException {
         //根据orderId查询订单
         Order order = orderMapper.selectById(orderVo.getOrderId());

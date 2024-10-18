@@ -10,7 +10,7 @@
           <el-col :span="6">订单时间：{{ order.createTime }}</el-col>
           <el-col :span="12">订单号：{{ order.id }}</el-col>
           <el-col :span="6" class="text-right">
-            <el-button type="text" @click="deleteOrder(order.id)" title="删除订单">
+            <el-button type="text"  title="删除订单">
               <el-icon style="color: red;"><Delete /></el-icon>
             </el-button>
           </el-col>
