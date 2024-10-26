@@ -3,6 +3,7 @@ package com.st.mall.goodsservice.mapper;
 import com.st.mall.common.bean.Category;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CategoryMapper {
     //添加
@@ -22,4 +23,5 @@ public interface CategoryMapper {
 
     //根据父分类的id进行查询
     List<Category> selectByParentId(Integer parentId);
+    List<Map<String, Object>> getGoodsCountByCategory();
 }

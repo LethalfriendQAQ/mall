@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 public class GoodsServiceApplicationTests {
@@ -17,6 +18,24 @@ public class GoodsServiceApplicationTests {
     private CategoryMapper categoryMapper;
     @Autowired
     private CategoryService categoryService;
+
+    @Test
+    public void test11() {
+        List<Map<String, Object>> goodsCountByCategory = categoryMapper.getGoodsCountByCategory();
+        for (Map<String, Object> categoryInfo : goodsCountByCategory) {
+            // 提取每个父分类的信息
+            String parentCategoryName = (String) categoryInfo.get("parent_category_name");
+            Long goodsCount = (Long) categoryInfo.get("goods_count");
+
+            // 输出每个父分类的商品数量信息
+            System.out.println("父分类名称: " + parentCategoryName);
+            System.out.println("商品数量: " + goodsCount);
+            System.out.println("-----------------------");
+        }
+
+    }
+
+
 
     @Test
     public void test1() {

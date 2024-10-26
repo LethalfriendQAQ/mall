@@ -26,6 +26,9 @@ const categoryApi = {
     },
     selectAllParent() {
         return service.get("/category/allParent");
+    },
+    getGoodsCountByCategory() {
+        return service.get("/category/getGoodsCountByCategory");
     }
 };
 

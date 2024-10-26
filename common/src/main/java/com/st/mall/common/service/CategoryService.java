@@ -4,6 +4,7 @@ import com.st.mall.common.bean.Category;
 import com.st.mall.common.exception.StException;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CategoryService {
     //添加
@@ -17,4 +18,5 @@ public interface CategoryService {
     //根据id查询
     List<Category> selectByParentId(Integer parentId);
     Category selectById(Integer id);
+    List<Map<String, Object>> getGoodsCountByCategory();
 }

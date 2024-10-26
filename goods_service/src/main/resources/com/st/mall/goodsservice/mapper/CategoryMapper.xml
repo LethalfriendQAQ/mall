@@ -67,4 +67,13 @@
     <select id="selectByParentId" resultType="category">
         SELECT * FROM `category` WHERE `parent_id`=#{parentId}
     </select>
+    <select id="getGoodsCountByCategory" resultType="java.util.Map">
+        SELECT parent.name AS parent_category_name,
+               COUNT(g.id) AS goods_count
+        FROM category AS parent
+                 LEFT JOIN category AS child ON child.parent_id = parent.id
+                 LEFT JOIN goods AS g ON g.category_id = child.id
+        WHERE parent.parent_id = 0
+        GROUP BY parent.name;
+    </select>
 </mapper>
