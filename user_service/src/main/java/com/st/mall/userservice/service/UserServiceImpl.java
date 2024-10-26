@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
         condition.setUsername(user.getUsername());
         if (userMapper.selectByCondition(condition)
                 .stream()
-                .anyMatch(item -> item.getUsername().equals(user.getUsername()))) {
+                .anyMatch(item -> item.getUsername().equals(user.getUsername()) && !item.getId().equals(user.getId()))) {
             throw new StException("该用户名已存在");
         }
         User u = userMapper.selectById(user.getId());

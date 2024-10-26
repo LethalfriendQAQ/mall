@@ -1,4 +1,5 @@
 <template>
+  <div v-if="collectItems.length > 0">
     <el-row style="margin-bottom: 20px">
       <el-col :span="12" style="font-size: 18px; font-weight: bold">我的收藏</el-col>
     </el-row>
@@ -25,6 +26,10 @@
       <el-pagination background layout="prev, pager, next" :total="pageInfo.total"
                      :page-size="pageInfo.pageSize" @change="selectCollects"/>
     </el-row>
+  </div>
+  <div v-else class="none">
+    还没有搜藏哦~，去看看心仪的商品吧~<RouterLink to="/user/index" >去收藏</RouterLink>
+  </div>
 </template>
 
 <script setup>
@@ -127,5 +132,11 @@ function toGoodsView(id) {
 .price {
   font-size: 14px;
   color: var(--theme-color); /* 使用主题色 */
+}
+.none {
+  line-height: 300px;
+  height: 300px;
+  background-color: #FFFFFF;
+  text-align: center;
 }
 </style>
