@@ -49,7 +49,8 @@ white-list:
 # /category/{id} GET
 # /goods/** GET
 st:
-  picDir: D:/situ/code/Project02/pic/
+#  picDir: D:/situ/code/Project02/pic/
+  picDir: static/pic/
 
 logging:
   level:

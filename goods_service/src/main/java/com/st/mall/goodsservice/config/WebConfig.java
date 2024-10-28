@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private JwtInterceptor jwtInterceptor;
-    @Value("${st.picDir: D:/situ/code/Project02/pic/}")
+    @Value("${st.picDir: static/pic/}")
     private String picDir;
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/category/pic/**", "/goods/pic/**")
